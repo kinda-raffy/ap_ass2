@@ -90,7 +90,7 @@ int menu() {
 }
 
 
-void menuHandler() {
+void gameHandler() {
     int choice = menu();
     if (choice == 1) {
         newGame();
@@ -99,7 +99,7 @@ void menuHandler() {
     } else if (choice == 3) {
         credits();
         // Re-display menu.
-        menuHandler();  // FIXME - can this lead to errors?
+        gameHandler();  // FIXME - can this lead to errors?
     } else if (choice == 4) {
         std::cout << "Goodbye" << std::endl;
     } else {
@@ -116,7 +116,7 @@ void greet() {
 
 int main() {
     greet();
-    menuHandler();
+    gameHandler();
 
     auto* list = new LinkedList();
     delete list;
