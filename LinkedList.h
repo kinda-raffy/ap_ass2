@@ -20,6 +20,8 @@ public:
    bool remove(char);
    bool remove(Tile*);
    int size() const;
+
+   void print() const;
 };
 
 #endif // ASSIGN2_LINKEDLIST_H
