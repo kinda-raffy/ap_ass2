@@ -28,6 +28,8 @@ Tile* Node::getTile() {
 }
 
 void Node::setTile(Tile *tile) {
+   // Deacollate storage of unused tile.
+   delete this->tile;
    this->tile = tile;
 }
 

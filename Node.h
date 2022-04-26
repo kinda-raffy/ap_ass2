@@ -14,6 +14,7 @@ public:
    Node(const Node&);
    ~Node();
 
+   // Getters and setters technically superfluous, but easier to parse.
    Node* getNext();
    void setNext(Node*);
 

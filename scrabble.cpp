@@ -9,22 +9,24 @@
 
 
 int credits() {
-    std::cout << "----------------------------------\n";
-    std::cout << "Name: Rafat Mahiuddin\n";
-    std::cout << "Student ID: s3897093\n";
-    std::cout << "Email: s3897093@student.rmit.edu.au\n\n";
-
-    std::cout << "Name: Adrian Louis Rebellato\n";
-    std::cout << "Student ID: s3889401\n";
-    std::cout << "Email: s3889401@student.rmit.edu.au\n\n";
-
-    std::cout << "Name: Harry Porter\n";
-    std::cout << "Student ID: s3888604\n";
-    std::cout << "Email: s3888604@student.rmit.edu.au\n\n";
-
-    std::cout << "Name: Alexander Mitchell\n";
-    std::cout << "Student ID: s3902255\n";
-    std::cout << "Email: s3902255@student.rmit.edu.au\n\n" << std::endl;
+    std::cout 
+        << "-----------------------------------\n"
+        // Raf
+        << "Name: Rafat Mahiuddin\n"
+        << "Student ID: s3897093\n"
+        << "Email: s3897093@student.rmit.edu.au\n\n"
+        // Adrian
+        << "Name: Adrian Louis Rebellato\n"
+        << "Student ID: s3889401\n"
+        << "Email: s3889401@student.rmit.edu.au\n\n"
+        // Harry
+        << "Name: Harry Porter\n"
+        << "Student ID: s3888604\n"
+        << "Email: s3888604@student.rmit.edu.au\n\n"
+        // Alexander
+        << "Name: Alexander Mitchell\n"
+        << "Student ID: s3902255\n"
+        << "Email: s3902255@student.rmit.edu.au\n\n";
     return EXIT_SUCCESS;
 }
 
