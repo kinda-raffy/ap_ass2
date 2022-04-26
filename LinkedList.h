@@ -2,6 +2,7 @@
 #define ASSIGN2_LINKEDLIST_H
 
 #include "Node.h"
+#include <memory>
 
 class LinkedList {
 
