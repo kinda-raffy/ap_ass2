@@ -22,9 +22,9 @@ int credits() {
     std::cout << "Student ID: s3888604\n";
     std::cout << "Email: s3888604@student.rmit.edu.au\n\n";
 
-    std::cout << "Name: Mummy Pig\n";
-    std::cout << "Student ID: s3897093\n";
-    std::cout << "Email: s3897093@student.rmit.edu.au\n\n" << std::endl;
+    std::cout << "Name: Alexander Mitchell\n";
+    std::cout << "Student ID: s3902255\n";
+    std::cout << "Email: s3902255@student.rmit.edu.au\n\n" << std::endl;
     return EXIT_SUCCESS;
 }
 
