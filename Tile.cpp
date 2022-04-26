@@ -1,5 +1,6 @@
 #include "Tile.h"
 
+// Values constant for each letter.
 const static std::map<char, int> values = {
 	{'A', 1}, 
 	{'B', 3},
@@ -33,6 +34,14 @@ Tile::Tile(char letter)
 	: letter {letter} {
 };
 
-int Tile::getValue() {
+Tile::Tile(const Tile &source)
+	: Tile {source.letter} {
+}
+
+int Tile::getValue() const {
 	return values.at(letter);
 };
+
+char Tile::getLetter() const {
+	return letter;
+}

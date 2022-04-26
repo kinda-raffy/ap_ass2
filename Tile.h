@@ -4,12 +4,16 @@
 #include <map>
 
 class Tile {
+
+   const char letter;
+
 public:
 
    Tile(char);
-   int getValue();
+   Tile(const Tile&);
 
-   char letter;
+   int getValue() const;
+   char getLetter() const;
 };
 
 #endif // ASSIGN2_TILE_H

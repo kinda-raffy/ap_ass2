@@ -4,13 +4,23 @@
 #include "Tile.h"
 
 class Node {
+
+   Tile* tile;
+   Node* next;
+
 public:
 
    Node(Tile*, Node*);
    Node(const Node&);
+   ~Node();
 
-   Tile*    tile;
-   Node*    next;
+   Node* getNext();
+   void setNext(Node*);
+
+   Tile* getTile();
+   void setTile(Tile*);
+
+   char getLetter() const;
 };
 
 #endif // ASSIGN2_NODE_H

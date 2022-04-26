@@ -4,12 +4,33 @@ LinkedList::LinkedList()
    : head {nullptr}, tail {nullptr}, length {0} {
 }
 
-LinkedList::LinkedList(const LinkedList &other)
-   : head {nullptr}, tail {nullptr}, length {other.length} {
+LinkedList::LinkedList(const LinkedList &source)
+   : head {nullptr}, tail {nullptr}, length {source.length} {
    // TODO: Delegate to base constructor and deep copy all source nodes.
+   int index {0};
+   Node *current {source.head}, *previous {nullptr};
+   while (index < length) {
+      // Construct a copy of current node in source list.
+      Node* node {new Node {*current}};
+      tail = node;
+      if (head == nullptr) {
+         previous = head = node;
+      } else {
+         previous->setNext(node);
+         previous = previous->getNext();
+      }
+      current = current->getNext();
+   }
 }
 
 LinkedList::~LinkedList() {
+   Node *current {head}, *next {nullptr};
+   // Iterate over and delete all nodes in list.
+   while (current != nullptr) {
+      next = current->getNext();
+      delete current;
+      current = next;
+   }
 }
 
 void LinkedList::append(char letter) {
@@ -21,28 +42,28 @@ void LinkedList::append(Tile *tile) {
    if (head == nullptr) {
       head = tail = node;
    } else {
-      tail->next = node;
-      tail = tail->next;
+      tail->setNext(node);
+      tail = tail->getNext();
    }
    ++length;
 }
 
 bool LinkedList::remove(Tile* tile) {
-   remove(tile->letter);
+   remove(tile->getLetter());
 }
 
 bool LinkedList::remove(char letter) {
    bool success {false};
    Node *current {head}, *previous {nullptr};
-   while (current != nullptr && current->tile->letter != letter) {
+   while (current != nullptr && current->getLetter() != letter) {
       previous = current;
-      current = current->next;
+      current->setNext(current->getNext());
    }
    if (current != nullptr) {
       if (current == head) {
-         head = head->next;
+         head->setNext(head->getNext());
       } else {
-         previous->next = current->next;
+         previous->setNext(current->getNext());
       }
       // Free superfluous storage.
       delete current;
