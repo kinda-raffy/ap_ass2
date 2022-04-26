@@ -7,6 +7,7 @@
 class Node {
 
    // Node object owns composed tile, but doesn't own next node.
+
    Tile* tile;
    Node* next;
 
