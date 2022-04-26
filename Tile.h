@@ -5,10 +5,11 @@
 
 class Tile {
 public:
+
    Tile(char);
    int getValue();
-   char letter;
 
+   char letter;
 };
 
 #endif // ASSIGN2_TILE_H
