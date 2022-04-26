@@ -8,7 +8,7 @@ OUTPUT=scrabble
 
 all: $(OUTPUT)
 
-clean: testclean
+clean:
 	rm -f $(OUTPUT) *.o
 
 $(OUTPUT): $(OBJECTS)
