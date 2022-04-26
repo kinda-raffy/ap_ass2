@@ -29,16 +29,10 @@ const static std::map<char, int> valueMap = {
 		{'Z', 10}
 };
 
-class Tile {
-		char letter;
-
-		Tile(char let) {
-				this->letter = let;
-		}
-
-		int getValue() {
-				return valueMap.at(letter);
-		}
+Tile::Tile(char letter)
+		: letter {letter} {
 };
 
-// Empty... for now?
+int Tile::getValue() {
+		return valueMap.at(letter);
+};

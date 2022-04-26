@@ -6,14 +6,9 @@
 class Tile {
 public:
    Tile(char);
-   char letter;
    int getValue();
+   char letter;
+
 };
-
-
-
-
-
-
 
 #endif // ASSIGN2_TILE_H
