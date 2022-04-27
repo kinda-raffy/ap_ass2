@@ -41,7 +41,7 @@ void LinkedList::append(char letter) {
 
 void LinkedList::append(std::unique_ptr<Tile> tile) {
    std::shared_ptr<Node> node = std::make_unique<Node>(
-      new Node {std::make_unique<Tile>(tile), std::shared_ptr<Node> {}}
+      new Node {std::make_unique<Tile>(tile), std::shared_ptr<Node>()}
    );
    if (head == nullptr) {
       head = tail = node;
