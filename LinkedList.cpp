@@ -6,12 +6,14 @@ LinkedList::LinkedList()
 
 LinkedList::LinkedList(const LinkedList &source)
    : head {nullptr}, tail {nullptr}, length {source.length} {
-   // TODO: Delegate to base constructor and deep copy all source nodes.
    int index {0};
-   Node *current {source.head}, *previous {nullptr};
+   // Node *current {source.head}, *previous {nullptr};
+   std::shared_ptr<Node> current {source.head}, previous {source.head};
+
    while (index < length) {
       // Construct a copy of current node in source list.
-      Node* node {new Node {*current}};
+      std::shared_ptr<Node> node = std::make_shared<Node>(current);
+      // Node* node {new Node {*current}};
       tail = node;
       if (head == nullptr) {
          previous = head = node;
@@ -24,21 +26,23 @@ LinkedList::LinkedList(const LinkedList &source)
 }
 
 LinkedList::~LinkedList() {
-   Node *current {head}, *next {nullptr};
+   std::shared_ptr<Node> current {head}, next {nullptr};
    // Iterate over and delete all nodes in list.
    while (current != nullptr) {
       next = current->getNext();
-      delete current;
+      // delete current;
       current = next;
    }
 }
 
 void LinkedList::append(char letter) {
-   append(new Tile {letter});
+   append(std::make_unique<Tile>(new Tile {letter}));
 }
 
-void LinkedList::append(Tile *tile) {
-   Node *node {new Node {tile, nullptr}};
+void LinkedList::append(std::unique_ptr<Tile> tile) {
+   std::shared_ptr<Node> node = std::make_unique<Node>(
+      new Node {std::make_unique<Tile>(tile), std::shared_ptr<Node> {}}
+   );
    if (head == nullptr) {
       head = tail = node;
    } else {
@@ -48,13 +52,13 @@ void LinkedList::append(Tile *tile) {
    ++length;
 }
 
-bool LinkedList::remove(Tile* tile) {
+bool LinkedList::remove(std::unique_ptr<Tile> tile) {
    remove(tile->getLetter());
 }
 
 bool LinkedList::remove(char letter) {
    bool success {false};
-   Node *current {head}, *previous {nullptr};
+   std::shared_ptr<Node> current {head}, previous {};
    while (current != nullptr && current->getLetter() != letter) {
       previous = current;
       current->setNext(current->getNext());
@@ -66,7 +70,8 @@ bool LinkedList::remove(char letter) {
          previous->setNext(current->getNext());
       }
       // Free superfluous storage.
-      delete current;
+      // delete current;
+      // No longer needed due to special pointers
       success = true;
       --length;
    }

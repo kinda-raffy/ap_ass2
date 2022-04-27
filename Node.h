@@ -8,29 +8,29 @@ class Node {
 
    // Node object owns composed tile, but doesn't own next node.
 
-   Tile* tile;
-   Node* next;
+   // Tile* tile;
+   // Node* next;
 
    // TODO: Refactor to use smart pointers.
 
-   // std::unique_ptr<Tile> tile;
+   std::unique_ptr<Tile> tile;
    // std::make_unique<Tile>(...);
 
-   // std::shared_ptr<Node> next;
+   std::shared_ptr<Node> next;
    // std::make_shared<Node>(...);
 
 public:
 
-   Node(Tile*, Node*);
+   Node(std::unique_ptr<Tile> Tile, std::shared_ptr<Node> Node);
    Node(const Node&);
    ~Node();
 
    // Getters and setters technically superfluous, but easier to parse.
-   Node* getNext();
-   void setNext(Node*);
+   std::shared_ptr<Node> getNext();
+   void setNext(std::shared_ptr<Node> next);
 
-   Tile* getTile();
-   void setTile(Tile*);
+   std::unique_ptr<Tile> getTile();
+   void setTile(std::unique_ptr<Tile> tile);
 
    char getLetter() const;
 };

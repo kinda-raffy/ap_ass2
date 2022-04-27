@@ -1,7 +1,7 @@
 #include "Node.h"
 
-Node::Node(Tile *tile, Node *next) 
-   : tile {tile}, next {next} {
+Node::Node(std::unique_ptr<Tile> tile, std::shared_ptr<Node> next) 
+   : tile {std::make_unique<Tile>(tile)}, next {next} {
 }
 
 Node::Node(const Node &source)
@@ -11,26 +11,26 @@ Node::Node(const Node &source)
 
 Node::~Node() {
    // Node object has ownership of tile, but not of next node.
-   delete tile;
+   // delete tile;
 }
 
-Node* Node::getNext() {
+std::shared_ptr<Node> Node::getNext() {
    return next;
 }
 
-void Node::setNext(Node *next) {
+void Node::setNext(std::shared_ptr<Node> next) {
    // Nodes do not own the next node pointed to; do not delete next.
    this->next = next;
 }
 
-Tile* Node::getTile() {
-   return tile;
+std::unique_ptr<Tile> Node::getTile() {
+   return std::make_unique<Tile>(tile);
 }
 
-void Node::setTile(Tile *tile) {
+void Node::setTile(std::unique_ptr<Tile> tile) {
    // Deacollate storage of unused tile.
-   delete this->tile;
-   this->tile = tile;
+   // delete this->tile;
+   this->tile = std::make_unique<Tile>(tile);
 }
 
 char Node::getLetter() const {
