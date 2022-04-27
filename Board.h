@@ -1,0 +1,21 @@
+#ifndef ASSIGN2_BOARD_H
+#define ASSIGN2_BOARD_H
+
+#include <vector>
+#include <memory>
+
+class Board {
+
+    // Board is a unique pointer to vector of unique pointers to char vectors.
+    std::unique_ptr<std::vector<std::unique_ptr<std::vector<char>>>> board;
+    const size_t rows;
+    const size_t cols;
+
+public:
+
+    Board(size_t, size_t);
+    Board(const Board&);
+    ~Board();
+};
+
+#endif // ASSIGN2_BOARD_H
