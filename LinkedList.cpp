@@ -12,7 +12,7 @@ LinkedList::LinkedList(const LinkedList &source)
 
    while (index < length) {
       // Construct a copy of current node in source list.
-      std::shared_ptr<Node> node = std::make_shared<Node>(current);
+      std::shared_ptr<Node> node {std::make_shared<Node>(current)};
       // Node* node {new Node {*current}};
       tail = node;
       if (head == nullptr) {

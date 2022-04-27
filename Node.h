@@ -12,12 +12,8 @@ class Node {
    // Node* next;
 
    // TODO: Refactor to use smart pointers.
-
    std::unique_ptr<Tile> tile;
-   // std::make_unique<Tile>(...);
-
    std::shared_ptr<Node> next;
-   // std::make_shared<Node>(...);
 
 public:
 
