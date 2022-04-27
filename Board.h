@@ -8,12 +8,13 @@ class Board {
 
     // Board is a unique pointer to vector of unique pointers to char vectors.
     std::unique_ptr<std::vector<std::unique_ptr<std::vector<char>>>> board;
-    const size_t rows;
-    const size_t cols;
+    const size_t dimension;
 
 public:
 
-    Board(size_t, size_t);
+    // TODO: Construct a board object using string?
+
+    Board(size_t);
     Board(const Board&);
     ~Board();
 };
