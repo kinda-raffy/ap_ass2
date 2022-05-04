@@ -9,15 +9,12 @@ Node::Node(std::unique_ptr<Tile> tile)
 }
 
 Node::Node(std::unique_ptr<Tile> tile, std::shared_ptr<Node> next) 
-   : tile {std::make_unique<Tile>(tile)}, next {next} {
+   : tile {std::make_unique<Tile>(*tile)}, next {next} {
 }
 
 Node::Node(const Node &source)
    : tile {new Tile {source.getLetter()}}, next {nullptr} {
    // Next node is currently not deep copied. 
-}
-
-Node::~Node() {
 }
 
 std::shared_ptr<Node> Node::getNext() {
