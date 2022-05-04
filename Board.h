@@ -4,9 +4,11 @@
 #include <vector>
 #include <memory>
 
+// Do not use namespaces in header files.
+
 class Board {
 
-    // Board is a unique pointer to vector of unique pointers to char vectors.
+    // Board is a unique pointer to vector of unique pointers to char vectors?
     std::unique_ptr<std::vector<std::unique_ptr<std::vector<char>>>> board;
     const size_t dimension;
 
