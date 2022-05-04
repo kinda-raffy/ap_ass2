@@ -2,27 +2,30 @@
 #define ASSIGN2_NODE_H
 
 #include "Tile.h"
+#include <memory>
 
 class Node {
 
-   // Node object owns composed tile, but doesn't own next node.
-   Tile* tile;
-   Node* next;
+   // Node object owns tile, but doesn't own next node.
+   std::unique_ptr<Tile> tile;
+   std::shared_ptr<Node> next;
 
 public:
 
-   Node(Tile*, Node*);
+   Node(char);
+   Node(std::unique_ptr<Tile>);
+   Node(std::unique_ptr<Tile>, std::shared_ptr<Node>);
    Node(const Node&);
    ~Node();
 
    // Getters and setters technically superfluous, but easier to parse.
-   Node* getNext();
-   void setNext(Node*);
+   std::shared_ptr<Node> getNext();
+   void setNext(std::shared_ptr<Node> next);
 
-   Tile* getTile();
-   void setTile(Tile*);
-
+   // Modify tile through node object.
+   int getValue() const;
    char getLetter() const;
+   void setLetter(char);
 };
 
 #endif // ASSIGN2_NODE_H

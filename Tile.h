@@ -5,15 +5,18 @@
 
 class Tile {
 
-   const char letter;
+   char letter;
 
 public:
 
    explicit Tile(char);
    Tile(const Tile&);
+   ~Tile() = default;
 
    int getValue() const;
+
    char getLetter() const;
+   void setLetter(char);
 };
 
 #endif // ASSIGN2_TILE_H
