@@ -32,7 +32,7 @@ const static std::map<char, int> values = {
 
 Tile::Tile(char letter)
 	: letter {letter} {
-};
+}
 
 Tile::Tile(const Tile &source)
 	: Tile {source.letter} {
@@ -40,7 +40,7 @@ Tile::Tile(const Tile &source)
 
 int Tile::getValue() const {
 	return values.at(letter);
-};
+}
 
 char Tile::getLetter() const {
 	return letter;
