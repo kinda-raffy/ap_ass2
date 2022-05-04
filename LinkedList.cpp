@@ -1,19 +1,17 @@
 #include "LinkedList.h"
 
 LinkedList::LinkedList()
-        : head{nullptr}, tail{nullptr}, length{0} {
+    : head {nullptr}, tail {nullptr}, length {0} {
 }
 
 LinkedList::LinkedList(const LinkedList &source)
-        : head{nullptr}, tail{nullptr}, length{source.length} {
-    int index{0};
+    : head {nullptr}, tail {nullptr}, length {source.length} {
+    int index {0};
     // Node *current {source.head}, *previous {nullptr};
-    std::shared_ptr <Node> current{source.head}, previous{source.head};
-
+    std::shared_ptr <Node> current {source.head}, previous {source.head};
     while (index < length) {
         // Construct a copy of current node in source list.
-        std::shared_ptr <Node> node{std::make_shared<Node>(current)};
-        // Node* node {new Node {*current}};
+        std::shared_ptr <Node> node {std::make_shared<Node>(*current)};
         tail = node;
         if (head == nullptr) {
             previous = head = node;

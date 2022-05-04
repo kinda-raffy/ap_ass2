@@ -16,9 +16,8 @@ public:
    Node(std::unique_ptr<Tile>);
    Node(std::unique_ptr<Tile>, std::shared_ptr<Node>);
    Node(const Node&);
-   ~Node();
+   ~Node() = default;
 
-   // Getters and setters technically superfluous, but easier to parse.
    std::shared_ptr<Node> getNext();
    void setNext(std::shared_ptr<Node> next);
 

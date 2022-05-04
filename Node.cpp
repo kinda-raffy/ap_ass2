@@ -17,9 +17,6 @@ Node::Node(const Node &source)
    // Next node is currently not deep copied. 
 }
 
-Node::~Node() {
-}
-
 std::shared_ptr<Node> Node::getNext() {
    // Return a shared pointer to the next node.
    return next;
