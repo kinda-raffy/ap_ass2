@@ -1,17 +1,23 @@
 #include "Node.h"
 
+Node::Node(char letter)
+   : Node {std::move(std::make_unique<Tile>(letter))} {
+}
+
+Node::Node(std::unique_ptr<Tile> tile)
+   : Node {std::move(tile), nullptr} {
+}
+
 Node::Node(std::unique_ptr<Tile> tile, std::shared_ptr<Node> next) 
    : tile {std::make_unique<Tile>(tile)}, next {next} {
 }
 
 Node::Node(const Node &source)
    : tile {new Tile {source.getLetter()}}, next {nullptr} {
-   // TODO: Should next be deep copied as well?
+   // Next node is currently not deep copied. 
 }
 
 Node::~Node() {
-   // Node object has ownership of tile, but not of next node.
-   // delete tile;
 }
 
 std::shared_ptr<Node> Node::getNext() {

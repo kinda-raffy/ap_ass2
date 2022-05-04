@@ -6,18 +6,18 @@
 
 class Node {
 
-   // Node object owns composed tile, but doesn't own next node.
-
    // Tile* tile;
    // Node* next;
 
-   // TODO: Refactor to use smart pointers.
+   // Node object owns tile, but doesn't own next node.
    std::unique_ptr<Tile> tile;
    std::shared_ptr<Node> next;
 
 public:
 
-   Node(std::unique_ptr<Tile> Tile, std::shared_ptr<Node> Node);
+   Node(char);
+   Node(std::unique_ptr<Tile>);
+   Node(std::unique_ptr<Tile>, std::shared_ptr<Node>);
    Node(const Node&);
    ~Node();
 

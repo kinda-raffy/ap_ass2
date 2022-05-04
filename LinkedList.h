@@ -9,7 +9,6 @@ class LinkedList {
    // Node* head;
    // Node* tail;
    int length;
-
    std::shared_ptr<Node> head;
    std::shared_ptr<Node> tail;
 
