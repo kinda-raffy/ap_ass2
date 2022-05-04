@@ -3,12 +3,32 @@
 #include <iostream>
 #include <algorithm>
 #include <fstream>
+#include <vector>
+#include <random>
 
 #define EXIT_SUCCESS    0
 #define EXIT_FAILURE    1
 
-// TODO: Implement placeholder function.
-int createTileBag(const std::string &filename="");
+void shuffleArray(const std::vector<char>& letters) {
+    auto eng = std::default_random_engine{};
+    std::shuffle(letters.begin(), letters.end(), eng);
+}
+
+auto* readBaseTileBag() {
+    std::ifstream file;
+    file.open("ScrabbleTiles.txt");
+    if(!file.is_open()) { throw std::runtime_error("Could not open tile bag file"); }
+
+    auto* charList = new LinkedList();
+    std::string line;
+    while(std::getline(file, line)) { charList->append(line[0]); }
+    file.close();
+    return charList;
+}
+
+int createTileBag(const std::string &filename="") {
+
+}
 
 LinkedList* createHand(const std::string &fileName="") {
     auto *hand = new LinkedList();
@@ -36,7 +56,7 @@ LinkedList* createHand(const std::string &fileName="") {
 }
 
 // FIXME - Placeholder function
-int createBoard(const void *board=nullptr);
+//int createBoard(const void *board=nullptr);
 
 // TODO: Make player a class?
 // FIXME: Create classes automatically handles load and new games. Update parameters to match.
@@ -47,7 +67,7 @@ void generateGame(const std::string& player1Name,
                   const void *player1Hand=createHand(),
                   const void *player2Hand=createHand(),
                   const int board=createBoard(),
-                  const int tileBag=createTileBag(),
+//                  const int tileBag=createTileBag(),
                   const std::string& currPlayer="") {
     if (currPlayer.empty()) {
         // New game.
@@ -113,13 +133,13 @@ std::string getPlayerName(int num) {
     return playerName;
 }
 
-void newGame() {
-    std::cout << "Starting a New Game" << std::endl;
-    std::string player1Name = getPlayerName(1);
-    std::string player2Name = getPlayerName(2);
-    std::cout << "Let's Play" << std::endl;
-    generateGame(player1Name, player2Name);
-}
+//void newGame() {
+//    std::cout << "Starting a New Game" << std::endl;
+//    std::string player1Name = getPlayerName(1);
+//    std::string player2Name = getPlayerName(2);
+//    std::cout << "Let's Play" << std::endl;
+//    generateGame(player1Name, player2Name);
+//}
 
 
 int gameModeHandler() {
@@ -154,6 +174,7 @@ void greet() {
    std::cout << "Welcome to Scrabble!\n";
    std::cout << "--------------------" << std::endl;
 }
+
 
 
 int main() {

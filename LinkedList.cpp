@@ -80,7 +80,9 @@ void LinkedList::print() const {
     std::cout << "Your hand is " << std::endl;
     std::shared_ptr<Node> current = head;
     while (current != nullptr) {
-        std::cout << current->getLetter() << '-' << current->getValue() << ',';
+        std::cout << current->getLetter() << '-' << current->getValue();
+        if (current != tail) { std::cout << ", "; }
         current = current->getNext();
     }
+    std::cout << std::endl;
 }

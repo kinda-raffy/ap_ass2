@@ -16,7 +16,7 @@ public:
 
     // TODO: Construct a board object using string?
 
-    Board(size_t);
+    explicit Board(size_t);
     Board(const Board&);
     ~Board();
 };
