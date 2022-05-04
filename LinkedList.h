@@ -21,6 +21,8 @@ public:
    bool remove(char);
    bool remove(std::shared_ptr<Tile> tile);
    int size() const;
+
+   void print() const;
 };
 
 #endif // ASSIGN2_LINKEDLIST_H

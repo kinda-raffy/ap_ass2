@@ -9,7 +9,7 @@ class Tile {
 
 public:
 
-   Tile(char);
+   explicit Tile(char);
    Tile(const Tile&);
    ~Tile() = default;
 

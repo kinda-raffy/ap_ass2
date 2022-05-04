@@ -78,3 +78,12 @@ bool LinkedList::remove(char letter) {
 int LinkedList::size() const {
     return length;
 }
+
+void LinkedList::print() const {
+    std::cout << "Your hand is\n";
+   Node *current {head};
+   while (current != nullptr) {
+      std::cout << current->getTile()->getLetter() << '-' << current->getTile()->getValue() << ",";
+      current = current->getNext();
+   } std::cout << std::endl;
+}
