@@ -35,12 +35,12 @@ LinkedList::~LinkedList() {
 
 // Create a new tile using the char arg and delegate.
 void LinkedList::append(char letter) {
-    append(std::make_shared<Tile>(letter));
+    append(std::move(std::make_unique<Tile>(letter)));
 }
 
 // Create a new node using tile arg and append.
-void LinkedList::append(std::shared_ptr<Tile> tile) {
-    std::shared_ptr<Node> node {std::make_shared<Node>(*tile)};
+void LinkedList::append(std::unique_ptr<Tile> tile) {
+    std::shared_ptr<Node> node {std::make_shared<Node>(std::move(tile))};
     if (head == nullptr) {
         head = tail = node;
     } else {
@@ -48,10 +48,6 @@ void LinkedList::append(std::shared_ptr<Tile> tile) {
         tail = tail->getNext();
     }
     ++length;
-}
-
-bool LinkedList::remove(std::shared_ptr <Tile> tile) {
-    remove(tile->getLetter());
 }
 
 bool LinkedList::remove(char letter) {
@@ -80,10 +76,16 @@ int LinkedList::size() const {
 }
 
 void LinkedList::print() const {
-    std::cout << "Your hand is\n";
-   Node *current {head};
-   while (current != nullptr) {
-      std::cout << current->getTile()->getLetter() << '-' << current->getTile()->getValue() << ",";
-      current = current->getNext();
-   } std::cout << std::endl;
+//     std::cout << "Your hand is\n";
+//    Node *current {head};
+//    while (current != nullptr) {
+//       std::cout << current->getTile()->getLetter() << '-' << current->getTile()->getValue() << ",";
+//       current = current->getNext();
+//    } std::cout << std::endl;
+    std::cout << "Your hand is " << std::endl;
+    std::shared_ptr<Node> current = head;
+    while (current != nullptr) {
+        std::cout << current->getLetter() << '-' << current->getValue() << ',';
+        current = current->getNext();
+    }
 }

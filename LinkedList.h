@@ -3,6 +3,7 @@
 
 #include "Node.h"
 #include <memory>
+#include <iostream>
 
 class LinkedList {
 
@@ -16,10 +17,9 @@ public:
    LinkedList(const LinkedList&);
    ~LinkedList();
 
-   void append(char);
-   void append(std::shared_ptr<Tile> tile);
    bool remove(char);
-   bool remove(std::shared_ptr<Tile> tile);
+   void append(char);
+   void append(std::unique_ptr<Tile> tile);
    int size() const;
 
    void print() const;
