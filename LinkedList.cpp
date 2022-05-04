@@ -47,8 +47,8 @@ char LinkedList::pop() {
     if (head != nullptr) {
         result = head->getLetter();
         head = head->getNext();
+        --length;
     }
-    --length;
     return result;
 }
 

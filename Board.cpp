@@ -1,20 +1,26 @@
-#include <iostream>
 #include "Board.h"
 
-using std::make_unique, std::unique_ptr, std::vector;
-
 Board::Board(size_t dimension)
-    : board {make_unique<vector<unique_ptr<vector<char>>>>()},
-    dimension {dimension} {
-    // TODO: Test all of this.
+    : dimension {dimension}, 
+    board {std::vector<std::vector<char>> {}} {
+    // TODO: Finish implementation; emptry positions.
     for (size_t index {0}; index < dimension; ++index) {
-        board->emplace_back(make_unique<vector<char>>());
+        board.emplace_back(std::vector<char> {});
     }
 }
 
 Board::Board(const Board &source)
     : Board {source.dimension} {
-    // TODO: Figure out how this will be done.
+    // Copy all characters into corresponding positions.
+    int row {0};
+    while (row < dimension) {
+        int col {0};
+        while (col < dimension) {
+            board.at(row).at(col) = source.board.at(row).at(col);
+            ++col;
+        }
+        ++row;
+    }
 }
 
 Board::~Board() = default;
