@@ -35,7 +35,8 @@ LinkedList::~LinkedList() {
 
 // Create a new tile using the char arg and delegate.
 void LinkedList::append(char letter) {
-    append(std::move(std::make_unique<Tile>(letter)));
+    std::unique_ptr<Tile> tile {std::make_unique<Tile>(letter)};
+    append(std::move(tile));
 }
 
 // Create a new node using tile arg and append.
@@ -76,12 +77,6 @@ int LinkedList::size() const {
 }
 
 void LinkedList::print() const {
-//     std::cout << "Your hand is\n";
-//    Node *current {head};
-//    while (current != nullptr) {
-//       std::cout << current->getTile()->getLetter() << '-' << current->getTile()->getValue() << ",";
-//       current = current->getNext();
-//    } std::cout << std::endl;
     std::cout << "Your hand is " << std::endl;
     std::shared_ptr<Node> current = head;
     while (current != nullptr) {
