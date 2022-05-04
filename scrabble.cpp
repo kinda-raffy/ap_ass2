@@ -122,7 +122,7 @@ void newGame() {
 }
 
 
-int menu() {
+int gameModeHandler() {
     int choice;
     std::cout << "1. New Game\n";
     std::cout << "2. Load Game\n";
@@ -133,7 +133,7 @@ int menu() {
 }
 
 void gameHandler() {
-    int choice = menu();
+    int choice = gameModeHandler();
     if (choice == 1) {
         newGame();
     } else if (choice == 2) {
