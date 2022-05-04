@@ -11,7 +11,7 @@ LinkedList::LinkedList(const LinkedList &source)
     std::shared_ptr <Node> current {source.head}, previous {source.head};
     while (index < length) {
         // Construct a copy of current node in source list.
-        std::shared_ptr <Node> node {std::make_shared<Node>(*current)};
+        std::shared_ptr <Node> node{std::make_shared<Node>(*current)};
         tail = node;
         if (head == nullptr) {
             previous = head = node;
@@ -38,9 +38,7 @@ void LinkedList::append(char letter) {
 }
 
 void LinkedList::append(std::unique_ptr <Tile> tile) {
-    std::shared_ptr <Node> node = std::make_unique<Node>(
-            new Node{std::make_unique<Tile>(tile), std::shared_ptr<Node>()}
-    );
+    std::shared_ptr <Node> node = std::make_shared<Node>(new Node(tile)); //???? what
     if (head == nullptr) {
         head = tail = node;
     } else {
