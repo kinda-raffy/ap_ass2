@@ -7,7 +7,6 @@
 #define EXIT_SUCCESS    0
 #define EXIT_FAILURE    1
 
-
 int credits() {
     std::cout 
         << "-----------------------------------\n"
@@ -30,7 +29,6 @@ int credits() {
     return EXIT_SUCCESS;
 }
 
-
 int validFile(const std::string& fileName) {
     int returnStatus = EXIT_SUCCESS;
     std::ifstream file(fileName);
@@ -43,7 +41,6 @@ int validFile(const std::string& fileName) {
     return returnStatus;
 }
 
-
 int loadGame() {
     std::cout << "Enter the filename from which load a game" << std::endl;
     std::string filename;
@@ -54,8 +51,6 @@ int loadGame() {
     }
     return EXIT_SUCCESS;
 }
-
-
 
 std::string getPlayerName(int num) {
     std::string playerName;
@@ -70,7 +65,6 @@ std::string getPlayerName(int num) {
     return playerName;
 }
 
-
 int newGame() {
     std::cout << "Starting a New Game" << std::endl;
     std::string player1Name = getPlayerName(1);
@@ -82,7 +76,6 @@ int newGame() {
     return EXIT_SUCCESS;
 }
 
-
 int menu() {
     int choice;
     std::cout << "1. New Game\n";
@@ -92,7 +85,6 @@ int menu() {
     std::cin >> choice;
     return choice;
 }
-
 
 void gameHandler() {
     int choice = menu();
@@ -111,12 +103,10 @@ void gameHandler() {
     }
 }
 
-
 void greet() {
    std::cout << "Welcome to Scrabble!\n";
-   std::cout << "-------------------" << std::endl;
+   std::cout << "--------------------" << std::endl;
 }
-
 
 int main() {
     greet();
