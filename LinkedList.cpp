@@ -37,8 +37,8 @@ void LinkedList::append(char letter) {
     append(std::make_unique<Tile>(new Tile{letter}));
 }
 
-void LinkedList::append(std::unique_ptr <Tile> tile) {
-    std::shared_ptr <Node> node = std::make_shared<Node>(new Node(tile)); //???? what
+void LinkedList::append(std::shared_ptr<Tile> tile) {
+    std::shared_ptr<Node> node {std::make_shared<Node>(*tile)};
     if (head == nullptr) {
         head = tail = node;
     } else {
@@ -48,7 +48,7 @@ void LinkedList::append(std::unique_ptr <Tile> tile) {
     ++length;
 }
 
-bool LinkedList::remove(std::unique_ptr <Tile> tile) {
+bool LinkedList::remove(std::shared_ptr <Tile> tile) {
     remove(tile->getLetter());
 }
 
