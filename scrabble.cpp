@@ -7,27 +7,27 @@
 #define EXIT_SUCCESS    0
 #define EXIT_FAILURE    1
 
-
 int credits() {
-    std::cout << "----------------------------------\n";
-    std::cout << "Name: Rafat Mahiuddin\n";
-    std::cout << "Student ID: s3897093\n";
-    std::cout << "Email: s3897093@student.rmit.edu.au\n\n";
-
-    std::cout << "Name: Peppa Pig\n";
-    std::cout << "Student ID: s3897093\n";
-    std::cout << "Email: s3897093@student.rmit.edu.au\n\n";
-
-    std::cout << "Name: George .\n";
-    std::cout << "Student ID: s3897093\n";
-    std::cout << "Email: s3897093@student.rmit.edu.au\n\n";
-
-    std::cout << "Name: Mummy Pig\n";
-    std::cout << "Student ID: s3897093\n";
-    std::cout << "Email: s3897093@student.rmit.edu.au\n\n" << std::endl;
+    std::cout 
+        << "-----------------------------------\n"
+        // Raf
+        << "Name: Rafat Mahiuddin\n"
+        << "Student ID: s3897093\n"
+        << "Email: s3897093@student.rmit.edu.au\n\n"
+        // Adrian
+        << "Name: Adrian Louis Rebellato\n"
+        << "Student ID: s3889401\n"
+        << "Email: s3889401@student.rmit.edu.au\n\n"
+        // Harry
+        << "Name: Harry Porter\n"
+        << "Student ID: s3888604\n"
+        << "Email: s3888604@student.rmit.edu.au\n\n"
+        // Alexander
+        << "Name: Alexander Mitchell\n"
+        << "Student ID: s3902255\n"
+        << "Email: s3902255@student.rmit.edu.au\n\n";
     return EXIT_SUCCESS;
 }
-
 
 int validFile(const std::string& fileName) {
     int returnStatus = EXIT_SUCCESS;
@@ -41,7 +41,6 @@ int validFile(const std::string& fileName) {
     return returnStatus;
 }
 
-
 int loadGame() {
     std::cout << "Enter the filename from which load a game" << std::endl;
     std::string filename;
@@ -53,19 +52,18 @@ int loadGame() {
     return EXIT_SUCCESS;
 }
 
-
-
 std::string getPlayerName(int num) {
     std::string playerName;
-    std::cout << "Enter a name for player " << num << " (uppercase characters only)" << std::endl;
+    std::cout << "Enter a name for player " 
+        << num << " (uppercase characters only)" << std::endl;
     std::cin >> playerName;
     while (!(std::all_of(playerName.begin(), playerName.end(), isupper))) {
-        std::cout << "Invalid name. Please enter a name for player " << num << " (uppercase characters only)" << std::endl;
+        std::cout << "Invalid name. Please enter a name for player " 
+            << num << " (uppercase characters only)" << std::endl;
         std::cin >> playerName;
     }
     return playerName;
 }
-
 
 int newGame() {
     std::cout << "Starting a New Game" << std::endl;
@@ -78,7 +76,6 @@ int newGame() {
     return EXIT_SUCCESS;
 }
 
-
 int menu() {
     int choice;
     std::cout << "1. New Game\n";
@@ -88,7 +85,6 @@ int menu() {
     std::cin >> choice;
     return choice;
 }
-
 
 void gameHandler() {
     int choice = menu();
@@ -107,12 +103,10 @@ void gameHandler() {
     }
 }
 
-
 void greet() {
    std::cout << "Welcome to Scrabble!\n";
-   std::cout << "-------------------" << std::endl;
+   std::cout << "--------------------" << std::endl;
 }
-
 
 int main() {
     greet();

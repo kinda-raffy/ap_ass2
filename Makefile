@@ -1,12 +1,20 @@
-.default: all
+CC=g++
+CCOPTS=-Wall -Werror -g -O -std=c++14
+# CCOPTS=-g -O -std=c++14
 
-all: scrabble
+OBJECTS=$(shell find *.cpp | sed 's/.cpp/.o/g')
+
+OUTPUT=scrabble
+
+all: $(OUTPUT)
 
 clean:
-	rm -rf scrabble *.o *.dSYM
+	rm -f $(OUTPUT) *.o
 
-scrabble: Tile.o Node.o LinkedList.o scrabble.o
-	g++ -Wall -Werror -std=c++14 -g -O -o $@ $^
+$(OUTPUT): $(OBJECTS)
+	$(CC) $(CCOPTS) -o $(OUTPUT) $(OBJECTS)
 
 %.o: %.cpp
-	g++ -Wall -Werror -std=c++14 -g -O -c $^
+	$(CC) $(CCOPTS) -c $^
+
+%.cpp:
