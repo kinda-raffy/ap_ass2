@@ -1,19 +1,17 @@
 #include "LinkedList.h"
 
 LinkedList::LinkedList()
-        : head{nullptr}, tail{nullptr}, length{0} {
+    : head {nullptr}, tail {nullptr}, length {0} {
 }
 
 LinkedList::LinkedList(const LinkedList &source)
-        : head{nullptr}, tail{nullptr}, length{source.length} {
-    int index{0};
+    : head {nullptr}, tail {nullptr}, length {source.length} {
+    int index {0};
     // Node *current {source.head}, *previous {nullptr};
-    std::shared_ptr <Node> current{source.head}, previous{source.head};
-
+    std::shared_ptr <Node> current {source.head}, previous {source.head};
     while (index < length) {
         // Construct a copy of current node in source list.
-        std::shared_ptr <Node> node{std::make_shared<Node>(current)};
-        // Node* node {new Node {*current}};
+        std::shared_ptr <Node> node{std::make_shared<Node>(*current)};
         tail = node;
         if (head == nullptr) {
             previous = head = node;
@@ -39,10 +37,8 @@ void LinkedList::append(char letter) {
     append(std::make_unique<Tile>(new Tile{letter}));
 }
 
-void LinkedList::append(std::unique_ptr <Tile> tile) {
-    std::shared_ptr <Node> node = std::make_unique<Node>(
-            new Node{std::make_unique<Tile>(tile), std::shared_ptr<Node>()}
-    );
+void LinkedList::append(std::shared_ptr<Tile> tile) {
+    std::shared_ptr<Node> node {std::make_shared<Node>(*tile)};
     if (head == nullptr) {
         head = tail = node;
     } else {
@@ -52,7 +48,7 @@ void LinkedList::append(std::unique_ptr <Tile> tile) {
     ++length;
 }
 
-bool LinkedList::remove(std::unique_ptr <Tile> tile) {
+bool LinkedList::remove(std::shared_ptr <Tile> tile) {
     remove(tile->getLetter());
 }
 

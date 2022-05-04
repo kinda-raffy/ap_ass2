@@ -6,8 +6,6 @@
 
 class LinkedList {
 
-   // Node* head;
-   // Node* tail;
    int length;
    std::shared_ptr<Node> head;
    std::shared_ptr<Node> tail;
@@ -19,9 +17,9 @@ public:
    ~LinkedList();
 
    void append(char);
-   void append(std::unique_ptr<Tile> tile);
+   void append(std::shared_ptr<Tile> tile);
    bool remove(char);
-   bool remove(std::unique_ptr<Tile> tile);
+   bool remove(std::shared_ptr<Tile> tile);
    int size() const;
 
    void print() const;
