@@ -45,3 +45,7 @@ int Tile::getValue() const {
 char Tile::getLetter() const {
 	return letter;
 }
+
+void Tile::setLetter(char letter) {
+	this->letter = letter;
+}

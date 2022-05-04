@@ -6,9 +6,6 @@
 
 class Node {
 
-   // Tile* tile;
-   // Node* next;
-
    // Node object owns tile, but doesn't own next node.
    std::unique_ptr<Tile> tile;
    std::shared_ptr<Node> next;
@@ -25,10 +22,10 @@ public:
    std::shared_ptr<Node> getNext();
    void setNext(std::shared_ptr<Node> next);
 
-   std::unique_ptr<Tile> getTile();
-   void setTile(std::unique_ptr<Tile> tile);
-
+   // Modify tile through node object.
+   int getValue() const;
    char getLetter() const;
+   void setLetter(char);
 };
 
 #endif // ASSIGN2_NODE_H

@@ -21,6 +21,7 @@ Node::~Node() {
 }
 
 std::shared_ptr<Node> Node::getNext() {
+   // Return a shared pointer to the next node.
    return next;
 }
 
@@ -29,16 +30,10 @@ void Node::setNext(std::shared_ptr<Node> next) {
    this->next = next;
 }
 
-std::unique_ptr<Tile> Node::getTile() {
-   return std::make_unique<Tile>(tile);
-}
-
-void Node::setTile(std::unique_ptr<Tile> tile) {
-   // Deacollate storage of unused tile.
-   // delete this->tile;
-   this->tile = std::make_unique<Tile>(tile);
-}
-
 char Node::getLetter() const {
    return tile->getLetter();
+}
+
+void Node::setLetter(char letter) {
+   tile->setLetter(letter);
 }
