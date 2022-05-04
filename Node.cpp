@@ -9,7 +9,7 @@ Node::Node(std::unique_ptr<Tile> tile)
 }
 
 Node::Node(std::unique_ptr<Tile> tile, std::shared_ptr<Node> next) 
-   : tile {std::make_unique<Tile>(tile)}, next {next} {
+   : tile {std::make_unique<Tile>(*tile)}, next {next} {
 }
 
 Node::Node(const Node &source)
