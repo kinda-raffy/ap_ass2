@@ -17,6 +17,7 @@ public:
    LinkedList(const LinkedList&);
    ~LinkedList();
 
+   char pop();
    bool remove(char);
    void append(char);
    void append(std::unique_ptr<Tile> tile);

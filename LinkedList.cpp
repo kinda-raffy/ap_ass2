@@ -51,21 +51,30 @@ void LinkedList::append(std::unique_ptr<Tile> tile) {
     ++length;
 }
 
+// Delete the first node and return the contained character.
+char LinkedList::pop() {
+    char result {'\0'};
+    if (head != nullptr) {
+        result = head->getLetter();
+        head = head->getNext();
+    }
+    return result;
+}
+
 bool LinkedList::remove(char letter) {
     bool success {false};
-    std::shared_ptr<Node> current {head}, previous {};
+    std::shared_ptr<Node> current {head}, previous {nullptr};
     while (current != nullptr && current->getLetter() != letter) {
         previous = current;
-        current->setNext(current->getNext());
+        current = current->getNext();
     }
     if (current != nullptr) {
+        // Superfluous storage auto deleted by smart pointers.
         if (current == head) {
-            head->setNext(head->getNext());
+            head = head->getNext();
         } else {
             previous->setNext(current->getNext());
         }
-        // Free superfluous storage.
-        // delete current;
         success = true;
         --length;
     }
