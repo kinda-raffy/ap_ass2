@@ -59,10 +59,12 @@ int loadGame() {
 
 std::string getPlayerName(int num) {
     std::string playerName;
-    std::cout << "Enter a name for player " << num << " (uppercase characters only)" << std::endl;
+    std::cout << "Enter a name for player " 
+        << num << " (uppercase characters only)" << std::endl;
     std::cin >> playerName;
     while (!(std::all_of(playerName.begin(), playerName.end(), isupper))) {
-        std::cout << "Invalid name. Please enter a name for player " << num << " (uppercase characters only)" << std::endl;
+        std::cout << "Invalid name. Please enter a name for player " 
+            << num << " (uppercase characters only)" << std::endl;
         std::cin >> playerName;
     }
     return playerName;
