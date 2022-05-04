@@ -23,16 +23,6 @@ LinkedList::LinkedList(const LinkedList &source)
     }
 }
 
-LinkedList::~LinkedList() {
-    std::shared_ptr<Node> current{head}, next{nullptr};
-    // Iterate over and delete all nodes in list.
-    while (current != nullptr) {
-        next = current->getNext();
-        // delete current;
-        current = next;
-    }
-}
-
 // Create a new tile using the char arg and delegate.
 void LinkedList::append(char letter) {
     std::unique_ptr<Tile> tile {std::make_unique<Tile>(letter)};

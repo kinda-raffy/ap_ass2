@@ -15,7 +15,7 @@ public:
 
    LinkedList();
    LinkedList(const LinkedList&);
-   ~LinkedList();
+   ~LinkedList() = default;
 
    char pop();
    bool remove(char);
