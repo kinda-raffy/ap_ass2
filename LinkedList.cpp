@@ -24,7 +24,7 @@ LinkedList::LinkedList(const LinkedList &source)
 }
 
 LinkedList::~LinkedList() {
-    std::shared_ptr <Node> current{head}, next{nullptr};
+    std::shared_ptr<Node> current{head}, next{nullptr};
     // Iterate over and delete all nodes in list.
     while (current != nullptr) {
         next = current->getNext();
@@ -33,10 +33,12 @@ LinkedList::~LinkedList() {
     }
 }
 
+// Create a new tile using the char arg and delegate.
 void LinkedList::append(char letter) {
-    append(std::make_unique<Tile>(new Tile{letter}));
+    append(std::make_shared<Tile>(letter));
 }
 
+// Create a new node using tile arg and append.
 void LinkedList::append(std::shared_ptr<Tile> tile) {
     std::shared_ptr<Node> node {std::make_shared<Node>(*tile)};
     if (head == nullptr) {
@@ -53,8 +55,8 @@ bool LinkedList::remove(std::shared_ptr <Tile> tile) {
 }
 
 bool LinkedList::remove(char letter) {
-    bool success{false};
-    std::shared_ptr <Node> current{head}, previous{};
+    bool success {false};
+    std::shared_ptr<Node> current {head}, previous {};
     while (current != nullptr && current->getLetter() != letter) {
         previous = current;
         current->setNext(current->getNext());
@@ -67,7 +69,6 @@ bool LinkedList::remove(char letter) {
         }
         // Free superfluous storage.
         // delete current;
-        // No longer needed due to special pointers
         success = true;
         --length;
     }
