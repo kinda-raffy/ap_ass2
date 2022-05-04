@@ -7,12 +7,12 @@ LinkedList::LinkedList()
 LinkedList::LinkedList(const LinkedList &source)
     : head {nullptr}, tail {nullptr}, length {source.length} {
     int index {0};
-    // Node *current {source.head}, *previous {nullptr};
     std::shared_ptr <Node> current {source.head}, previous {source.head};
     while (index < length) {
         // Construct a copy of current node in source list.
         std::shared_ptr <Node> node{std::make_shared<Node>(*current)};
         tail = node;
+        // Append copied node to the end of the list.
         if (head == nullptr) {
             previous = head = node;
         } else {
@@ -58,6 +58,7 @@ char LinkedList::pop() {
         result = head->getLetter();
         head = head->getNext();
     }
+    --length;
     return result;
 }
 
