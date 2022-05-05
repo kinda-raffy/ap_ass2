@@ -8,7 +8,7 @@ class Board {
 
     // Board is a two dimensional vector of characters.
     std::vector<std::vector<char>> board;
-    const size_t dimension;
+    const size_t size;
 
 public:
 
