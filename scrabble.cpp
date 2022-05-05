@@ -58,7 +58,7 @@ LinkedList* createHand(const std::string &fileName="") {
 // FIXME - Placeholder function
 //int createBoard(const void *board=nullptr);
 
-// TODO: Make player a class?
+// TODO: Make player a class? YES PLEASE RAF PLEASE MAKE A PLAYER CLASS ON GOD
 // FIXME: Create classes automatically handles load and new games. Update parameters to match.
 void generateGame(const std::string& player1Name,
                   const std::string& player2Name,
