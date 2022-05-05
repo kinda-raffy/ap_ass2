@@ -28,6 +28,7 @@ const static std::map<char, int> values = {
 	{'X', 8},
 	{'Y', 4},
 	{'Z', 10},
+	{'\0', 0}, // Null character representing empty tiles?
 };
 
 Tile::Tile(char letter)
