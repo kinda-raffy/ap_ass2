@@ -1,8 +1,6 @@
 #ifndef ASSIGN2_SAVE_STATE_H
 #define ASSIGN2_SAVE_STATE_H
 
-#include "Board.h"
-
 #include <string>
 
 class SaveState {

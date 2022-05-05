@@ -2,6 +2,7 @@
 #define ASSIGN2_TILE_H
 
 #include <map>
+#include <cctype>
 
 class Tile {
 

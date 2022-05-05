@@ -12,19 +12,21 @@
 class Board {
 
     // Board is a two dimensional vector of tiles.
-    std::vector<std::vector<Tile>> board;
     const size_t size;
+    std::vector<std::vector<Tile>> board;
+    
 
 public:
 
     // Boards can be constructed using size or save state.
     explicit Board(size_t);
-    Board(const SaveState&);
     Board(const Board&);
+    Board(const SaveState&);
     ~Board() = default;
 
     std::size_t getSize() const;
     std::string toSave() const;
+    std::string toString() const;
 };
 
 #endif // ASSIGN2_BOARD_H
