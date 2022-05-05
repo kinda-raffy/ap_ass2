@@ -34,3 +34,7 @@ char Node::getLetter() const {
 void Node::setLetter(char letter) {
    tile->setLetter(letter);
 }
+
+int Node::getValue() const {
+   return tile->getValue();
+}

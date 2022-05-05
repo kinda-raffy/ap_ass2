@@ -18,3 +18,5 @@ Board::Board(const Board &source)
         board.push_back(source.board.at(index));
     }
 }
+
+Board::~Board() = default;

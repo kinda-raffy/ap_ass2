@@ -4,6 +4,8 @@
 #include <vector>
 #include <memory>
 
+// Do not use namespaces in header files.
+
 class Board {
 
     // Board is a two dimensional vector of characters.
@@ -13,7 +15,7 @@ class Board {
 public:
 
     // TODO: Construct a board object using string?
-    Board(size_t);
+    explicit Board(size_t);
     Board(const Board&);
     ~Board();
 };
