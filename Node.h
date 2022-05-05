@@ -21,7 +21,7 @@ public:
    std::shared_ptr<Node> getNext();
    void setNext(std::shared_ptr<Node> next);
 
-   // Modify tile through node object.
+   // Access and alter tile through node object.
    int getValue() const;
    char getLetter() const;
    void setLetter(char);

@@ -17,13 +17,13 @@ Node::Node(const Node &source)
    // Next node is currently not deep copied. 
 }
 
+// Return a shared pointer to the next node.
 std::shared_ptr<Node> Node::getNext() {
-   // Return a shared pointer to the next node.
    return next;
 }
 
+// Set next pointer to a new node. Smart pointers will handle memory.
 void Node::setNext(std::shared_ptr<Node> next) {
-   // Nodes do not own the next node pointed to; do not delete next.
    this->next = next;
 }
 
