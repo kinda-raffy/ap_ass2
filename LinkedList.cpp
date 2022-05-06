@@ -4,6 +4,11 @@ LinkedList::LinkedList()
     : head {nullptr}, tail {nullptr}, length {0} {
 }
 
+LinkedList::LinkedList(const std::string &list)
+    : LinkedList {} {
+    
+}
+
 LinkedList::LinkedList(const LinkedList &source)
     : head {nullptr}, tail {nullptr}, length {source.length} {
     int index {0};

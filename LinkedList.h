@@ -16,6 +16,7 @@ class LinkedList {
 public:
 
    LinkedList();
+   LinkedList(const std::string&);
    LinkedList(const LinkedList&);
    ~LinkedList() = default;
 

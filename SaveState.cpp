@@ -1,10 +1,7 @@
 #include "SaveState.h"
 
-
-
 // Create a save state from text file. Refactor to auto find size args?
-SaveState::SaveState(const std::string &input, 
-    const std::size_t players, const std::size_t size) {
+SaveState::SaveState(const std::string &input, size_t players, size_t size) {
     // Use input string to locate save state file and read.
     std::ifstream file {input};
     if (!file) {

@@ -24,13 +24,12 @@ public:
 
     // TODO: Copy constructor?
 
-    SaveState(const std::string&, const std::size_t, const std::size_t);
+    SaveState(const std::string&, std::size_t = 2, std::size_t = 15);
     SaveState(const Core&);
     ~SaveState() = default;
     // SaveState(const Board&, const std::vector<Player>&, const LinkedList&, const int); Backup process.
 
     void saveToFile(const std::string&) const;
-    std::unique_ptr<Core> createCore() const;
 };
 
 #endif // ASSIGN2_SAVE_STATE_H
