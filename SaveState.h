@@ -13,13 +13,12 @@
 class SaveState {
 
     const std::string tiles;
-    const std::string board; // Regex could be used for validation.
+    const std::string board; // Regex could be used for validation if required? 
     std::size_t partition;
 
     std::vector<const std::string> players;
     std::vector<const std::string> hands;
     std::vector<const int> scores;
-    
     int current;
 
 public:
@@ -28,6 +27,7 @@ public:
     SaveState(const Core&);
     // SaveState(const Board&, const std::vector<Player>&, const LinkedList&, const int); Backup process.
     SaveState(const SaveState&);
+    ~SaveState() = default;
 
     void saveToFile(const std::string&) const;
     std::unique_ptr<Core> createCore() const;
