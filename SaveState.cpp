@@ -1,9 +1,43 @@
 #include "SaveState.h"
 
+
+
+// Create a save state from text file. Refactor to auto find size args?
+SaveState::SaveState(const std::string &input, 
+    const std::size_t players, const std::size_t size) {
+    // Use input string to locate save state file and read.
+    std::ifstream file {input};
+    if (!file) {
+        std::cout << "Error accessing file. Object invalid." << std::endl;
+    } else {
+        std::string line;
+        // Read player info.
+        for (int index {0}; index < players; ++index) {
+            std::getline(file, line);
+            this->players.push_back(line);
+            std::getline(file, line);
+            scores.push_back(std::stoi(line));
+            std::getline(file, line);
+            hands.push_back(line);
+        }
+        // Read board info. Two lines added for header.
+        for (int index {0}; index < size + 2; ++index) {
+            std::getline(file, line);
+            board += line + "\n";
+        }
+        // Tile bag and current player.
+        std::getline(file, tiles);
+        std::getline(file, line);
+        current = 1;
+        while (this->players.at(current - 1) != line) {
+            ++current;
+        }
+    }
+}
+
 SaveState::SaveState(const Core &core) : 
     board {core.board->toString()},
     tiles {core.tiles->toString()},
-    partition {this->board.find(' ')}, 
     players {}, scores {}, hands {}, current {core.current}  {
     // Iteratively convert all player info into save strings and store.
     for (const Player &player : core.players) {
@@ -26,17 +60,6 @@ SaveState::SaveState(const Core &core) :
         }
     }
 */
-
-// TODO: Fix for deep copy.
-SaveState::SaveState(const SaveState &save) : 
-    board     {save.board}, 
-    tiles     {save.tiles},
-    players   {save.players},
-    scores    {save.scores},
-    hands     {save.hands},
-    current   {save.current},
-    partition {save.partition} {
-}
 
 void SaveState::saveToFile(const std::string &location) const {
     std::ofstream output {location, std::ios::trunc};

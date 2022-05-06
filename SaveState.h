@@ -12,9 +12,8 @@
 
 class SaveState {
 
-    const std::string tiles;
-    const std::string board; // Regex could be used for validation if required? 
-    std::size_t partition;
+    std::string tiles;
+    std::string board; // Regex could be used for validation if required? 
 
     std::vector<const std::string> players;
     std::vector<const std::string> hands;
@@ -23,11 +22,12 @@ class SaveState {
 
 public:
 
-    // SaveState(const std::ifstream&); ?
+    // TODO: Copy constructor?
+
+    SaveState(const std::string&, const std::size_t, const std::size_t);
     SaveState(const Core&);
-    // SaveState(const Board&, const std::vector<Player>&, const LinkedList&, const int); Backup process.
-    SaveState(const SaveState&);
     ~SaveState() = default;
+    // SaveState(const Board&, const std::vector<Player>&, const LinkedList&, const int); Backup process.
 
     void saveToFile(const std::string&) const;
     std::unique_ptr<Core> createCore() const;

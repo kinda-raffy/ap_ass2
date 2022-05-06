@@ -9,6 +9,11 @@ Board::Board(std::size_t size)
     }
 }
 
+// TODO: Finish this constructor.
+Board::Board(const std::string &save) 
+    : board {}, size {} {
+}
+
 Board::Board(const Board &source)
     : size {source.size}, board {std::vector<std::vector<Tile>> {}} {
     // Copy all characters into corresponding positions.
@@ -17,47 +22,61 @@ Board::Board(const Board &source)
     }
 }
 
-Board::Board(const SaveState &saveState)
-    : Board{saveState.getSize()}{
-    std::string letters = saveState.getLetters();
-    size_t index = 0;
-    for (std::vector<Tile> &row : board) {
-        for (Tile &position : row) {
-            position.setLetter(letters.at(index++));
+/*
+    Board::Board(const SaveState &saveState)
+        : Board {saveState.getSize()} {
+        std::string letters {saveState.getLetters()};
+        std::size_t index {0};
+        for (std::vector<Tile> &row : board) {
+            for (Tile &position : row) {
+                position.setLetter(letters.at(index++));
+            }
         }
     }
-}
+*/
 
 std::size_t Board::getSize() const {
     return size;
 }
 
-// Convert current board into a save state string.
-std::string Board::toString() const {
-    std::stringstream stream {};
-    // Push board size to string stream.
-    stream << size << ' ';
-    for (const std::vector<Tile> &row : board) {
-        for (const Tile &position : row) {
-            stream << position.getLetter();
+/*
+    // Convert current board into a save state string.
+    std::string Board::toString() const {
+        std::stringstream stream {};
+        // Push board size to string stream.
+        stream << size << ' ';
+        for (const std::vector<Tile> &row : board) {
+            for (const Tile &position : row) {
+                stream << position.getLetter();
+            }
         }
+        return stream.str();
     }
-    return stream.str();
-}
+*/
 
 // Create a string that visually represents the current board state.
-std::string Board::toDisplay() const{
+std::string Board::toString() const {
     std::stringstream stream {};
-    stream << " ";
-    for(std::size_t i {0}; i < size; ++i) {
-        stream << " " << i;
+    // Col indicies.
+    stream << "  ";
+    for (std::size_t index {0}; index < size; ++index) {
+        stream << "  " << index << " ";
     }
+    // Top border.
+    stream << "  ";
+    for (std::size_t index {0}; index < 3 * size; ++index) {
+        stream << "-";
+    }
+    // Row labels and body.
     stream << std::endl;
     char rowLabel {'A'};
+    // Iterate over each space in the vector.
     for (const std::vector<Tile> &row : board) {
-        stream << rowLabel++ << "|";
+        stream << rowLabel++ << " | ";
         for (const Tile &position : row) {
-            stream << position.getLetter() << "|";
+            // Convert unused tiles into spaces for printing.
+            char letter {position.getLetter()};
+            stream << ((letter != '-') ? letter : ' ') << " | ";
         }
         stream << std::endl;
     }
