@@ -4,39 +4,40 @@ SaveState::SaveState(const Core &core) :
     board {core.board->toString()},
     tiles {core.tiles->toString()},
     partition {this->board.find(' ')}, 
-    players {}, hands {}, current {core.current}  {
-    // Identify the partition between board size and tile state substrings.
-}
-
-SaveState::SaveState(const Board &board, const std::vector<Player> &players, 
-    const LinkedList& tiles, const int current) 
-    : board {board.toString()}, tiles {tiles.toString()}, 
-        partition {}, players {}, hands {}, scores {}, current {current} {
-    partition = this->board.find(' ');
-    for (const Player &player : players) {
-        this->players.push_back(player.getName());
-        this->scores.push_back(player.getScore());
-        this->hands.push_back(player.handToString());
+    players {}, scores {}, hands {}, current {core.current}  {
+    // Iteratively convert all player info into save strings and store.
+    for (const Player &player : core.players) {
+        players.push_back(player.getName());
+        scores.push_back(player.getScore());
+        hands.push_back(player.handToString());
     }
 }
 
-SaveState::SaveState(const SaveState &saveState)
-    : board {saveState.board}, partition {saveState.partition} {
-}
-
-size_t SaveState::getSize() const {
-    std::size_t size {0};
-    if (partition != std::string::npos) {
-        size = std::stoi(board.substr(0, partition));
+/*
+    SaveState::SaveState(const Board &board, const std::vector<Player> &players, 
+        const LinkedList& tiles, const int current) 
+        : board {board.toString()}, tiles {tiles.toString()}, 
+            partition {}, players {}, hands {}, scores {}, current {current} {
+        partition = this->board.find(' ');
+        for (const Player &player : players) {
+            this->players.push_back(player.getName());
+            this->scores.push_back(player.getScore());
+            this->hands.push_back(player.handToString());
+        }
     }
-    return size;
+*/
+
+// TODO: Fix for deep copy.
+SaveState::SaveState(const SaveState &save) : 
+    board     {save.board}, 
+    tiles     {save.tiles},
+    players   {save.players},
+    scores    {save.scores},
+    hands     {save.hands},
+    current   {save.current},
+    partition {save.partition} {
 }
 
-std::string SaveState::getLetters() const {
-    return board.substr(partition + 1);
-}
-
-// TODO: Output to file using correct format.
 void SaveState::saveToFile(const std::string &location) const {
     std::ofstream outputFile {location, std::ios::trunc};
     // If the output file was successfully opened, then write contents.

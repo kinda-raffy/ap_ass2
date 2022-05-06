@@ -26,13 +26,10 @@ public:
 
     // SaveState(const std::ifstream&); ?
     SaveState(const Core&);
-    SaveState(const Board&, const std::vector<Player>&, const LinkedList&, const int);
+    // SaveState(const Board&, const std::vector<Player>&, const LinkedList&, const int); Backup process.
     SaveState(const SaveState&);
 
-    std::size_t getSize() const;
-    std::string getLetters() const;
     void saveToFile(const std::string&) const;
-
     std::unique_ptr<Core> createCore() const;
 };
 
