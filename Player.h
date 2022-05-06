@@ -22,12 +22,12 @@ public:
            std::string fileName="");
     ~Player();
 
-    std::string getName();
-    int getScore();
+    std::string getName() const;
+    int getScore() const;
     void setScore(int);
 
-    std::string handToString();
-    void printHand();
+    std::string handToString() const;
+    void printHand() const;
 };
 
 

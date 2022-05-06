@@ -14,7 +14,6 @@ class Board {
     // Board is a two dimensional vector of tiles.
     const size_t size;
     std::vector<std::vector<Tile>> board;
-    
 
 public:
 
@@ -25,8 +24,8 @@ public:
     ~Board() = default;
 
     std::size_t getSize() const;
-    std::string toSave() const;
     std::string toString() const;
+    std::string toDisplay() const;
 };
 
 #endif // ASSIGN2_BOARD_H

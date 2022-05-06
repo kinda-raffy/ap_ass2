@@ -33,7 +33,7 @@ std::size_t Board::getSize() const {
 }
 
 // Convert current board into a save state string.
-std::string Board::toSave() const {
+std::string Board::toString() const {
     std::stringstream stream {};
     // Push board size to string stream.
     stream << size << ' ';
@@ -45,21 +45,21 @@ std::string Board::toSave() const {
     return stream.str();
 }
 
-std::string Board::toString() const{
+// Create a string that visually represents the current board state.
+std::string Board::toDisplay() const{
     std::stringstream stream {};
-
     stream << " ";
-    for(size_t i=0; i < size; i++){
+    for(std::size_t i {0}; i < size; ++i) {
         stream << " " << i;
     }
-    stream << "\n";
-    char rowLabel = 'A';
+    stream << std::endl;
+    char rowLabel {'A'};
     for (const std::vector<Tile> &row : board) {
         stream << rowLabel++ << "|";
         for (const Tile &position : row) {
             stream << position.getLetter() << "|";
         }
-        stream << "\n";
+        stream << std::endl;
     }
     return stream.str();
 }

@@ -44,11 +44,11 @@ void Player::setLoadedHand(int playerNum, std::string fileName) {
     this->hand = std::move(loadedHand);
 }
 
-std::string Player::getName() {
+std::string Player::getName() const {
     return this->name;
 }
 
-int Player::getScore() {
+int Player::getScore() const {
     return this->score;
 }
 
@@ -56,14 +56,12 @@ void Player::setScore(int score_) {
     this->score = score_;
 }
 
-std::string handToString() {
+std::string Player::handToString() const {
     // FIXME - Fix LL print.
     return "";
 }
 
-void Player::printHand() {
+void Player::printHand() const {
     std::cout << "Your hand is" << std::endl;
     std::cout << handToString() << std::endl;
 }
-
-
