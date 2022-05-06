@@ -12,6 +12,5 @@ int main() {
     std::string saveString = "4 -A-E---G----H---";
     SaveState save = SaveState(saveString);
     Board board = Board(save);
-
     std::cout << board.toString();
 }
