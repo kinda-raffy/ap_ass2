@@ -26,7 +26,7 @@ using uniqPtr_LL = std::unique_ptr<LinkedList>;
     // Add to tile bag.
     uniqPtr_LL tileBag = std::make_unique<LinkedList>();
     for (auto& letter : *charList) { tileBag->append(letter); }
-    return tileBag;
+    return std::move(tileBag);
 }
 
 uniqPtr_LL loadSavedBag(const std::string& fileName) {

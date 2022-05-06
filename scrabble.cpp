@@ -1,13 +1,28 @@
 #include "LinkedList.h"
+#include "SaveState.h"
+#include "Core.h"
 
 #include <iostream>
 #include <algorithm>
 #include <fstream>
 #include <vector>
 #include <random>
+#include <memory>
 
 #define EXIT_SUCCESS    0
 #define EXIT_FAILURE    1
+
+// FIXME - Chnage function name
+void _newGame() {
+    std::unique_ptr<Core> game {std::make_unique<Core>()};
+    game->run();
+}
+
+void _loadGame(const std::string &file, size_t players, size_t size) {
+    std::unique_ptr<SaveState> save {std::make_unique<SaveState>(file, players, size)};
+    std::unique_ptr<Core> game = std::make_unique<Core>(*save);
+    game->run();
+}
 
 void credits() {
     std::cout

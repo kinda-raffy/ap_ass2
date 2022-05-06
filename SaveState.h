@@ -1,7 +1,7 @@
 #ifndef ASSIGN2_SAVE_STATE_H
 #define ASSIGN2_SAVE_STATE_H
 
-#include "Core.h"
+//#include "Core.h"
 #include "Board.h"
 #include "Player.h"
 
