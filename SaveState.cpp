@@ -1,5 +1,13 @@
 #include "SaveState.h"
 
+SaveState::SaveState(const Core &core) : 
+    board {core.board->toString()},
+    tiles {core.tiles->toString()},
+    partition {this->board.find(' ')}, 
+    players {}, hands {}, current {core.current}  {
+    // Identify the partition between board size and tile state substrings.
+}
+
 SaveState::SaveState(const Board &board, const std::vector<Player> &players, 
     const LinkedList& tiles, const int current) 
     : board {board.toString()}, tiles {tiles.toString()}, 

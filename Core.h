@@ -8,6 +8,14 @@ using uniqPtr_LL = std::unique_ptr<LinkedList>;
 using sharPtr_LL = std::shared_ptr<LinkedList>;
 
 class Core {
+    /* 
+        Harry Proposed Layout
+        ~
+        std::vector<Player> players;
+        std::shared_ptr<LinkedList> tiles;
+        std::unique_ptr<Board> board;
+        int current; // Current player turn.
+    */
 
     int numPlayers;
     int playerTurn;

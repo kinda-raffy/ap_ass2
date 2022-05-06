@@ -8,6 +8,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <memory>
 
 class SaveState {
 
@@ -31,6 +32,8 @@ public:
     std::size_t getSize() const;
     std::string getLetters() const;
     void saveToFile(const std::string&) const;
+
+    std::unique_ptr<Core> createCore() const;
 };
 
 #endif // ASSIGN2_SAVE_STATE_H
