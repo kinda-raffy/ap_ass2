@@ -76,12 +76,15 @@ int LinkedList::size() const {
     return length;
 }
 
-void LinkedList::print() const {
-    std::shared_ptr<Node> current = head;
+std::string LinkedList::toString() const {
+    std::stringstream stream {};
+    std::shared_ptr<Node> current {head};
     while (current != nullptr) {
-        std::cout << current->getLetter() << '-' << current->getValue();
-        if (current != tail) { std::cout << ", "; }
-        current = current->getNext();
+        stream << current->getLetter() << '-' << current->getValue();
+        if (current != tail) {
+            stream << ", ";
+        }
     }
-    std::cout << std::endl;
+    stream << std::endl;
+    return stream.str();
 }

@@ -4,10 +4,11 @@
 #include "Node.h"
 #include <memory>
 #include <iostream>
+#include <string>
+#include <sstream>
 
 class LinkedList {
 
-   
    std::shared_ptr<Node> head;
    std::shared_ptr<Node> tail;
    int length;
@@ -24,7 +25,7 @@ public:
    void append(std::unique_ptr<Tile> tile);
    int size() const;
 
-   void print() const;
+   std::string toString() const;
 };
 
 #endif // ASSIGN2_LINKEDLIST_H
