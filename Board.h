@@ -26,6 +26,8 @@ public:
 
     std::size_t getSize() const;
     std::string toString() const;
+
+    int placeTile(int x, int y, char letter);
 };
 
 #endif // ASSIGN2_BOARD_H

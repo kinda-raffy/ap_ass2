@@ -10,7 +10,7 @@ Board::Board(std::size_t size)
 }
 
 // TODO: Finish this constructor.
-Board::Board(const std::string &save) 
+Board::Board(const std::string &save)
     : board {}, size {} {
 }
 
@@ -62,6 +62,7 @@ std::string Board::toString() const {
     for (std::size_t index {0}; index < size; ++index) {
         stream << "  " << index << " ";
     }
+    stream << "\n";
     // Top border.
     stream << "  ";
     for (std::size_t index {0}; index < 3 * size; ++index) {
@@ -76,9 +77,23 @@ std::string Board::toString() const {
         for (const Tile &position : row) {
             // Convert unused tiles into spaces for printing.
             char letter {position.getLetter()};
-            stream << ((letter != '-') ? letter : ' ') << " | ";
+            stream << ((letter != '\0') ? letter : ' ') << " | ";
         }
         stream << std::endl;
     }
     return stream.str();
+}
+
+int Board::placeTile(int x, int y, char letter) {
+    int retStat = 0;
+
+    // Bounds check; don't index outside the vector
+    if (!(size <= x || size <= y)) {
+        // Check if position (x, y) is empty
+        if (board[x][y].getLetter() == '\0') {
+            board[x][y].setLetter(letter);
+            retStat = board[x][y].getValue();
+        }
+    }
+    return retStat;
 }

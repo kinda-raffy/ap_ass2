@@ -1,5 +1,4 @@
 #include "Core.h"
-#include "TileBag.cpp"
 
 void Core::printDuck() {
     std::cout << "https://imgur.com/gallery/w9Mjo4y" << std::endl;
@@ -47,7 +46,7 @@ void Core::displayEnd() {
 }
 
 void Core::changeTurn() {
-    if (current >= players.size()) {
+    if (current >= players.size() - 1) {
         this->current = 0;
     } else {
         this->current++;
@@ -62,17 +61,37 @@ int Core::handleAction(std::vector<std::string> actVec) {
     if (act == "place") {
         players[current].refreshPass();
         if (actVec[1] == "Done") {
+            // Replenish hand if bag is not empty.
+            while (bag->size() != 0 &&
+                   players[current].getHand()->size() < HAND_SIZE) {
+                players[current].getHand()->append(bag->pop());
+            }
             retStat = NEXT_PLAYER;
         } else {
-            // TODO - Upper conversion / checks.
             // Command | place <letter> at <pos>
-            char letter = actVec[1][0];
+            char letter = std::toupper(actVec[1][0]);
             std::string pos = actVec[3];
-            // TODO - Place tile on board.
-            //  RET struct {value, bingoBool}
-            //  RET {0, false} if illegal move ELSE {value of tile placed, true/false}.
-            const int value = 5;
-            const bool bingo = false;
+
+            // Convert pos to (x, y) coordinates
+            int posX = pos[0] - 65;  // i'm sorry TODO make less bad
+            int posY = std::stoi(pos.substr(1));
+            // TODO: check if remainder of pos is actually
+            // an int before doing that
+
+            // Place tile
+            int value = board->placeTile(posX, posY, letter);
+
+            // If move was valid, remove tile from player hand
+            if (value) {
+                players[current].getHand()->remove(letter);
+            }
+
+            // Check for bingo, will be true if player's hand is now empty
+            bool bingo = false;
+            if (players[current].getHand()->size() == 0) {
+                bingo = true;
+            }
+
             if (value) {
                 // Increase score.
                 if (bingo) {
@@ -80,11 +99,7 @@ int Core::handleAction(std::vector<std::string> actVec) {
                     players[current].addScore(value + BINGO_BONUS);
                 } else {
                     players[current].addScore(value);
-                } // Remove used letter from hand.
-                players[current].getHand()->remove(letter);
-                // Replenish hand if bag is not empty.
-                if (bag->size())
-                    players[current].getHand()->append(bag->pop());
+                }
                 retStat = SAME_PLAYER;
             } else {
                 std::cout << "Illegal move." << std::endl;
