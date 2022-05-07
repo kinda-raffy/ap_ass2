@@ -1,11 +1,4 @@
-#include <vector>
-#include <fstream>
-#include <algorithm>
-#include <random>
-#include "LinkedList.h"
-
-using uniqPtr_LL = std::unique_ptr<LinkedList>;
-
+#include "TileBag.h"
 
  uniqPtr_LL createNewBag() {
     std::ifstream file;
@@ -48,4 +41,3 @@ uniqPtr_LL loadSavedBag(const std::string& fileName) {
      const int _bagSize {tileBag->size()};
      for (int i = 0; i < _bagSize; ++i) {}  // TODO - Implement.
  }
-
