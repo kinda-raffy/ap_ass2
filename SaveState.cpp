@@ -71,7 +71,7 @@ SaveState::SaveState(const std::string &input) {
 // FIXME: Once Core is finalised fix this constructor.
 SaveState::SaveState(const Core &core) : 
     board {core.board->toString()},
-    tiles {core.tiles->toString()},
+    tiles {core.bag->toString()},
     players {}, scores {}, hands {}, current {core.current}  {
     // Iteratively convert all player info into save strings and store.
     for (const Player &player : core.players) {
