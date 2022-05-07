@@ -13,15 +13,15 @@
 #define EXIT_FAILURE    1
 
 // FIXME - Chnage function name
-void _newGame() {
-    std::unique_ptr<Core> game {std::make_unique<Core>()};
-    game->run();
+void _newGame(std::vector<std::string> playerNames) {
+    std::unique_ptr<Core> game {std::make_unique<Core>(playerNames)};
+    game->runGame();
 }
 
 void _loadGame(const std::string &file, size_t players, size_t size) {
     std::unique_ptr<SaveState> save {std::make_unique<SaveState>(file, players, size)};
     std::unique_ptr<Core> game = std::make_unique<Core>(*save);
-    game->run();
+    game->runGame();
 }
 
 void credits() {
@@ -82,11 +82,14 @@ std::string getPlayerName(int num) {
 }
 
 void newGame() {
+    std::vector<std::string> playerNames(2);
+
     std::cout << "Starting a New Game" << std::endl;
-    std::string player1Name = getPlayerName(1);
-    std::string player2Name = getPlayerName(2);
+    playerNames[0] = getPlayerName(1);
+    playerNames[1] = getPlayerName(2);
     std::cout << "Let's Play" << std::endl;
-    generateGame(player1Name, player2Name);
+
+    _newGame(playerNames);
 }
 
 
@@ -127,7 +130,7 @@ void greet() {
 
 int main() {
     greet();
-    gameModeHandler();
+    gameHandler();
 
     return EXIT_SUCCESS;
 }
