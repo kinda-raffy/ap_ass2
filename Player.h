@@ -1,7 +1,7 @@
-#include "LinkedList.h"
-
 #ifndef AP_ASS2_PLAYER_H
 #define AP_ASS2_PLAYER_H
+
+#include "LinkedList.h"
 
 using uniqPtr_LL = std::unique_ptr<LinkedList>;
 using sharPtr_LL = std::shared_ptr<LinkedList>;
@@ -9,8 +9,9 @@ using sharPtr_LL = std::shared_ptr<LinkedList>;
 class Player {
 
     std::string name;
+    sharPtr_LL hand;
+    int consecutivePasses;
     int score;
-    uniqPtr_LL hand;
 
     void setNewHand(sharPtr_LL tileBag);
     void setLoadedHand(int playerNum, std::string fileName);
@@ -25,6 +26,12 @@ public:
     std::string getName() const;
     int getScore() const;
     void setScore(int);
+    void addScore(int);
+    sharPtr_LL getHand() const;
+
+    int getPass() const;
+    void refreshPass();
+    void incrementPass();
 
     std::string handToString() const;
     void printHand() const;

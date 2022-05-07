@@ -4,7 +4,6 @@
 #include "Node.h"
 #include <memory>
 #include <iostream>
-#include <vector>
 #include <string>
 #include <sstream>
 
@@ -25,6 +24,7 @@ public:
    bool remove(char);
    void append(char);
    void append(std::unique_ptr<Tile> tile);
+   bool replaceFirstInstance(char, char);
    int size() const;
 
    std::string toString() const;

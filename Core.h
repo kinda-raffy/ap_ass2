@@ -2,6 +2,8 @@
 #define AP_ASS2_CORE_H
 
 #include <vector>
+#include <sstream>
+#include "SaveState.h"
 #include "LinkedList.h"
 #include "Player.h"
 #include "Board.h"
@@ -9,8 +11,14 @@
 using uniqPtr_LL = std::unique_ptr<LinkedList>;
 using sharPtr_LL = std::shared_ptr<LinkedList>;
 
-// Forward declaration could fix yesterday's error.
-class SaveState;
+// Core iteration control constants.
+#define QUIT 0
+#define NEXT_PLAYER 1
+#define SAME_PLAYER 2
+#define INVALID_ACT 3
+
+// Game rule constants.
+#define BINGO_BONUS 50
 
 class Core {
 
@@ -19,28 +27,26 @@ class Core {
     std::unique_ptr<Board> board;
     int current;
 
+    std::vector<Player> createPlayers(std::vector<std::string>);
+    int handleAction(std::vector<std::string>);
+    void changeTurn();
+    void displayTurn();
+    void displayEnd();
+
+
+
 public:
 
-    Core();
-    Core(const SaveState&);
-
-    // Can you set unique pointers to null? I've also fixed syntax here.
-    Core(std::vector<std::string> playerNames, uniqPtr_LL _board = nullptr,
-        uniqPtr_LL _bag = nullptr, int playerTurn = -1);
-    ~Core();
+    explicit Core(std::vector<std::string>);
+    explicit Core(const SaveState&);
+    ~Core() = default;
 
     void runGame();
-    void saveGame();
+    void saveGame(std::string);
 
+    friend std::ostream& operator << (std::ostream& os, const Core& core);
     void printDuck();
 
-    std::vector<Player> createPlayers(
-        const std::vector<std::string> playerNames);
-
-private:
-
-    // I've put this here to separate visually from the fields area.
-    std::vector<Player> createPlayers(int);
 };
 
 

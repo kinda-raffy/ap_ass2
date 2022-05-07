@@ -1,52 +1,216 @@
 #include "Core.h"
 #include "TileBag.cpp"
-#include "SaveState.h"
 
 void Core::printDuck() {
     std::cout << "https://imgur.com/gallery/w9Mjo4y" << std::endl;
 }
 
-Core::Core(const std::vector<std::string> playerNames,
-           const uniqPtr_LL _board, const uniqPtr_LL _bag,
-           int playerTurn) : current {playerTurn} {
-    if (current == -1) {
-        // New game.
-        this->bag = std::move(createNewBag());
-        this->players = createPlayers(playerNames);
-        this->board = std::make_unique<Board>(Board());
-        this->current = 1;
-
-    } else {
-        // Load game.
-        
-        /*
-            FIXME - What's going on here?
-            ~
-            Bag is a shared pointer; std::move returns a unique pointer.
-            Players is a vector of players, playerNames a vector of strings.
-            Board is a unique pointer to a board, _board points to a linked list.
-        */
-        this->bag = std::move(_bag);
-        this->players = (playerNames);
-        this->board = std::move(_board);
-        this->current = playerTurn;
-    }
+Core::Core(std::vector<std::string> playerNames) {
+    // New game.
+    this->bag = std::move(createNewBag());
+    this->players = createPlayers(playerNames);
+    this->board = std::make_unique<Board>(Board());
+    this->current = 0;
 }
 
 Core::Core(const SaveState&) {
-
+    // Load game.
+    // FIXME - Extract state from SaveState.
 }
 
 std::vector<Player> Core::createPlayers(const std::vector<std::string> playerNames) {
     // Check if bag is nullptr.
-    if (bag == nullptr) { throw std::runtime_error("Bag is nullptr."); }
-    //
-    const std::size_t _numPlayers = playerNames.size();
+    if (bag == nullptr) throw std::runtime_error("Bag is nullptr.");
+    // Generate num of players with corresponding names.
+    std::size_t numPlayers = playerNames.size();
     std::vector<Player> _players;
-    _players.reserve(_numPlayers);
-    for (int i {0}; i < _numPlayers; i++) {
+    _players.reserve(numPlayers);
+    for (std::size_t i {0}; i < numPlayers; i++) {
         _players.emplace_back(Player(playerNames[i], bag));
+    } return _players;
+}
+
+void Core::displayEnd() {
+    std::cout << "Game over" << std::endl;
+    // Scoreboard.
+    for (auto& player : players) {
+        std::cout << "Score for " << player.getName() << ": "
+                                  << player.getScore() << std::endl;
     }
-    return _players;
+    // Declare winner.
+    auto winner {
+        std::max_element(players.begin(), players.end(),
+                         [](const Player& a, const Player& b) {
+                           return a.getScore() < b.getScore();
+        })[0]};
+    std::cout << "Player " << winner.getName() << " won!\n" << std::endl;
+}
+
+void Core::changeTurn() {
+    if (current >= players.size()) {
+        this->current = 0;
+    } else {
+        this->current++;
+    }
+}
+
+int Core::handleAction(std::vector<std::string> actVec) {
+    int retStat {SAME_PLAYER};
+    const std::string act = actVec[0];
+
+    // Place a tile.
+    if (act == "place") {
+        players[current].refreshPass();
+        if (actVec[1] == "Done") {
+            retStat = NEXT_PLAYER;
+        } else {
+            // TODO - Upper conversion / checks.
+            // Command | place <letter> at <pos>
+            char letter = actVec[1][0];
+            std::string pos = actVec[3];
+            // TODO - Place tile on board.
+            //  RET struct {value, bingoBool}
+            //  RET {0, false} if illegal move ELSE {value of tile placed, true/false}.
+            const int value = 5;
+            const bool bingo = false;
+            if (value) {
+                // Increase score.
+                if (bingo) {
+                    std::cout << "\nBINGO!!!\n" << std::endl;
+                    players[current].addScore(value + BINGO_BONUS);
+                } else {
+                    players[current].addScore(value);
+                } // Remove used letter from hand.
+                players[current].getHand()->remove(letter);
+                // Replenish hand if bag is not empty.
+                if (bag->size())
+                    players[current].getHand()->append(bag->pop());
+                retStat = SAME_PLAYER;
+            } else {
+                std::cout << "Illegal move." << std::endl;
+                retStat = INVALID_ACT;
+            }
+        }
+    }
+    // Replace a single tile on the player's hand.
+    else if (act == "replace") {
+        players[current].refreshPass();
+        // Command | replace <repLetter>.
+        std::string repLetter = actVec[1];
+
+        if (repLetter.length() != 1) {
+            std::cout << "Replacement character is not a char." << std::endl;
+            retStat = INVALID_ACT;
+        }
+        // Replace letter on hand.
+        // FIXME - Simplify.
+        else if (!(players[current].getHand()->replaceFirstInstance(repLetter[0], bag->pop()))) {
+            std:: cout << "Tile " + repLetter + " not found in player's hand." << std::endl;
+            retStat = INVALID_ACT;
+        }
+        // On successful replacement, add the old letter to the tile bag.
+        else {
+            bag->append(repLetter[0]);
+            retStat = NEXT_PLAYER;
+        }
+    }
+    // Don't play this round. Maximum 2 consecutive passes allowed.
+    else if (act == "pass") {
+        players[current].incrementPass();
+        retStat = NEXT_PLAYER;
+    }
+    // Saves game.
+    else if (act == "save") {
+        // Command | save <filename>
+        saveGame(actVec[1]);
+        retStat = SAME_PLAYER;
+    }
+    // Quit game. Does not show game end dialogue.
+    else if (act == "quit") {
+        retStat = QUIT;
+    }
+    // Invalid command.
+    else {
+        std::cout << "Invalid Input." << std::endl;
+        retStat = INVALID_ACT;
+    } return retStat;
+}
+
+
+// TODO - Keep one or the other. Determine this in testing.
+std::ostream &operator<<(std::ostream &os, const Core &core) {
+    os << core.players[core.current].getName()
+       << " it's your turn.\n";
+    for (auto& _p : core.players) {
+        os << "Score for " << _p.getName()
+                  << ": " << _p.getScore() << '\n';
+    }
+    os << core.board->toString() << '\n';
+    os << core.players[core.current].handToString() << '\n';
+    return os;
+}
+
+/**
+ * @brief Displays game at the start of every turn.
+ * @order_of_ops Current name, Score of all players, Board, Current player hand.
+ */
+void Core::displayTurn() {
+    std::cout << players[current].getName()
+              << " it's your turn." << std::endl;
+    for (auto& _p : players) {
+        std::cout << "Score for " << _p.getName()
+                  << ": " << _p.getScore() << std::endl;
+    }
+    std::cout << board->toString() << std::endl;
+    std::cout << players[current].handToString() << std::endl;
+}
+
+void Core::runGame() {
+    // TODO - Perform preliminary checks before starting core.
+    int coreControl {SAME_PLAYER};
+
+    // Run round.
+    do {
+        if (coreControl != INVALID_ACT)
+            displayTurn();
+
+        // Get game action.
+        std::string word;
+        std::string actionLine;
+        std::vector<std::string> actionList;
+
+        // Transform line into vector of words.
+        std::cout << "> " << std::flush;
+        std::getline(std::cin >> std::ws, actionLine);
+        std::istringstream iss(actionLine);
+        while (iss >> word)
+            actionList.push_back(word);
+
+        // Perform action.
+        coreControl = handleAction(actionList);
+
+        // Switch players.
+        if (coreControl == NEXT_PLAYER)
+            changeTurn();
+
+        // The below conditionals carries greater precedence over core control.
+        // Tile bag is empty and current's hand is empty.
+        if (!bag->size() && !players[current].getHand()->size()) {
+            displayEnd();
+            coreControl = QUIT;
+        }
+
+        // If current player has passed twice.
+        if (players[current].getPass() >= 2) {
+            displayEnd();
+            coreControl = QUIT;
+        } // TODO: Simplify above.
+
+    } while (coreControl != QUIT);
+    std::cout << "Goodbye" << std::endl;
+}
+
+void Core::saveGame(std::string filename) {
+    // TODO - Call SaveState.
 }
 

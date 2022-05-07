@@ -56,6 +56,18 @@ void LinkedList::append(std::unique_ptr<Tile> tile) {
     ++length;
 }
 
+// Replaces the first encounter of node with 'letter' with 'repLetter'.
+bool LinkedList::replaceFirstInstance(char letter, char repLetter) {
+    bool retStat {false};
+    std::shared_ptr<Node> current {head};
+    while (current != nullptr) {
+        if (current->getLetter() == letter) {
+            current->setLetter(repLetter);
+            retStat = true;
+        }
+    } return retStat;
+}
+
 // Delete the first node and return the contained character.
 char LinkedList::pop() {
     char result {'\0'};
