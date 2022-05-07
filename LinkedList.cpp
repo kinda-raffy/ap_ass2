@@ -111,6 +111,7 @@ std::string LinkedList::toString() const {
         if (current != tail) {
             stream << ", ";
         }
+        current = current->getNext();
     }
     stream << std::endl;
     return stream.str();
