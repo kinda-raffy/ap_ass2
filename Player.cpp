@@ -21,9 +21,8 @@ Player::~Player() = default;
 
 void Player::setNewHand(sharPtr_LL tileBag) {
     // Set a new hand.
-    const int _handSize {7};
     sharPtr_LL newHand = std::make_shared<LinkedList>();
-    for (int i = 0; i < _handSize; i++)
+    for (int i = 0; i < HAND_SIZE; i++)
         newHand->append(tileBag->pop());
     this->hand = newHand;
 }
@@ -65,8 +64,7 @@ sharPtr_LL Player::getHand() const {
 }
 
 std::string Player::handToString() const {
-    // FIXME - Fix LL print.
-    return "";
+    return hand->toString();
 }
 
 void Player::printHand() const {

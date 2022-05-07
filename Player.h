@@ -3,6 +3,8 @@
 
 #include "LinkedList.h"
 
+#define HAND_SIZE 7
+
 using uniqPtr_LL = std::unique_ptr<LinkedList>;
 using sharPtr_LL = std::shared_ptr<LinkedList>;
 
