@@ -23,8 +23,10 @@ using sharPtr_LL = std::shared_ptr<LinkedList>;
 
 class Core {
 
-
-
+    std::vector<Player> players;
+    std::shared_ptr<LinkedList> bag;
+    std::unique_ptr<Board> board;
+    int current;
 
     std::vector<Player> createPlayers(std::vector<std::string>);
     int handleAction(std::vector<std::string>);
@@ -35,12 +37,6 @@ class Core {
 
 
 public:
-
-    std::vector<Player> players;
-    std::shared_ptr<LinkedList> bag;
-    std::unique_ptr<Board> board;
-
-    int current;
 
     explicit Core(std::vector<std::string>);
     explicit Core(const SaveState&);
