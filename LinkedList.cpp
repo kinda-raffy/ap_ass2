@@ -1,12 +1,22 @@
 #include "LinkedList.h"
 
+// FIXME: All functionalities in here should really be tested.
+
 LinkedList::LinkedList()
     : head {nullptr}, tail {nullptr}, length {0} {
 }
 
+// Construct a linked list object using its string representation.
 LinkedList::LinkedList(const std::string &list)
     : LinkedList {} {
-    
+    std::istringstream inputString {list};
+    std::string node;
+    // Append each letter to list after erasing any leading whitespace.
+    while (std::getline(inputString, node, ',')) {
+        node.erase(0, node.find_first_not_of(' '));
+        // Only leading character required since tile values stored internally.
+        append(node.at(0));
+    }
 }
 
 LinkedList::LinkedList(const LinkedList &source)

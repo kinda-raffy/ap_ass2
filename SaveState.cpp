@@ -21,9 +21,8 @@ SaveState::SaveState(const std::string &input) {
         while (lines.at(partition).at(0) != ' ') {
             ++partition;
         }
-        // Find the player count and board size including two header lines.
+        // Find the player count by dividing leading line count by three.
         const std::size_t playerCount {(partition - 1) / 3};
-        const std::size_t boardSize {size - partition + 1};
         /* 
             std::string line;
             // Read player info.
