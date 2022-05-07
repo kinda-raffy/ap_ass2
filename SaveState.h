@@ -18,9 +18,9 @@ class SaveState {
     std::string tiles;
     std::string board; // Regex could be used for validation if required? 
 
-    std::vector<const std::string> players;
-    std::vector<const std::string> hands;
-    std::vector<const int> scores;
+    std::vector<std::string> players;
+    std::vector<std::string> hands;
+    std::vector<int> scores;
     int current;
 
 public:
