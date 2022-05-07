@@ -1,7 +1,6 @@
 #ifndef ASSIGN2_SAVE_STATE_H
 #define ASSIGN2_SAVE_STATE_H
 
-//#include "Core.h"
 #include "Board.h"
 #include "Player.h"
 
@@ -9,6 +8,10 @@
 #include <fstream>
 #include <vector>
 #include <memory>
+#include <algorithm>
+
+// Forward declaration could fix yesterday's error.
+class Core;
 
 class SaveState {
 
@@ -24,7 +27,7 @@ public:
 
     // TODO: Copy constructor?
 
-    SaveState(const std::string&, std::size_t = 2, std::size_t = 15);
+    SaveState(const std::string&);
     SaveState(const Core&);
     ~SaveState() = default;
     // SaveState(const Board&, const std::vector<Player>&, const LinkedList&, const int); Backup process.

@@ -1,5 +1,6 @@
 #include "Core.h"
 #include "TileBag.cpp"
+#include "SaveState.h"
 
 void Core::printDuck() {
     std::cout << "https://imgur.com/gallery/w9Mjo4y" << std::endl;
@@ -17,6 +18,14 @@ Core::Core(const std::vector<std::string> playerNames,
 
     } else {
         // Load game.
+        
+        /*
+            FIXME - What's going on here?
+            ~
+            Bag is a shared pointer; std::move returns a unique pointer.
+            Players is a vector of players, playerNames a vector of strings.
+            Board is a unique pointer to a board, _board points to a linked list.
+        */
         this->bag = std::move(_bag);
         this->players = (playerNames);
         this->board = std::move(_board);

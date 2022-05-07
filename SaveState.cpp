@@ -1,37 +1,75 @@
 #include "SaveState.h"
+#include "Core.h"
 
-// Create a save state from text file. Refactor to auto find size args?
-SaveState::SaveState(const std::string &input, size_t players, size_t size) {
+// Create a save state using text file. Auto deduces players and board size.
+SaveState::SaveState(const std::string &input) {
     // Use input string to locate save state file and read.
     std::ifstream file {input};
     if (!file) {
         std::cout << "Error accessing file. Object invalid." << std::endl;
     } else {
-        std::string line;
-        // Read player info.
-        for (int index {0}; index < players; ++index) {
-            std::getline(file, line);
-            this->players.push_back(line);
-            std::getline(file, line);
-            scores.push_back(std::stoi(line));
-            std::getline(file, line);
-            hands.push_back(line);
+        // Collect all lines from file first.
+        std::vector<std::string> lines {};
+        std::string line {};
+        while (std::getline(file, line)) {
+            lines.push_back(line);
         }
-        // Read board info. Two lines added for header.
-        for (int index {0}; index < size + 2; ++index) {
-            std::getline(file, line);
-            board += line + "\n";
+        // Subtract last two lines containing bag and current player.
+        std::size_t size {lines.size() - 2};
+        std::size_t partition {0};
+        // Partition should index the first line of the board.
+        while (lines.at(partition).at(0) != ' ') {
+            ++partition;
         }
-        // Tile bag and current player.
-        std::getline(file, tiles);
-        std::getline(file, line);
+        // Find the player count and board size including two header lines.
+        const std::size_t playerCount {(partition - 1) / 3};
+        const std::size_t boardSize {size - partition + 1};
+        /* 
+            std::string line;
+            // Read player info.
+            for (int index {0}; index < players; ++index) {
+                std::getline(file, line);
+                this->players.push_back(line);
+                std::getline(file, line);
+                scores.push_back(std::stoi(line));
+                std::getline(file, line);
+                hands.push_back(line);
+            }
+            // Read board info. Two lines added for header.
+            for (int index {0}; index < size + 2; ++index) {
+                std::getline(file, line);
+                board += line + "\n";
+            }
+            // Tile bag and current player.
+            std::getline(file, tiles);
+            std::getline(file, line);
+            current = 1;
+            while (this->players.at(current - 1) != line) {
+                ++current;
+            }
+        */
+        std::size_t index {0};
+        // Read and store player data. Index tracks position in vector.
+        for (std::size_t player {0}; player < playerCount; ++player) {
+            players.push_back(lines.at(index++));
+            scores.push_back(std::stoi(lines.at(index++)));
+            hands.push_back(lines.at(index++));
+        }
+        // Read board string beginning at partition index.
+        for (; partition < size; ++partition) {
+            board += lines.at(partition) + "\n";
+        }
+        // Read tile bag and current player data.
+        tiles = lines.at(size++); 
+        const std::string currentPlayer {lines.at(size)};
         current = 1;
-        while (this->players.at(current - 1) != line) {
+        while (players.at(current - 1) != currentPlayer) {
             ++current;
         }
     }
 }
 
+// FIXME: Once Core is finalised fix this constructor.
 SaveState::SaveState(const Core &core) : 
     board {core.board->toString()},
     tiles {core.tiles->toString()},
@@ -58,6 +96,7 @@ SaveState::SaveState(const Core &core) :
     }
 */
 
+// FIXME: Test to verify that this works as intended.
 void SaveState::saveToFile(const std::string &location) const {
     std::ofstream output {location, std::ios::trunc};
     // If the output file was successfully opened, then write contents.
