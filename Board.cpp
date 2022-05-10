@@ -22,37 +22,9 @@ Board::Board(const Board &source)
     }
 }
 
-/*
-    Board::Board(const SaveState &saveState)
-        : Board {saveState.getSize()} {
-        std::string letters {saveState.getLetters()};
-        std::size_t index {0};
-        for (std::vector<Tile> &row : board) {
-            for (Tile &position : row) {
-                position.setLetter(letters.at(index++));
-            }
-        }
-    }
-*/
-
 std::size_t Board::getSize() const {
     return size;
 }
-
-/*
-    // Convert current board into a save state string.
-    std::string Board::toString() const {
-        std::stringstream stream {};
-        // Push board size to string stream.
-        stream << size << ' ';
-        for (const std::vector<Tile> &row : board) {
-            for (const Tile &position : row) {
-                stream << position.getLetter();
-            }
-        }
-        return stream.str();
-    }
-*/
 
 // Create a string that visually represents the current board state.
 std::string Board::toString() const {
