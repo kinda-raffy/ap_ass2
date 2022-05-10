@@ -12,17 +12,6 @@
 #define EXIT_SUCCESS    0
 #define EXIT_FAILURE    1
 
-// FIXME - Chnage function name
-void _newGame(std::vector<std::string> playerNames) {
-    std::unique_ptr<Core> game {std::make_unique<Core>(playerNames)};
-    game->runGame();
-}
-
-// void _loadGame(const std::string &file, size_t players, size_t size) {
-//     std::unique_ptr<SaveState> save {std::make_unique<SaveState>(file, players, size)};
-//     std::unique_ptr<Core> game = std::make_unique<Core>(*save);
-//     game->runGame();
-// }
 
 void credits() {
     std::cout
