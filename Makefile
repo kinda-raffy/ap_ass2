@@ -3,7 +3,7 @@ CCOPTS=-Wall -Werror -g -O -std=c++14
 # CCOPTS=-g -O -std=c++14
 
 OBJECTS=$(shell find *.cpp | sed 's/.cpp/.o/g')
-HAOBJECTS=haDebug.cpp Board.cpp LinkedList.cpp Node.cpp SaveState.cpp Tile.cpp
+HAOBJECTS=scrabble.cpp LinkedList.cpp Node.cpp Tile.cpp Board.cpp Core.cpp Player.cpp TileBag.cpp
 OUTPUT=scrabble
 
 all: $(OUTPUT)
@@ -19,7 +19,7 @@ $(OUTPUT): $(OBJECTS)
 
 %.cpp:
 
-# g++ -Wall -Werror -g -O -std=c++14 -o 
+# g++ -Wall -Werror -g -O -std=c++14 -o
 # haDebug haDebug.cpp Board.cpp LinkedList.cpp Node.cpp SaveState.cpp
 haDebug:
 	$(CC) $(CCOPTS) -o haDebug $(HAOBJECTS)

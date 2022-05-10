@@ -11,6 +11,7 @@ LinkedList::LinkedList(const std::string &list)
     : LinkedList {} {
     try {
         if (!validateListString(list)) {
+            std::cout << "Sorry World!";
             throw std::invalid_argument("Incorrect string structure.");
         }
         std::istringstream inputString {list};
@@ -47,7 +48,7 @@ LinkedList::LinkedList(const LinkedList &source)
 
 // FIXME: Does this actually work?
 bool LinkedList::validateListString(const std::string &list) {
-    std::regex structure {"(([A-Z]{1}-[\d]{1, 2})(, ?))+"};
+    std::regex structure {"(([A-Z]{1}-[0-9]{1, 2})(, ?))+"};
     return std::regex_match(list, structure);
 }
 

@@ -46,7 +46,7 @@ void Core::displayEnd() {
 }
 
 void Core::changeTurn() {
-    if (current >= players.size() - 1) {
+    if (current >= static_cast<int>(players.size() - 1)) {
         this->current = 0;
     } else {
         this->current++;
@@ -228,4 +228,3 @@ void Core::runGame() {
 void Core::saveGame(std::string filename) {
     // TODO - Call SaveState.
 }
-

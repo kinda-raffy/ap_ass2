@@ -18,11 +18,11 @@ void _newGame(std::vector<std::string> playerNames) {
     game->runGame();
 }
 
-void _loadGame(const std::string &file, size_t players, size_t size) {
-    std::unique_ptr<SaveState> save {std::make_unique<SaveState>(file, players, size)};
-    std::unique_ptr<Core> game = std::make_unique<Core>(*save);
-    game->runGame();
-}
+// void _loadGame(const std::string &file, size_t players, size_t size) {
+//     std::unique_ptr<SaveState> save {std::make_unique<SaveState>(file, players, size)};
+//     std::unique_ptr<Core> game = std::make_unique<Core>(*save);
+//     game->runGame();
+// }
 
 void credits() {
     std::cout
@@ -89,7 +89,8 @@ void newGame() {
     playerNames[1] = getPlayerName(2);
     std::cout << "Let's Play" << std::endl;
 
-    _newGame(playerNames);
+    Core _newGame(playerNames);
+    _newGame.runGame();
 }
 
 

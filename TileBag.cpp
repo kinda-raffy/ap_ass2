@@ -19,25 +19,27 @@
     // Add to tile bag.
     uniqPtr_LL tileBag = std::make_unique<LinkedList>();
     for (auto& letter : *charList) { tileBag->append(letter); }
-    return std::move(tileBag);
+    // return std::move(tileBag);
+    return tileBag;
 }
 
-uniqPtr_LL loadSavedBag(const std::string& fileName) {
-    std::ifstream file;
-    if (!file.is_open()) {
-        throw std::runtime_error("Could not find file: " + fileName);
-    }
-    uniqPtr_LL tileBag = std::make_unique<LinkedList>();
-    // Iterate to line number where saved bag is located.
-    const int _lineNum {8};
-    std::string line;
-    for (int i = 0; i < _lineNum; ++i)
-        std::getline(file, line);
-    // TODO - Perform string splitting to get letters.
- }
+// uniqPtr_LL loadSavedBag(const std::string& fileName) {
+//     std::ifstream file;
+//     if (!file.is_open()) {
+//         throw std::runtime_error("Could not find file: " + fileName);
+//     }
+//     uniqPtr_LL tileBag = std::make_unique<LinkedList>();
+//     // Iterate to line number where saved bag is located.
+//     const int _lineNum {8};
+//     std::string line;
+//     for (int i = 0; i < _lineNum; ++i)
+//         std::getline(file, line);
+//     // TODO - Perform string splitting to get letters.
+//  }
 
- std::string tileBagToString(uniqPtr_LL& tileBag) {
-     std::string bagString;
-     const int _bagSize {tileBag->size()};
-     for (int i = 0; i < _bagSize; ++i) {}  // TODO - Implement.
- }
+ // std::string tileBagToString(uniqPtr_LL& tileBag) {
+ //     std::string bagString;
+ //     const int _bagSize {tileBag->size()};
+ //     for (int i = 0; i < _bagSize; ++i) {}  // TODO - Implement.
+ //     return "";
+ // }
