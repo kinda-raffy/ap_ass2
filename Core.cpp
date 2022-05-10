@@ -73,7 +73,7 @@ int Core::handleAction(std::vector<std::string> actVec) {
             std::string pos = actVec[3];
 
             // Convert pos to (x, y) coordinates
-            int posX = pos[0] - 65;  // i'm sorry TODO make less bad
+            int posX = int(pos[0]) - 65;  // i'm sorry TODO make less bad
             int posY = std::stoi(pos.substr(1));
             // TODO: check if remainder of pos is actually
             // an int before doing that
