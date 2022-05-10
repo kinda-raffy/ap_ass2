@@ -206,9 +206,14 @@ void Core::runGame() {
         // Transform line into vector of words.
         std::cout << "> " << std::flush;
         std::getline(std::cin >> std::ws, actionLine);
-        std::istringstream iss(actionLine);
-        while (iss >> word)
-            actionList.push_back(word);
+        if (std::cin.eof()) { // Quit if EOF, broken when running in CLion?
+            actionList.emplace_back("quit");
+        }
+        else {
+            std::istringstream iss(actionLine);
+            while (iss >> word)
+                actionList.emplace_back(word);
+        }
 
         // Perform preliminary checks then action.
         if (actionList.empty()) {

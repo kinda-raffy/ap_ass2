@@ -103,7 +103,7 @@ void gameHandler() {
         credits();
         // Re-display menu.
         gameHandler();
-    } else if (choice == 4) {
+    } else if (choice == 4 || choice == 0) { // Choice = 0 when EOF
         std::cout << "Goodbye" << std::endl;
     } else {
         std::cout << "Invalid choice" << std::endl;
