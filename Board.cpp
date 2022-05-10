@@ -86,9 +86,9 @@ std::string Board::toString() const {
 
 int Board::placeTile(int x, int y, char letter) {
     int retStat = 0;
-
+    int iSize = int (size);
     // Bounds check; don't index outside the vector
-    if (!(x < 0 || size <= x || y < 0 || size <= y)) {
+    if (!(x < 0 || iSize <= x || y < 0 || iSize <= y)) {
         // Check if position (x, y) is empty
         if (board[x][y].getLetter() == '\0') {
             board[x][y].setLetter(letter);
