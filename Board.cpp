@@ -90,7 +90,7 @@ int Board::placeTile(int x, int y, char letter) {
     // Bounds check; don't index outside the vector
     if (!(x < 0 || iSize <= x || y < 0 || iSize <= y)) {
         // Check if position (x, y) is empty
-        if (board[x][y].getLetter() == '\0') {
+        if (board[x][y].getLetter() == '-') {
             board[x][y].setLetter(letter);
             retStat = board[x][y].getValue();
         }
