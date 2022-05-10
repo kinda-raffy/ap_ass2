@@ -4,7 +4,7 @@ Board::Board(std::size_t size)
     : size {size}, board {std::vector<std::vector<Tile>> {}} {
     for (std::size_t index {0}; index < size; ++index) {
         // Create row and initialise all positions to null tiles.
-        std::vector<Tile> row (size, Tile {'\0'});
+        std::vector<Tile> row (size, Tile {'-'});
         board.push_back(row);
     }
 }
@@ -77,7 +77,7 @@ std::string Board::toString() const {
         for (const Tile &position : row) {
             // Convert unused tiles into spaces for printing.
             char letter {position.getLetter()};
-            stream << ((letter != '\0') ? letter : ' ') << " | ";
+            stream << ((letter != '-') ? letter : ' ') << " | ";
         }
         stream << std::endl;
     }
