@@ -125,12 +125,14 @@ int Core::handleAction(std::vector<std::string> actVec) {
         }
         // Replace letter on hand.
         // FIXME - Simplify.
-        else if (!(players.at(current).getHand()->replaceFirstInstance(repLetter[0], bag->pop()))) {
+        else if (!(players.at(current)
+                          .getHand()
+                          ->replaceFirstInstance(repLetter[0], bag->pop()))) {
             // Tile to be replaced is not in hand.
             retStat = INVALID_ACT;
         }
-        // On successful replacement, add the old letter to the tile bag.
         else {
+            // On successful replacement, add the old letter to the tile bag.
             bag->append(repLetter[0]);
             retStat = NEXT_PLAYER;
         }
