@@ -41,7 +41,7 @@ public:
     ~Core() = default;
 
     void runGame();
-    void saveGame(std::string);
+    void saveGame(const std::string&) const;
 
     friend std::ostream& operator << (std::ostream& os, const Core& core);
     void printDuck();

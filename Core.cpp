@@ -227,8 +227,10 @@ void Core::runGame() {
     std::cout << "Goodbye" << std::endl;
 }
 
-void Core::saveGame(std::string filename) {
-    // TODO - Call SaveState.
+// Save current game state to file using the given file name.
+void Core::saveGame(const std::string &file) const {
+    std::unique_ptr<SaveState> save {std::make_unique<SaveState>(this)};
+    save->saveToFile(file);
 }
 
 std::shared_ptr<std::vector<Player>> Core::getPlayers() {
