@@ -18,7 +18,7 @@ class Board {
 public:
 
     // Boards can be constructed using size or save state.
-    explicit Board(size_t=15);
+    explicit Board(size_t = 15);
     explicit Board(const std::string&);
     Board(const Board&);
     // Board(const SaveState&); Useless I guess?
