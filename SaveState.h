@@ -28,7 +28,7 @@ public:
     // TODO: Copy constructor?
 
     SaveState(const std::string&);
-    SaveState(const Core&);
+    SaveState(Core&);
     ~SaveState() = default;
     // SaveState(const Board&, const std::vector<Player>&, const LinkedList&, const int); Backup process.
 

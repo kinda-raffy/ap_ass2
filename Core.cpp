@@ -8,7 +8,7 @@ Core::Core(std::vector<std::string> playerNames) {
     // New game.
     this->bag = std::move(createNewBag());
     this->players = createPlayers(playerNames);
-    this->board = std::make_unique<Board>(Board());
+    this->board = std::make_shared<Board>(Board());
     this->current = 0;
 }
 
@@ -227,4 +227,20 @@ void Core::runGame() {
 
 void Core::saveGame(std::string filename) {
     // TODO - Call SaveState.
+}
+
+std::shared_ptr<std::vector<Player>> Core::getPlayers() {
+    return std::make_shared<std::vector<Player>>(players);
+}
+
+std::shared_ptr<LinkedList> Core::getBag() {
+    return bag;
+}
+
+std::shared_ptr<Board> Core::getBoard() {
+    return board;
+}
+
+int Core::getCurrent() const {
+    return current;
 }

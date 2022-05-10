@@ -25,7 +25,7 @@ class Core {
 
     std::vector<Player> players;
     std::shared_ptr<LinkedList> bag;
-    std::unique_ptr<Board> board;
+    std::shared_ptr<Board> board;
     int current;
 
     std::vector<Player> createPlayers(std::vector<std::string>);
@@ -33,8 +33,6 @@ class Core {
     void changeTurn();
     void displayTurn();
     void displayEnd();
-
-
 
 public:
 
@@ -48,6 +46,10 @@ public:
     friend std::ostream& operator << (std::ostream& os, const Core& core);
     void printDuck();
 
+    std::shared_ptr<std::vector<Player>> getPlayers();
+    std::shared_ptr<LinkedList> getBag();
+    std::shared_ptr<Board> getBoard();
+    int getCurrent() const;
 };
 
 
