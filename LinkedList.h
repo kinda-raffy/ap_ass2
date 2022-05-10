@@ -3,6 +3,7 @@
 
 #include "Node.h"
 #include <memory>
+#include <regex>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -23,11 +24,15 @@ public:
    char pop();
    bool remove(char);
    void append(char);
-   void append(std::unique_ptr<Tile> tile);
+   void append(std::unique_ptr<Tile>);
    bool replaceFirstInstance(char, char);
    int size() const;
 
    std::string toString() const;
+
+private:
+
+   bool validateListString(const std::string&);
 };
 
 #endif // ASSIGN2_LINKEDLIST_H
