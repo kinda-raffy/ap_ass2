@@ -60,12 +60,12 @@ std::string Board::toString() const {
     // Col indicies.
     stream << "  ";
     for (std::size_t index {0}; index < size; ++index) {
-        stream << "  " << index << " ";
+        stream << ((index > 10) ? " " : "  ") << index << " ";
     }
     stream << "\n";
     // Top border.
     stream << "  ";
-    for (std::size_t index {0}; index < 3 * size; ++index) {
+    for (std::size_t index {0}; index < 4 * size + 1; ++index) {
         stream << "-";
     }
     // Row labels and body.
