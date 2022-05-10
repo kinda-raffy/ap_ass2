@@ -74,11 +74,11 @@ void LinkedList::append(std::unique_ptr<Tile> tile) {
 bool LinkedList::replaceFirstInstance(char letter, char repLetter) {
     bool retStat {false};
     std::shared_ptr<Node> current {head};
-    while (current != nullptr) {
+    while (current != nullptr && !retStat) {
         if (current->getLetter() == letter) {
             current->setLetter(repLetter);
             retStat = true;
-        }
+        } current = current->getNext();
     } return retStat;
 }
 
