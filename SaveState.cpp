@@ -83,7 +83,7 @@ SaveState::SaveState(Core &core) :
 
 // FIXME: Test to verify that this works as intended.
 void SaveState::saveToFile(const std::string &location) const {
-    std::ofstream output {location, std::ios::trunc};
+    std::ofstream output {location};
     // If the output file was successfully opened, then write contents.
     if (output) {
         std::size_t index {0}, bound {players.size()};

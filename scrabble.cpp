@@ -74,10 +74,10 @@ std::string getPlayerName(int num) {
 
 void newGame() {
     std::vector<std::string> playerNames(2);
-    std::cout << "Starting a New Game" << std::endl;
+    std::cout << "Starting a New Game\n" << std::endl;
     playerNames[0] = getPlayerName(1);
     playerNames[1] = getPlayerName(2);
-    std::cout << "Let's Play" << std::endl;
+    std::cout << "\nLet's Play\n" << std::endl;
     Core game(playerNames);
     game.runGame();
 }
@@ -88,7 +88,7 @@ int gameModeHandler() {
     std::cout << "1. New Game\n";
     std::cout << "2. Load Game\n";
     std::cout << "3. Credits (Show student information)\n";
-    std::cout << "4. Quit\n";
+    std::cout << "4. Quit\n" << std::endl;
     std::cin >> choice;
     return choice;
 }
@@ -102,11 +102,12 @@ void gameHandler() {
     } else if (choice == 3) {
         credits();
         // Re-display menu.
-        gameModeHandler();
+        gameHandler();
     } else if (choice == 4) {
         std::cout << "Goodbye" << std::endl;
     } else {
         std::cout << "Invalid choice" << std::endl;
+        gameHandler();
     }
 }
 
