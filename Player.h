@@ -15,14 +15,14 @@ class Player {
     int consecutivePasses;
     int score;
 
-    void setNewHand(sharPtr_LL tileBag);
-    void setLoadedHand(int playerNum, std::string fileName);
+    void setNewHand(const sharPtr_LL& tileBag);
+    void setLoadedHand(int playerNum, const std::string& fileName);
 
 
 public:
-    Player(std::string name, sharPtr_LL tileBag,
+    Player(std::string name, const sharPtr_LL& tileBag,
            int score=-1, int playerNum=-1,
-           std::string fileName="");
+           const std::string& fileName="");
     ~Player();
 
     std::string getName() const;

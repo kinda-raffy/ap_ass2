@@ -60,11 +60,13 @@ void loadGame() {
 std::string getPlayerName(int num) {
     std::string playerName;
     std::cout << "Enter a name for player "
-        << num << " (uppercase characters only)" << std::endl;
+              << num
+              << " (uppercase characters only)" << std::endl;
     std::cin >> playerName;
     while (!(std::all_of(playerName.begin(), playerName.end(), isupper))) {
         std::cout << "Invalid name. Please enter a name for player "
-            << num << " (uppercase characters only)" << std::endl;
+                  << num
+                  << " (uppercase characters only)" << std::endl;
         std::cin >> playerName;
     }
     return playerName;
@@ -72,14 +74,12 @@ std::string getPlayerName(int num) {
 
 void newGame() {
     std::vector<std::string> playerNames(2);
-
     std::cout << "Starting a New Game" << std::endl;
     playerNames[0] = getPlayerName(1);
     playerNames[1] = getPlayerName(2);
     std::cout << "Let's Play" << std::endl;
-
-    Core _newGame(playerNames);
-    _newGame.runGame();
+    Core game(playerNames);
+    game.runGame();
 }
 
 

@@ -81,20 +81,6 @@ SaveState::SaveState(Core &core) :
     }
 }
 
-/*
-    SaveState::SaveState(const Board &board, const std::vector<Player> &players, 
-        const LinkedList& tiles, const int current) 
-        : board {board.toString()}, tiles {tiles.toString()}, 
-            partition {}, players {}, hands {}, scores {}, current {current} {
-        partition = this->board.find(' ');
-        for (const Player &player : players) {
-            this->players.push_back(player.getName());
-            this->scores.push_back(player.getScore());
-            this->hands.push_back(player.handToString());
-        }
-    }
-*/
-
 // FIXME: Test to verify that this works as intended.
 void SaveState::saveToFile(const std::string &location) const {
     std::ofstream output {location, std::ios::trunc};

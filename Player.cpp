@@ -1,9 +1,10 @@
 #include <fstream>
+#include <utility>
 #include "Player.h"
 
-Player::Player(std::string name, sharPtr_LL tileBag, int score, int playerNum,
-               std::string fileName) : consecutivePasses {0} {
-    this->name = name;
+Player::Player(std::string name, const sharPtr_LL& tileBag, int score, int playerNum,
+               const std::string& fileName) : consecutivePasses {0} {
+    this->name = std::move(name);
     if (fileName.empty()) {
         // New player.
         this->score = 0;
@@ -19,7 +20,7 @@ Player::Player(std::string name, sharPtr_LL tileBag, int score, int playerNum,
 Player::~Player() = default;
 
 
-void Player::setNewHand(sharPtr_LL tileBag) {
+void Player::setNewHand(const sharPtr_LL& tileBag) {
     // Set a new hand.
     sharPtr_LL newHand = std::make_shared<LinkedList>();
     for (int i = 0; i < HAND_SIZE; i++)
@@ -27,7 +28,7 @@ void Player::setNewHand(sharPtr_LL tileBag) {
     this->hand = newHand;
 }
 
-void Player::setLoadedHand(int playerNum, std::string fileName) {
+void Player::setLoadedHand(int playerNum, const std::string& fileName) {
     // Load hand from file.
     std::ifstream file;
     if (!file.is_open()) {

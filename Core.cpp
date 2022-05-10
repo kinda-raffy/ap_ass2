@@ -1,5 +1,7 @@
 #include "Core.h"
 
+#include <utility>
+
 void Core::printDuck() {
     std::cout << "https://imgur.com/gallery/w9Mjo4y" << std::endl;
 }
@@ -7,7 +9,7 @@ void Core::printDuck() {
 Core::Core(std::vector<std::string> playerNames) {
     // New game.
     this->bag = std::move(createNewBag());
-    this->players = createPlayers(playerNames);
+    this->players = createPlayers(std::move(playerNames));
     this->board = std::make_shared<Board>(Board());
     this->current = 0;
 }
