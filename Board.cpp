@@ -11,7 +11,7 @@ Board::Board(std::size_t size)
 
 // TODO: Finish this constructor.
 Board::Board(const std::string &save)
-    : board {}, size {} {
+    : size {}, board {}{
 }
 
 Board::Board(const Board &source)
