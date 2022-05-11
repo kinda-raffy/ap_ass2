@@ -3,12 +3,13 @@
 #include "Player.h"
 
 Player::Player(const std::string &name, const std::string &hand, int score)
-    : name {name}, hand {std::make_shared<LinkedList>(hand)}, 
-    passes {0}, score {score} {
+        : name{name}, hand{std::make_shared<LinkedList>(hand)},
+          passes{0}, score{score}, currentlyPlacing{false} {
 }
 
-Player::Player(std::string name, const std::shared_ptr<LinkedList>& tileBag, int score, int playerNum,
-               const std::string& fileName) : passes {0} {
+Player::Player(std::string name, const std::shared_ptr<LinkedList> &tileBag,
+               int score, int playerNum, const std::string &fileName)
+        : passes{0}, currentlyPlacing{false} {
     this->name = std::move(name);
     // New player.
     this->score = 0;
@@ -65,4 +66,16 @@ void Player::refreshPass() {
 
 void Player::incrementPass() {
     this->passes++;
+}
+
+bool Player::isPlacing() const {
+    return currentlyPlacing;
+}
+
+void Player::startPlacing() {
+    currentlyPlacing = true;
+}
+
+void Player::donePlacing() {
+    currentlyPlacing = false;
 }

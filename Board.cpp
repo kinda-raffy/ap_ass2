@@ -26,7 +26,8 @@ Board::Board(const std::string &state)
         std::size_t index {4};
         while (index < line.size()) {
             // Create tile for each character and point index to next position.
-            Tile position {line.at(index)};
+            char letter = line.at(index);
+            Tile position {(letter == ' ') ? '-' : letter};
             board.at(size).push_back(position);
             index += 4;
         }

@@ -71,53 +71,57 @@ void Core::changeTurn() {
 int Core::handleAction(std::vector<std::string> actVec) {
     int retStat {SAME_PLAYER};
     const std::string act {actVec[0]};
+    Player& currentPlayer = players.at(current);
 
     // Place a tile.
     if (act == "place") {
-        players.at(current).refreshPass();
+        currentPlayer.refreshPass();
         if (actVec.size() == 2 && actVec[1] == "Done") {
             // Replenish hand if bag is not empty.
             while (bag->size() != 0 &&
-                   players.at(current).getHand()->size() < HAND_SIZE) {
-                players.at(current).getHand()->append(bag->pop());
+                   currentPlayer.getHand()->size() < HAND_SIZE) {
+                currentPlayer.getHand()->append(bag->pop());
             }
+            currentPlayer.donePlacing();
             retStat = NEXT_PLAYER;
         } else if (actVec.size() == 4) {
             // Command | place <letter> at <pos>
-            char letter = std::toupper(actVec[1][0]);
+            char letter = char(std::toupper(actVec[1][0]));
 
             // Check if letter is in hand.
-            if (players.at(current).getHand()->contains(letter)) {
+            // and if command contains "at" between the letter and pos.
+            if (currentPlayer.getHand()->contains(letter) &&
+                actVec[2] == "at") {
                 std::string pos = actVec[3];
 
                 // Convert pos to (x, y) coordinates
-                int posX = int(pos[0]) - 65;  // i'm sorry TODO make less bad
+                int posX = int(std::toupper(pos[0])) - 65;
                 int posY = std::stoi(pos.substr(1));
                 // TODO: check if remainder of pos is actually
                 // an int before doing that
 
                 // Place tile
                 int value = board->placeTile(posX, posY, letter);
-                int valid = value;
 
                 // If move was valid, remove tile from player hand
-                if (valid) {
-                    players.at(current).getHand()->remove(letter);
+                if (value) {
+                    currentPlayer.getHand()->remove(letter);
                 }
 
                 // Check for bingo, will be true if player's hand is now empty
                 bool bingo = false;
-                if (players.at(current).getHand()->size() == 0) {
+                if (currentPlayer.getHand()->size() == 0) {
                     bingo = true;
                 }
 
-                if (valid) {
+                if (value) { // if valid
+                    currentPlayer.startPlacing();
                     // Increase score.
                     if (bingo) {
                         std::cout << "\nBINGO!!!\n" << std::endl;
-                        players.at(current).addScore(value + BINGO_BONUS);
+                        currentPlayer.addScore(value + BINGO_BONUS);
                     } else {
-                        players.at(current).addScore(value);
+                        currentPlayer.addScore(value);
                     }
                     retStat = SAME_PLAYER;
                 } else {
@@ -134,8 +138,9 @@ int Core::handleAction(std::vector<std::string> actVec) {
         }
     }
     // Replace a single tile on the player's hand.
-    else if (act == "replace" && actVec.size() == 2) {
-        players.at(current).refreshPass();
+    else if (act == "replace" && actVec.size() == 2 &&
+             !currentPlayer.isPlacing()) {
+        currentPlayer.refreshPass();
         // Command | replace <repLetter>.
         std::string repLetter = actVec[1];
 
@@ -144,7 +149,7 @@ int Core::handleAction(std::vector<std::string> actVec) {
             retStat = INVALID_ACT;
         }
         // Replace letter on hand.
-        else if (!(players.at(current).getHand()
+        else if (!(currentPlayer.getHand()
                 ->replace(repLetter[0], bag->pop()))) {
             // Tile to be replaced is not in hand.
             retStat = INVALID_ACT;
@@ -156,12 +161,14 @@ int Core::handleAction(std::vector<std::string> actVec) {
         }
     }
     // Don't play this round. Maximum 2 consecutive passes allowed.
-    else if (act == "pass" && actVec.size() == 1) {
-        players.at(current).incrementPass();
+    else if (act == "pass" && actVec.size() == 1 &&
+             !currentPlayer.isPlacing()) {
+        currentPlayer.incrementPass();
         retStat = NEXT_PLAYER;
     }
     // Saves game.
-    else if (act == "save" && actVec.size() == 2) {
+    else if (act == "save" && actVec.size() == 2 &&
+             !currentPlayer.isPlacing()) {
         // Command | save <filename>
         saveGame(actVec[1]);
         retStat = SAME_PLAYER;

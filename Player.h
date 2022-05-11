@@ -14,6 +14,7 @@ class Player {
     sharPtr_LL hand;
     int passes;
     int score;
+    bool currentlyPlacing;
 
     void setNewHand(const sharPtr_LL& tileBag);
     void setLoadedHand(int playerNum, const std::string& fileName);
@@ -36,6 +37,10 @@ public:
     int getPass() const;
     void refreshPass();
     void incrementPass();
+
+    bool isPlacing() const;
+    void startPlacing();
+    void donePlacing();
 
     std::string handToString() const;
     void printHand() const;

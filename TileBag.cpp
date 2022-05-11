@@ -1,9 +1,9 @@
 #include "TileBag.h"
 
- uniqPtr_LL createNewBag() {
+uniqPtr_LL createNewBag() {
     std::ifstream file;
     file.open("ScrabbleTiles.txt");
-    if(!file.is_open()) {
+    if (!file.is_open()) {
         throw std::runtime_error("Could not open tile bag file");
     }
 
@@ -13,15 +13,16 @@
 
     // Populate charList with letters from file.
     std::string line;
-    while(std::getline(file, line)) { charList.push_back(line.at(0)); }
+    while (std::getline(file, line)) { charList.push_back(line.at(0)); }
     file.close();
 
     // Shuffle charList.
-    auto eng = std::default_random_engine{};
-    std::shuffle(charList.begin(), charList.end(), eng);
+    std::default_random_engine randomEngine (
+            std::chrono::system_clock::now().time_since_epoch().count());
+    std::shuffle(charList.begin(), charList.end(), randomEngine);
 
     // Add to tile bag.
     uniqPtr_LL tileBag = std::make_unique<LinkedList>();
-    for (auto& letter : charList) { tileBag->append(letter); }
+    for (auto &letter: charList) { tileBag->append(letter); }
     return tileBag;
 }

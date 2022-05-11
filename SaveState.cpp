@@ -71,6 +71,7 @@ void SaveState::saveToFile(const std::string &location) const {
             ++index;
         }
         out << board << tiles << std::endl << players.at(current) << std::endl;
+        std::cout << "\nGame successfully saved\n" << std::endl;
     } else {
         std::cout << "Invalid file specification." << std::endl;
     }
