@@ -37,7 +37,7 @@ class Core {
 public:
 
     explicit Core(std::vector<std::string>);
-    explicit Core(const SaveState&);
+    explicit Core(SaveState&);
     ~Core() = default;
 
     void runGame();

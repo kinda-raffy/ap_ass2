@@ -12,7 +12,7 @@ class Player {
 
     std::string name;
     sharPtr_LL hand;
-    int consecutivePasses;
+    int passes;
     int score;
 
     void setNewHand(const sharPtr_LL& tileBag);
@@ -20,6 +20,8 @@ class Player {
 
 
 public:
+
+    Player(const std::string&, const std::string&, int);
     Player(std::string name, const sharPtr_LL& tileBag,
            int score=-1, int playerNum=-1,
            const std::string& fileName="");

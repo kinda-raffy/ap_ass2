@@ -11,17 +11,18 @@ Board::Board(std::size_t size)
 
 // FIXME: Delete debug print when verified.
 Board::Board(const std::string &state)
-    : size {}, board {} {
+    : size {0}, board {} {
     std::istringstream input {state};
     std::string line {};
-    // Skip the first two lines.
+    // Skip the first two lines. Better way to do this?
     for (std::size_t skip {0}; skip < 2; ++skip) {
+        std::getline(input, line);
     }
     // Extract characters for each line of the state string.
     while (std::getline(input, line)) {
         std::vector<Tile> row {};
         board.push_back(row);
-        // Characters always begin at the fifth position. ALways four apart.
+        // Characters always begin at the fifth position. Always four apart.
         std::size_t index {4};
         while (index < line.size()) {
             // Create tile for each character and point index to next position.
@@ -29,10 +30,8 @@ Board::Board(const std::string &state)
             board.at(size).push_back(position);
             index += 4;
         }
+        ++size;
     }
-    size = board.size();
-    // Debug print.
-    std::cout << toString() << std::endl;
 }
 
 Board::Board(const Board &source)

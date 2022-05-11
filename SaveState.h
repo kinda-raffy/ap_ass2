@@ -25,14 +25,18 @@ class SaveState {
 
 public:
 
-    // TODO: Copy constructor?
-
     SaveState(const std::string&);
     SaveState(Core&);
     ~SaveState() = default;
-    // SaveState(const Board&, const std::vector<Player>&, const LinkedList&, const int); Backup process.
 
     void saveToFile(const std::string&) const;
+
+    std::string& getTiles();
+    std::string& getBoard();
+    std::shared_ptr<std::vector<std::string>> getPlayers();    
+    std::shared_ptr<std::vector<std::string>> getHands();
+    std::shared_ptr<std::vector<int>> getScores();
+    int getCurrent();
 };
 
 #endif // ASSIGN2_SAVE_STATE_H

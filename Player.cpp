@@ -2,17 +2,20 @@
 #include <utility>
 #include "Player.h"
 
-Player::Player(std::string name, const sharPtr_LL& tileBag, int score, int playerNum,
-               const std::string& fileName) : consecutivePasses {0} {
+Player::Player(const std::string &name, const std::string &hand, int score)
+    : name {name}, hand {std::make_shared<LinkedList>(hand)}, 
+    passes {0}, score {score} {
+}
+
+Player::Player(std::string name, const std::shared_ptr<LinkedList>& tileBag, int score, int playerNum,
+               const std::string& fileName) : passes {0} {
     this->name = std::move(name);
     // New player.
     this->score = 0;
     setNewHand(tileBag);
 }
 
-
 Player::~Player() = default;
-
 
 void Player::setNewHand(const sharPtr_LL& tileBag) {
     // Set a new hand.
@@ -53,13 +56,13 @@ void Player::printHand() const {
 }
 
 int Player::getPass() const {
-    return this->consecutivePasses;
+    return this->passes;
 }
 
 void Player::refreshPass() {
-    this->consecutivePasses = 0;
+    this->passes = 0;
 }
 
 void Player::incrementPass() {
-    this->consecutivePasses++;
+    this->passes++;
 }

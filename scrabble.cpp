@@ -49,13 +49,13 @@ int validFile(const std::string& fileName) {
 
 void loadGame() {
     std::cout << "Enter the filename from which load a game" << std::endl;
-    std::string filename;
+    std::string file {};
     std::cout << "> ";
-    std::cin >> filename;
-    if (validFile(filename)) {
-        std::cout << "Scrabble game successfully loaded" << std::endl;
-        // TODO - load game
-    }
+    std::cin >> file;
+    // Read saved data, then create and run core object.
+    auto load {std::make_unique<SaveState>(file)};
+    auto core {std::make_unique<Core>(*load)};
+    core->runGame();
 }
 
 std::string getPlayerName(int num) {
