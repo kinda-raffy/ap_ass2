@@ -61,8 +61,8 @@ SaveState::SaveState(const std::string &input) {
         // Read tile bag and current player data.
         tiles = lines.at(size++); 
         const std::string currentPlayer {lines.at(size)};
-        current = 1;
-        while (players.at(current - 1) != currentPlayer) {
+        current = 0;
+        while (players.at(current) != currentPlayer) {
             ++current;
         }
     }
@@ -70,8 +70,7 @@ SaveState::SaveState(const std::string &input) {
 
 // FIXME: Once Core is finalised fix this constructor.
 SaveState::SaveState(Core &core) :
-    tiles {core.getBag()->toString()},
-    board {core.getBoard()->toString()},
+    tiles {core.getBag()->toString()}, board {core.getBoard()->toString()},
     players {}, hands {}, scores {}, current {core.getCurrent()}  {
     // Iteratively convert all player info into save strings and store.
     std::shared_ptr<std::vector<Player>> corePlayers {core.getPlayers()};
@@ -87,8 +86,8 @@ void SaveState::saveToFile(const std::string &location) const {
     std::ofstream output {location};
     // If the output file was successfully opened, then write contents.
     if (output) {
-        std::size_t index {0}, bound {players.size()};
-        while (index < bound) {
+        std::size_t index {0};
+        while (index < players.size()) {
             output
                 << players.at(index) << std::endl
                 << scores.at(index)  << std::endl
