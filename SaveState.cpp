@@ -81,11 +81,13 @@ SaveState::SaveState(Core &core) :
     }
 }
 
-// FIXME: Test to verify that this works as intended.
+// TODO: Test to verify that this works as intended.
 void SaveState::saveToFile(const std::string &location) const {
+    std::cout << "SAVE TO FILE ~ BEGIN" << std::endl;
     std::ofstream output {location};
     // If the output file was successfully opened, then write contents.
-    if (output) {
+    if (output.is_open()) {
+        std::cout << "SAVE TO FILE ~ FILE OPEN" << std::endl;
         std::size_t index {0}, bound {players.size()};
         while (index < bound) {
             output
@@ -101,4 +103,5 @@ void SaveState::saveToFile(const std::string &location) const {
     }
     // Close the output file stream once all contents have been transferred.
     output.close();
+    std::cout << "SAVE TO FILE ~ CLOSED" << std::endl;
 }

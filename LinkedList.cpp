@@ -9,21 +9,13 @@ LinkedList::LinkedList()
 // Construct a linked list object using its string representation.
 LinkedList::LinkedList(const std::string &list)
     : LinkedList {} {
-    try {
-        if (!validateListString(list)) {
-            std::cout << "Sorry World!";
-            throw std::invalid_argument("Incorrect string structure.");
-        }
-        std::istringstream inputString {list};
-        std::string node;
-        // Append each letter to list after erasing any leading whitespace.
-        while (std::getline(inputString, node, ',')) {
-            node.erase(0, node.find_first_not_of(' '));
-            // Only leading character required since tile values stored internally.
-            append(node.at(0));
-        }
-    } catch (std::invalid_argument &error) {
-        std::cout << error.what() << std::endl;
+    std::istringstream inputString {list};
+    std::string node;
+    // Append each letter to list after erasing any leading whitespace.
+    while (std::getline(inputString, node, ',')) {
+        node.erase(0, node.find_first_not_of(' '));
+        // Only leading character required since tile values stored internally.
+        append(node.at(0));
     }
 }
 
@@ -44,12 +36,6 @@ LinkedList::LinkedList(const LinkedList &source)
         }
         current = current->getNext();
     }
-}
-
-// FIXME: Does this actually work?
-bool LinkedList::validateListString(const std::string &list) {
-    std::regex structure {"(([A-Z]{1}-[0-9]{1, 2})(, ?))+"};
-    return std::regex_match(list, structure);
 }
 
 // Create a new tile using the char arg and delegate.
