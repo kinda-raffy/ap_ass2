@@ -58,7 +58,6 @@ std::string Board::toString() const {
 
 int Board::placeTile(std::size_t x, std::size_t y, char letter) {
     int placeValue = 0;
-    int iSize = int (size);
     // Size types are unsigned, so only upper bound checking required.
     if (x < size && y < size) {
         bool null {board.at(x).at(y).getLetter() == '-'};
