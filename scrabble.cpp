@@ -50,6 +50,7 @@ int validFile(const std::string& fileName) {
 void loadGame() {
     std::cout << "Enter the filename from which load a game" << std::endl;
     std::string filename;
+    std::cout << "> ";
     std::cin >> filename;
     if (validFile(filename)) {
         std::cout << "Scrabble game successfully loaded" << std::endl;
@@ -62,11 +63,13 @@ std::string getPlayerName(int num) {
     std::cout << "Enter a name for player "
               << num
               << " (uppercase characters only)" << std::endl;
+    std::cout << "> ";
     std::cin >> playerName;
     while (!(std::all_of(playerName.begin(), playerName.end(), isupper))) {
         std::cout << "Invalid name. Please enter a name for player "
                   << num
                   << " (uppercase characters only)" << std::endl;
+        std::cout << "> ";
         std::cin >> playerName;
     }
     return playerName;
@@ -74,10 +77,10 @@ std::string getPlayerName(int num) {
 
 void newGame() {
     std::vector<std::string> playerNames(2);
-    std::cout << "Starting a New Game\n" << std::endl;
+    std::cout << "\nStarting a New Game\n" << std::endl;
     playerNames[0] = getPlayerName(1);
     playerNames[1] = getPlayerName(2);
-    std::cout << "\nLet's Play\n" << std::endl;
+    std::cout << "\nLet's Play!" << std::endl;
     Core game(playerNames);
     game.runGame();
 }
@@ -89,6 +92,7 @@ int gameModeHandler() {
     std::cout << "2. Load Game\n";
     std::cout << "3. Credits (Show student information)\n";
     std::cout << "4. Quit\n" << std::endl;
+    std::cout << "> ";
     std::cin >> choice;
     return choice;
 }
@@ -101,7 +105,6 @@ void gameHandler() {
         loadGame();
     } else if (choice == 3) {
         credits();
-        // Re-display menu.
         gameHandler();
     } else if (choice == 4 || choice == 0) { // Choice = 0 when EOF
         std::cout << "Goodbye" << std::endl;

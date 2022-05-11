@@ -32,7 +32,7 @@ std::vector<Player> Core::createPlayers(const std::vector<std::string> playerNam
 }
 
 void Core::displayEnd() {
-    std::cout << "Game over" << std::endl;
+    std::cout << "\nGame over" << std::endl;
     // Scoreboard.
     for (auto& player : players) {
         std::cout << "Score for " << player.getName() << ": "
@@ -146,7 +146,6 @@ int Core::handleAction(std::vector<std::string> actVec) {
     // Saves game.
     else if (act == "save" && actVec.size() == 2) {
         // Command | save <filename>
-        std::cout << "Before saveGame(actVec)";
         saveGame(actVec[1]);
         retStat = SAME_PLAYER;
     }
@@ -181,72 +180,73 @@ std::ostream &operator<<(std::ostream &os, const Core &core) {
  * @order_of_ops Current name, Score of all players, Board, Current player hand.
  */
 void Core::displayTurn() {
-    std::cout << '\n' << players.at(current).getName()
+    std::cout << '\n'
+              << players.at(current).getName()
               << " it's your turn." << std::endl;
     for (auto& _p : players) {
         std::cout << "Score for " << _p.getName()
                   << ": " << _p.getScore() << std::endl;
     }
-    std::cout << board->toString() << std::endl;
-    std::cout << players.at(current).handToString() << std::endl;
+    std::cout << board->toString() << "\n\n"
+              << "Your hand is\n"
+              << players.at(current).handToString() << '\n'
+              << std::endl;
 }
 
 void Core::runGame() {
     // TODO - Perform preliminary checks before starting core.
-    int coreControl {SAME_PLAYER};
+    int coreControl{NEXT_PLAYER};
 
     // Run round.
     do {
-        if (coreControl != INVALID_ACT)
+        if (coreControl != INVALID_ACT && coreControl != SAME_PLAYER)
             displayTurn();
 
-        // Get game action.
-        std::string word;
-        std::string actionLine;
-        std::vector<std::string> actionList;
+            std::string word;
+            std::string actionLine;
+            std::vector<std::string> actionList;
 
-        // Transform line into vector of words.
-        std::cout << "> " << std::flush;
-        std::getline(std::cin >> std::ws, actionLine);
-        if (std::cin.eof()) { // Quit if EOF, broken when running in CLion?
-            actionList.emplace_back("quit");
-        }
-        else {
-            std::istringstream iss(actionLine);
-            while (iss >> word)
-                actionList.emplace_back(word);
-        }
+            // Get game action as a vector of strings.
+            std::cout << "> " << std::flush;
+            std::getline(std::cin >> std::ws, actionLine);
+            if (std::cin.eof()) {
+                actionList.emplace_back("quit");
+            } else {
+                std::istringstream iss(actionLine);
+                while (iss >> word)
+                    actionList.emplace_back(word);
+            }
 
-        // Perform preliminary checks then action.
-        if (actionList.empty()) {
-            // There is no action.
-            coreControl = INVALID_ACT;
-        } else if (players.at(current).getPass() >= 1) {
-            // End game if player exceeded pass limit.
-            displayEnd();
-            coreControl = QUIT;
-        } else {
-            // Perform action.
-            coreControl = handleAction(actionList);
-        }
+            // Perform preliminary checks then action.
+            if (actionList.empty()) {
+                // There is no action.
+                coreControl = INVALID_ACT;
+            } else if (players.at(current).getPass() >= 1) {
+                // End game if player exceeded pass limit.
+                displayEnd();
+                coreControl = QUIT;
+            } else {
+                // Perform action.
+                coreControl = handleAction(actionList);
+            }
 
-        // Handle Core Control.
-        if (coreControl == INVALID_ACT) {
-            std::cout << "\nInvalid input." << std::endl;
-        } else if (coreControl == NEXT_PLAYER) {
-            // Switch players.
-            changeTurn();
-        }
+            // Handle Core Control.
+            if (coreControl == INVALID_ACT) {
+                std::cout << "\nInvalid input.\n" << std::endl;
+            } else if (coreControl == NEXT_PLAYER) {
+                changeTurn();
+            }
 
-        // The below conditionals carries greater precedence over core control.
-        // Tile bag is empty and current's hand is empty.
-        if (!bag->size() && !players.at(current).getHand()->size()) {
-            displayEnd();
-            coreControl = QUIT;
-        }
+            // The below conditional carries greater precedence over core control.
+            // Tile bag is empty and current's hand is empty.
+            if (!bag->size() && !players.at(current).getHand()->size()) {
+                displayEnd();
+                coreControl = QUIT;
+            }
     } while (coreControl != QUIT);
     std::cout << "Goodbye" << std::endl;
 }
+
 
 // Save current game state to file using the given file name.
 void Core::saveGame(const std::string &file) {

@@ -113,6 +113,5 @@ std::string LinkedList::toString() const {
         }
         current = current->getNext();
     }
-    stream << std::endl;
     return stream.str();
 }

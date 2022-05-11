@@ -74,14 +74,8 @@ SaveState::SaveState(Core &core) :
     board {core.getBoard()->toString()},
     players {}, hands {}, scores {}, current {core.getCurrent()}  {
     // Iteratively convert all player info into save strings and store.
-    std::cout << "\nBefore first for loop, after init list\n";
     std::shared_ptr<std::vector<Player>> corePlayers {core.getPlayers()};
-    for (Player corePlayer : *corePlayers) {
-        std::cout << corePlayer.getName() << std::endl;
-    }
-    std::cout << "\nBefore second for loop." << std::endl;
     for (const Player player : *corePlayers) {
-        std::cout << "\nInside Loop, for player" << player.getName();
         players.push_back(player.getName());
         scores.push_back(player.getScore());
         hands.push_back(player.handToString());
@@ -108,4 +102,5 @@ void SaveState::saveToFile(const std::string &location) const {
     }
     // Close the output file stream once all contents have been transferred.
     output.close();
+    std::cout << "\nGame successfully saved\n" << std::endl;
 }
