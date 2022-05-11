@@ -11,7 +11,7 @@ Board::Board(std::size_t size)
 
 // TODO: Finish this constructor.
 Board::Board(const std::string &save)
-    : size {}, board {}{
+    : size {}, board {} {
 }
 
 Board::Board(const Board &source)
@@ -58,16 +58,15 @@ std::string Board::toString() const {
     return stream.str();
 }
 
-int Board::placeTile(int x, int y, char letter) {
-    int retStat = 0;
-    int iSize = int (size);
-    // Bounds check; don't index outside the vector
-    if (!(x < 0 || iSize <= x || y < 0 || iSize <= y)) {
-        // Check if position (x, y) is empty
-        if (board[x][y].getLetter() == '-') {
-            board[x][y].setLetter(letter);
-            retStat = board[x][y].getValue();
+int Board::placeTile(std::size_t x, std::size_t y, char letter) {
+    int placeValue = 0;
+    // Size types are unsigned, so only upper bound checking required.
+    if (x < size && y < size) {
+        bool null {board.at(x).at(y).getLetter() == '-'};
+        if (null) {
+            board.at(x).at(y).setLetter(letter);
+            placeValue = board.at(x).at(y).getValue();
         }
     }
-    return retStat;
+    return placeValue;
 }
