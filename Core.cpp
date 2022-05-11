@@ -14,9 +14,21 @@ Core::Core(std::vector<std::string> playerNames) {
     this->current = 0;
 }
 
-Core::Core(const SaveState&) {
-    // Load game.
-    // FIXME - Extract state from SaveState.
+Core::Core(SaveState &save) 
+    : bag {std::make_shared<LinkedList>(save.getTiles())}, 
+      board {std::make_shared<Board>(save.getBoard())}, 
+      current {save.getCurrent()} {
+
+    // Create player objects using save state strings.
+    std::shared_ptr<std::vector<std::string>> names {save.getPlayers()},
+        hands {save.getHands()};
+    std::shared_ptr<std::vector<int>> scores {save.getScores()};
+    std::size_t index {0}, bound {names->size()};
+    while (index < bound) {
+        Player player {names->at(index), hands->at(index), scores->at(index)};
+        players.emplace_back(player);
+        ++index;
+    }
 }
 
 std::vector<Player> Core::createPlayers(const std::vector<std::string> playerNames) {

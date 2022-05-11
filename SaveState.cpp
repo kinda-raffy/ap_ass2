@@ -23,30 +23,6 @@ SaveState::SaveState(const std::string &input) {
         }
         // Find the player count by dividing leading line count by three.
         const std::size_t playerCount {(partition - 1) / 3};
-        /* 
-            std::string line;
-            // Read player info.
-            for (int index {0}; index < players; ++index) {
-                std::getline(file, line);
-                this->players.push_back(line);
-                std::getline(file, line);
-                scores.push_back(std::stoi(line));
-                std::getline(file, line);
-                hands.push_back(line);
-            }
-            // Read board info. Two lines added for header.
-            for (int index {0}; index < size + 2; ++index) {
-                std::getline(file, line);
-                board += line + "\n";
-            }
-            // Tile bag and current player.
-            std::getline(file, tiles);
-            std::getline(file, line);
-            current = 1;
-            while (this->players.at(current - 1) != line) {
-                ++current;
-            }
-        */
         std::size_t index {0};
         // Read and store player data. Index tracks position in vector.
         for (std::size_t player {0}; player < playerCount; ++player) {
@@ -65,6 +41,7 @@ SaveState::SaveState(const std::string &input) {
         while (players.at(current) != currentPlayer) {
             ++current;
         }
+        std::cout << "Scrabble game successfully loaded" << std::endl;
     }
 }
 
@@ -94,8 +71,33 @@ void SaveState::saveToFile(const std::string &location) const {
             ++index;
         }
         out << board << tiles << std::endl << players.at(current) << std::endl;
+    } else {
+        std::cout << "Invalid file specification." << std::endl;
     }
     // Close the output file stream once all contents have been transferred.
     out.close();
-    std::cout << "\nGame successfully saved\n" << std::endl;
+}
+
+std::string& SaveState::getTiles() {
+    return tiles;
+}
+
+std::string& SaveState::getBoard() {
+    return board;
+}
+
+std::shared_ptr<std::vector<std::string>> SaveState::getPlayers() {
+    return std::make_shared<std::vector<std::string>>(players);
+}   
+
+std::shared_ptr<std::vector<std::string>> SaveState::getHands() {
+    return std::make_shared<std::vector<std::string>>(hands);
+}
+
+std::shared_ptr<std::vector<int>> SaveState::getScores() {
+    return std::make_shared<std::vector<int>>(scores);
+}
+
+int SaveState::getCurrent() {
+    return current;
 }
