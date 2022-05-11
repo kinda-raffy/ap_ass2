@@ -12,7 +12,6 @@
 #define EXIT_SUCCESS    0
 #define EXIT_FAILURE    1
 
-
 void credits() {
     std::cout
         << "-----------------------------------\n"
@@ -125,6 +124,5 @@ void greet() {
 int main() {
     greet();
     gameHandler();
-
     return EXIT_SUCCESS;
 }
