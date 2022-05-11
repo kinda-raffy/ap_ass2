@@ -58,19 +58,19 @@ void Core::changeTurn() {
 
 int Core::handleAction(std::vector<std::string> actVec) {
     int retStat {SAME_PLAYER};
-    const std::string act = actVec[0];
+    const std::string act {actVec[0]};
 
     // Place a tile.
     if (act == "place") {
-        players[current].refreshPass();
-        if (actVec[1] == "Done") {
+        players.at(current).refreshPass();
+        if (actVec.size() == 2 && actVec[1] == "Done") {
             // Replenish hand if bag is not empty.
             while (bag->size() != 0 &&
-                   players[current].getHand()->size() < HAND_SIZE) {
-                players[current].getHand()->append(bag->pop());
+                   players.at(current).getHand()->size() < HAND_SIZE) {
+                players.at(current).getHand()->append(bag->pop());
             }
             retStat = NEXT_PLAYER;
-        } else {
+        } else if (actVec.size() == 4) {
             // Command | place <letter> at <pos>
             char letter = std::toupper(actVec[1][0]);
             std::string pos = actVec[3];
@@ -86,72 +86,79 @@ int Core::handleAction(std::vector<std::string> actVec) {
 
             // If move was valid, remove tile from player hand
             if (value) {
-                players[current].getHand()->remove(letter);
+                players.at(current).getHand()->remove(letter);
             }
 
             // Check for bingo, will be true if player's hand is now empty
             bool bingo = false;
-            if (players[current].getHand()->size() == 0) {
+            if (players.at(current).getHand()->size() == 0) {
                 bingo = true;
             }
 
             if (value) {
                 // Increase score.
                 if (bingo) {
+                    // FIXME - Should replenish bag here or switch to next player.
                     std::cout << "\nBINGO!!!\n" << std::endl;
-                    players[current].addScore(value + BINGO_BONUS);
+                    players.at(current).addScore(value + BINGO_BONUS);
                 } else {
-                    players[current].addScore(value);
+                    players.at(current).addScore(value);
                 }
                 retStat = SAME_PLAYER;
             } else {
-                std::cout << "Illegal move." << std::endl;
+                // Illegal move.
                 retStat = INVALID_ACT;
             }
+        } else {
+            // Vector is fo insufficient length.
+            retStat = INVALID_ACT;
         }
     }
     // Replace a single tile on the player's hand.
-    else if (act == "replace") {
-        players[current].refreshPass();
+    else if (act == "replace" && actVec.size() == 2) {
+        players.at(current).refreshPass();
         // Command | replace <repLetter>.
         std::string repLetter = actVec[1];
 
         if (repLetter.length() != 1) {
-            std::cout << "Replacement character is not a char." << std::endl;
+            //  Replacement letter not a char.
             retStat = INVALID_ACT;
         }
         // Replace letter on hand.
         // FIXME - Simplify.
-        else if (!(players[current].getHand()->replaceFirstInstance(repLetter[0], bag->pop()))) {
-            std:: cout << "Tile " + repLetter + " not found in player's hand." << std::endl;
+        else if (!(players.at(current)
+                          .getHand()
+                          ->replaceFirstInstance(repLetter[0], bag->pop()))) {
+            // Tile to be replaced is not in hand.
             retStat = INVALID_ACT;
         }
-        // On successful replacement, add the old letter to the tile bag.
         else {
+            // On successful replacement, add the old letter to the tile bag.
             bag->append(repLetter[0]);
             retStat = NEXT_PLAYER;
         }
     }
     // Don't play this round. Maximum 2 consecutive passes allowed.
-    else if (act == "pass") {
-        players[current].incrementPass();
+    else if (act == "pass" && actVec.size() == 1) {
+        players.at(current).incrementPass();
         retStat = NEXT_PLAYER;
     }
     // Saves game.
-    else if (act == "save") {
+    else if (act == "save" && actVec.size() == 2) {
         // Command | save <filename>
         saveGame(actVec[1]);
         retStat = SAME_PLAYER;
     }
     // Quit game. Does not show game end dialogue.
-    else if (act == "quit") {
+    else if (act == "quit" && actVec.size() == 1) {
         retStat = QUIT;
     }
     // Invalid command.
     else {
-        std::cout << "Invalid Input." << std::endl;
+        // Command is not part of spec.
         retStat = INVALID_ACT;
-    } return retStat;
+    }
+    return retStat;
 }
 
 
@@ -173,7 +180,7 @@ std::ostream &operator<<(std::ostream &os, const Core &core) {
  * @order_of_ops Current name, Score of all players, Board, Current player hand.
  */
 void Core::displayTurn() {
-    std::cout << players.at(current).getName()
+    std::cout << '\n' << players.at(current).getName()
               << " it's your turn." << std::endl;
     for (auto& _p : players) {
         std::cout << "Score for " << _p.getName()
@@ -200,16 +207,35 @@ void Core::runGame() {
         // Transform line into vector of words.
         std::cout << "> " << std::flush;
         std::getline(std::cin >> std::ws, actionLine);
-        std::istringstream iss(actionLine);
-        while (iss >> word)
-            actionList.push_back(word);
+        if (std::cin.eof()) { // Quit if EOF, broken when running in CLion?
+            actionList.emplace_back("quit");
+        }
+        else {
+            std::istringstream iss(actionLine);
+            while (iss >> word)
+                actionList.emplace_back(word);
+        }
 
-        // Perform action.
-        coreControl = handleAction(actionList);
+        // Perform preliminary checks then action.
+        if (actionList.empty()) {
+            // There is no action.
+            coreControl = INVALID_ACT;
+        } else if (players.at(current).getPass() >= 1) {
+            // End game if player exceeded pass limit.
+            displayEnd();
+            coreControl = QUIT;
+        } else {
+            // Perform action.
+            coreControl = handleAction(actionList);
+        }
 
-        // Switch players.
-        if (coreControl == NEXT_PLAYER)
+        // Handle Core Control.
+        if (coreControl == INVALID_ACT) {
+            std::cout << "\nInvalid input." << std::endl;
+        } else if (coreControl == NEXT_PLAYER) {
+            // Switch players.
             changeTurn();
+        }
 
         // The below conditionals carries greater precedence over core control.
         // Tile bag is empty and current's hand is empty.
@@ -217,20 +243,13 @@ void Core::runGame() {
             displayEnd();
             coreControl = QUIT;
         }
-
-        // If current player has passed twice.
-        if (players[current].getPass() >= 2) {
-            displayEnd();
-            coreControl = QUIT;
-        } // TODO: Simplify above.
-
     } while (coreControl != QUIT);
     std::cout << "Goodbye" << std::endl;
 }
 
 // Save current game state to file using the given file name.
-void Core::saveGame(const std::string &file) const {
-    std::unique_ptr<SaveState> save {std::make_unique<SaveState>(this)};
+void Core::saveGame(const std::string &file) {
+    std::unique_ptr<SaveState> save {std::make_unique<SaveState>(*this)};
     save->saveToFile(file);
 }
 
