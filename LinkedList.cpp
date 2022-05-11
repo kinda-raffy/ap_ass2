@@ -1,6 +1,5 @@
 #include "LinkedList.h"
 
-// FIXME: All functionalities in here should really be tested.
 
 LinkedList::LinkedList()
     : head {nullptr}, tail {nullptr}, length {0} {
@@ -56,8 +55,20 @@ void LinkedList::append(std::unique_ptr<Tile> tile) {
     ++length;
 }
 
+bool LinkedList::contains(char letter) const {
+    std::shared_ptr<Node> current{head};
+    bool found {false};
+    while (current != nullptr) {
+        if (current->getLetter() == letter) {
+            found = true;
+        }
+        current = current->getNext();
+    }
+    return found;
+}
+
 // Replaces the first encounter of node with 'letter' with 'repLetter'.
-bool LinkedList::replaceFirstInstance(char letter, char repLetter) {
+bool LinkedList::replace(char letter, char repLetter) {
     bool retStat {false};
     std::shared_ptr<Node> current {head};
     while (current != nullptr && !retStat) {

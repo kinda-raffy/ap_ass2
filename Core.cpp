@@ -7,7 +7,7 @@ void Core::printDuck() {
 }
 
 Core::Core(std::vector<std::string> playerNames) {
-    // New game.
+    // New game constructor.
     this->bag = std::move(createNewBag());
     this->players = createPlayers(std::move(playerNames));
     this->board = std::make_shared<Board>(Board());
@@ -85,44 +85,51 @@ int Core::handleAction(std::vector<std::string> actVec) {
         } else if (actVec.size() == 4) {
             // Command | place <letter> at <pos>
             char letter = std::toupper(actVec[1][0]);
-            std::string pos = actVec[3];
 
-            // Convert pos to (x, y) coordinates
-            int posX = int(pos[0]) - 65;  // i'm sorry TODO make less bad
-            int posY = std::stoi(pos.substr(1));
-            // TODO: check if remainder of pos is actually
-            // an int before doing that
+            // Check if letter is in hand.
+            if (players.at(current).getHand()->contains(letter)) {
+                std::string pos = actVec[3];
 
-            // Place tile
-            int value = board->placeTile(posX, posY, letter);
+                // Convert pos to (x, y) coordinates
+                int posX = int(pos[0]) - 65;  // i'm sorry TODO make less bad
+                int posY = std::stoi(pos.substr(1));
+                // TODO: check if remainder of pos is actually
+                // an int before doing that
 
-            // If move was valid, remove tile from player hand
-            if (value) {
-                players.at(current).getHand()->remove(letter);
-            }
+                // Place tile
+                int value = board->placeTile(posX, posY, letter);
+                int valid = value;
 
-            // Check for bingo, will be true if player's hand is now empty
-            bool bingo = false;
-            if (players.at(current).getHand()->size() == 0) {
-                bingo = true;
-            }
-
-            if (value) {
-                // Increase score.
-                if (bingo) {
-                    // FIXME - Should replenish bag here or switch to next player.
-                    std::cout << "\nBINGO!!!\n" << std::endl;
-                    players.at(current).addScore(value + BINGO_BONUS);
-                } else {
-                    players.at(current).addScore(value);
+                // If move was valid, remove tile from player hand
+                if (valid) {
+                    players.at(current).getHand()->remove(letter);
                 }
-                retStat = SAME_PLAYER;
+
+                // Check for bingo, will be true if player's hand is now empty
+                bool bingo = false;
+                if (players.at(current).getHand()->size() == 0) {
+                    bingo = true;
+                }
+
+                if (valid) {
+                    // Increase score.
+                    if (bingo) {
+                        std::cout << "\nBINGO!!!\n" << std::endl;
+                        players.at(current).addScore(value + BINGO_BONUS);
+                    } else {
+                        players.at(current).addScore(value);
+                    }
+                    retStat = SAME_PLAYER;
+                } else {
+                    // Illegal move.
+                    retStat = INVALID_ACT;
+                }
             } else {
-                // Illegal move.
+                // Letter is not in player's hand.
                 retStat = INVALID_ACT;
             }
         } else {
-            // Vector is fo insufficient length.
+            // Vector is of insufficient length.
             retStat = INVALID_ACT;
         }
     }
@@ -137,10 +144,8 @@ int Core::handleAction(std::vector<std::string> actVec) {
             retStat = INVALID_ACT;
         }
         // Replace letter on hand.
-        // FIXME - Simplify.
-        else if (!(players.at(current)
-                          .getHand()
-                          ->replaceFirstInstance(repLetter[0], bag->pop()))) {
+        else if (!(players.at(current).getHand()
+                ->replace(repLetter[0], bag->pop()))) {
             // Tile to be replaced is not in hand.
             retStat = INVALID_ACT;
         }

@@ -10,15 +10,9 @@ Player::Player(const std::string &name, const std::string &hand, int score)
 Player::Player(std::string name, const std::shared_ptr<LinkedList>& tileBag, int score, int playerNum,
                const std::string& fileName) : passes {0} {
     this->name = std::move(name);
-    if (fileName.empty()) {
-        // New player.
-        this->score = 0;
-        setNewHand(tileBag);
-    } else {
-        // Load player.
-        this->score = score;
-        setLoadedHand(playerNum, fileName);
-    }
+    // New player.
+    this->score = 0;
+    setNewHand(tileBag);
 }
 
 Player::~Player() = default;
@@ -31,21 +25,6 @@ void Player::setNewHand(const sharPtr_LL& tileBag) {
     this->hand = newHand;
 }
 
-void Player::setLoadedHand(int playerNum, const std::string& fileName) {
-    // Load hand from file.
-    std::ifstream file;
-    if (!file.is_open()) {
-        throw std::runtime_error("Could not find file: " + fileName);
-    }
-    sharPtr_LL loadedHand = std::make_shared<LinkedList>();
-    // Iterate to line number where saved hand is located.
-    const int _lineNum {3 * playerNum};
-    std::string line;
-    for (int i = 0; i < _lineNum; ++i)
-        std::getline(file, line);
-    // TODO - Perform string splitting to get letters.
-    this->hand = loadedHand;
-}
 
 std::string Player::getName() const {
     return this->name;

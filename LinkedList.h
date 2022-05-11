@@ -25,7 +25,8 @@ public:
    bool remove(char);
    void append(char);
    void append(std::unique_ptr<Tile>);
-   bool replaceFirstInstance(char, char);
+   bool contains(char letter) const;
+   bool replace(char, char);
    int size() const;
 
    std::string toString() const;
