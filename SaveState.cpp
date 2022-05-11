@@ -69,12 +69,19 @@ SaveState::SaveState(const std::string &input) {
 }
 
 // FIXME: Once Core is finalised fix this constructor.
-SaveState::SaveState(Core &core) : 
+SaveState::SaveState(Core &core) :
     tiles {core.getBag()->toString()},
     board {core.getBoard()->toString()},
     players {}, hands {}, scores {}, current {core.getCurrent()}  {
     // Iteratively convert all player info into save strings and store.
-    for (const Player &player : *core.getPlayers()) {
+    std::cout << "\nBefore first for loop, after init list\n";
+    std::shared_ptr<std::vector<Player>> corePlayers {core.getPlayers()};
+    for (Player corePlayer : *corePlayers) {
+        std::cout << corePlayer.getName() << std::endl;
+    }
+    std::cout << "\nBefore second for loop." << std::endl;
+    for (const Player player : *corePlayers) {
+        std::cout << "\nInside Loop, for player" << player.getName();
         players.push_back(player.getName());
         scores.push_back(player.getScore());
         hands.push_back(player.handToString());
@@ -83,11 +90,9 @@ SaveState::SaveState(Core &core) :
 
 // TODO: Test to verify that this works as intended.
 void SaveState::saveToFile(const std::string &location) const {
-    std::cout << "SAVE TO FILE ~ BEGIN" << std::endl;
     std::ofstream output {location};
     // If the output file was successfully opened, then write contents.
-    if (output.is_open()) {
-        std::cout << "SAVE TO FILE ~ FILE OPEN" << std::endl;
+    if (output) {
         std::size_t index {0}, bound {players.size()};
         while (index < bound) {
             output
@@ -99,9 +104,8 @@ void SaveState::saveToFile(const std::string &location) const {
         output
             << board << std::endl 
             << tiles << std::endl
-            << players.at(current - 1) << std::endl;
+            << players.at(current) << std::endl;
     }
     // Close the output file stream once all contents have been transferred.
     output.close();
-    std::cout << "SAVE TO FILE ~ CLOSED" << std::endl;
 }

@@ -146,6 +146,7 @@ int Core::handleAction(std::vector<std::string> actVec) {
     // Saves game.
     else if (act == "save" && actVec.size() == 2) {
         // Command | save <filename>
+        std::cout << "Before saveGame(actVec)";
         saveGame(actVec[1]);
         retStat = SAME_PLAYER;
     }
@@ -249,8 +250,11 @@ void Core::runGame() {
 
 // Save current game state to file using the given file name.
 void Core::saveGame(const std::string &file) {
-    std::unique_ptr<SaveState> save {std::make_unique<SaveState>(*this)};
-    save->saveToFile(file);
+    std::cout << "SAVE GAME ~ " << file << std::endl;
+    // std::unique_ptr<SaveState> save {std::make_unique<SaveState>(*this)};
+    SaveState save {*this};
+    std::cout << "SAVESTATE CREATED." << std::endl;
+    save.saveToFile(file);
 }
 
 std::shared_ptr<std::vector<Player>> Core::getPlayers() {
