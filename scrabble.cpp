@@ -83,31 +83,34 @@ void newGame() {
 }
 
 
-int gameModeHandler() {
-    int choice;
+std::string gameModeHandler() {
+    std::string choice;
     std::cout << "1. New Game\n";
     std::cout << "2. Load Game\n";
     std::cout << "3. Credits (Show student information)\n";
     std::cout << "4. Quit\n" << std::endl;
     std::cout << "> ";
-    std::cin >> choice;
+    std::getline(std::cin >> std::ws, choice);
     return choice;
 }
 
 void gameHandler() {
-    int choice = gameModeHandler();
-    if (choice == 1) {
-        newGame();
-    } else if (choice == 2) {
-        loadGame();
-    } else if (choice == 3) {
-        credits();
-        gameHandler();
-    } else if (choice == 4 || choice == 0) { // Choice = 0 when EOF
-        std::cout << "Goodbye" << std::endl;
-    } else {
-        std::cout << "Invalid choice" << std::endl;
-        gameHandler();
+    bool showMenu = true;
+    while (showMenu) {
+        std::string choice = gameModeHandler();
+        if (choice == "1") {
+            showMenu = false;
+            newGame();
+        } else if (choice == "2") {
+            showMenu = false;
+            loadGame();
+        } else if (choice == "3") {
+            credits();
+        } else if (choice == "4" || std::cin.eof()) {
+            std::cout << "Goodbye" << std::endl;
+        } else {
+            std::cout << "Invalid choice" << std::endl;
+        }
     }
 }
 
