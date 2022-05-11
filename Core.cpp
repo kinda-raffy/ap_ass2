@@ -202,47 +202,47 @@ void Core::runGame() {
         if (coreControl != INVALID_ACT && coreControl != SAME_PLAYER)
             displayTurn();
 
-            std::string word;
-            std::string actionLine;
-            std::vector<std::string> actionList;
+        std::string word;
+        std::string actionLine;
+        std::vector<std::string> actionList;
 
-            // Get game action as a vector of strings.
-            std::cout << "> " << std::flush;
-            std::getline(std::cin >> std::ws, actionLine);
-            if (std::cin.eof()) {
-                actionList.emplace_back("quit");
-            } else {
-                std::istringstream iss(actionLine);
-                while (iss >> word)
-                    actionList.emplace_back(word);
-            }
+        // Get game action as a vector of strings.
+        std::cout << "> " << std::flush;
+        std::getline(std::cin >> std::ws, actionLine);
+        if (std::cin.eof()) {
+            actionList.emplace_back("quit");
+        } else {
+            std::istringstream iss(actionLine);
+            while (iss >> word)
+                actionList.emplace_back(word);
+        }
 
-            // Perform preliminary checks then action.
-            if (actionList.empty()) {
-                // There is no action.
-                coreControl = INVALID_ACT;
-            } else if (players.at(current).getPass() >= 1) {
-                // End game if player exceeded pass limit.
-                displayEnd();
-                coreControl = QUIT;
-            } else {
-                // Perform action.
-                coreControl = handleAction(actionList);
-            }
+        // Perform preliminary checks then action.
+        if (actionList.empty()) {
+            // There is no action.
+            coreControl = INVALID_ACT;
+        } else if (players.at(current).getPass() >= 1) {
+            // End game if player exceeded pass limit.
+            displayEnd();
+            coreControl = QUIT;
+        } else {
+            // Perform action.
+            coreControl = handleAction(actionList);
+        }
 
-            // Handle Core Control.
-            if (coreControl == INVALID_ACT) {
-                std::cout << "\nInvalid input.\n" << std::endl;
-            } else if (coreControl == NEXT_PLAYER) {
-                changeTurn();
-            }
+        // Handle Core Control.
+        if (coreControl == INVALID_ACT) {
+            std::cout << "\nInvalid input.\n" << std::endl;
+        } else if (coreControl == NEXT_PLAYER) {
+            changeTurn();
+        }
 
-            // The below conditional carries greater precedence over core control.
-            // Tile bag is empty and current's hand is empty.
-            if (!bag->size() && !players.at(current).getHand()->size()) {
-                displayEnd();
-                coreControl = QUIT;
-            }
+        // The below conditional carries greater precedence over core control.
+        // Tile bag is empty and current's hand is empty.
+        if (!bag->size() && !players.at(current).getHand()->size()) {
+            displayEnd();
+            coreControl = QUIT;
+        }
     } while (coreControl != QUIT);
     std::cout << "Goodbye" << std::endl;
 }
