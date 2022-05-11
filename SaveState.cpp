@@ -94,7 +94,7 @@ void SaveState::saveToFile(const std::string &location) const {
                 << hands.at(index)   << std::endl;
             ++index;
         }
-        output 
+        output
             << board << std::endl 
             << tiles << std::endl
             << players.at(current - 1) << std::endl;

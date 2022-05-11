@@ -40,10 +40,11 @@ void Core::displayEnd() {
     }
     // Declare winner.
     auto winner {
-        std::max_element(players.begin(), players.end(),
-                         [](const Player& a, const Player& b) {
-                           return a.getScore() < b.getScore();
-        })[0]};
+        std::max_element(players.begin(), players.end(), 
+            [](const Player& a, const Player& b) {
+                return a.getScore() < b.getScore();
+            })[0]
+    };
     std::cout << "Player " << winner.getName() << " won!\n" << std::endl;
 }
 
@@ -163,7 +164,7 @@ std::ostream &operator<<(std::ostream &os, const Core &core) {
                   << ": " << _p.getScore() << '\n';
     }
     os << core.board->toString() << '\n';
-    os << core.players[core.current].handToString() << '\n';
+    os << core.players.at(core.current).handToString() << '\n';
     return os;
 }
 
@@ -172,14 +173,14 @@ std::ostream &operator<<(std::ostream &os, const Core &core) {
  * @order_of_ops Current name, Score of all players, Board, Current player hand.
  */
 void Core::displayTurn() {
-    std::cout << players[current].getName()
+    std::cout << players.at(current).getName()
               << " it's your turn." << std::endl;
     for (auto& _p : players) {
         std::cout << "Score for " << _p.getName()
                   << ": " << _p.getScore() << std::endl;
     }
     std::cout << board->toString() << std::endl;
-    std::cout << players[current].handToString() << std::endl;
+    std::cout << players.at(current).handToString() << std::endl;
 }
 
 void Core::runGame() {
@@ -212,7 +213,7 @@ void Core::runGame() {
 
         // The below conditionals carries greater precedence over core control.
         // Tile bag is empty and current's hand is empty.
-        if (!bag->size() && !players[current].getHand()->size()) {
+        if (!bag->size() && !players.at(current).getHand()->size()) {
             displayEnd();
             coreControl = QUIT;
         }
