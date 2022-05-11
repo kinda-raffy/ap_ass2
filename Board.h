@@ -12,7 +12,7 @@
 class Board {
 
     // Board is a two-dimensional vector of tiles.
-    const std::size_t size;
+    std::size_t size;
     std::vector<std::vector<Tile>> board;
 
 public:

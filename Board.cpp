@@ -4,15 +4,35 @@ Board::Board(std::size_t size)
     : size {size}, board {std::vector<std::vector<Tile>> {}} {
     for (std::size_t index {0}; index < size; ++index) {
         // Create row and initialise all positions to null tiles.
-        std::vector<Tile> row (size, Tile {'-'});
+        std::vector<Tile> row(size, Tile {'-'});
         board.push_back(row);
     }
 }
 
-// TODO: Finish this constructor.
-Board::Board(const std::string &boardString)
+// FIXME: Delete debug print when verified.
+Board::Board(const std::string &state)
     : size {}, board {} {
-    
+    std::istringstream input {state};
+    std::string line {};
+    // Skip the first two lines.
+    for (std::size_t skip {0}; skip < 2; ++skip) {
+    }
+    // Extract characters for each line of the state string.
+    while (std::getline(input, line)) {
+        std::vector<Tile> row {};
+        board.push_back(row);
+        // Characters always begin at the fifth position. ALways four apart.
+        std::size_t index {4};
+        while (index < line.size()) {
+            // Create tile for each character and point index to next position.
+            Tile position {line.at(index)};
+            board.at(size).push_back(position);
+            index += 4;
+        }
+    }
+    size = board.size();
+    // Debug print.
+    std::cout << toString() << std::endl;
 }
 
 Board::Board(const Board &source)

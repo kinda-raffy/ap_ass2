@@ -83,23 +83,19 @@ SaveState::SaveState(Core &core) :
 
 // TODO: Test to verify that this works as intended.
 void SaveState::saveToFile(const std::string &location) const {
-    std::ofstream output {location};
+    std::ofstream out {location};
     // If the output file was successfully opened, then write contents.
-    if (output) {
+    if (out) {
         std::size_t index {0};
         while (index < players.size()) {
-            output
-                << players.at(index) << std::endl
-                << scores.at(index)  << std::endl
-                << hands.at(index)   << std::endl;
+            out << players.at(index) << std::endl
+                << scores.at(index) << std::endl
+                << hands.at(index) << std::endl;
             ++index;
         }
-        output
-            << board << std::endl 
-            << tiles << std::endl
-            << players.at(current) << std::endl;
+        out << board << tiles << std::endl << players.at(current) << std::endl;
     }
     // Close the output file stream once all contents have been transferred.
-    output.close();
+    out.close();
     std::cout << "\nGame successfully saved\n" << std::endl;
 }
