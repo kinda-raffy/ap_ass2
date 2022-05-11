@@ -101,4 +101,5 @@ void SaveState::saveToFile(const std::string &location) const {
     }
     // Close the output file stream once all contents have been transferred.
     output.close();
+    std::cout << "\nGame successfully saved\n" << std::endl;
 }

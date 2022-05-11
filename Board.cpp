@@ -52,8 +52,10 @@ std::string Board::toString() const {
             char letter {position.getLetter()};
             stream << ((letter != '-') ? letter : ' ') << " | ";
         }
-        stream << std::endl;
+        stream << '\n';
     }
+    // Remove the last newline.
+    stream.seekp(-1, std::ios_base::end);
     return stream.str();
 }
 
