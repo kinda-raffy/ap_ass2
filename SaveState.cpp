@@ -99,6 +99,6 @@ std::shared_ptr<std::vector<int>> SaveState::getScores() {
     return std::make_shared<std::vector<int>>(scores);
 }
 
-int SaveState::getCurrent() {
+std::size_t SaveState::getCurrent() {
     return current;
 }

@@ -1,24 +1,21 @@
 #include "Core.h"
 
-#include <utility>
-
 void Core::printDuck() {
     std::cout << "https://imgur.com/gallery/w9Mjo4y" << std::endl;
 }
 
-Core::Core(std::vector<std::string> playerNames) {
-    // New game constructor.
-    this->bag = std::move(createNewBag());
-    this->players = createPlayers(std::move(playerNames));
-    this->board = std::make_shared<Board>(Board());
-    this->current = 0;
+Core::Core(const std::vector<std::string> &players) 
+    : bag {std::move(Core::createBag())}, board {std::make_shared<Board>()}, 
+      current {0} {
+    for (const std::string &name : players) {
+        this->players.emplace_back(name, bag);
+    }
 }
 
 Core::Core(SaveState &save) 
-    : bag {std::make_shared<LinkedList>(save.getTiles())}, 
+    : bag {std::make_shared<LinkedList>(save.getTiles())},
       board {std::make_shared<Board>(save.getBoard())}, 
       current {save.getCurrent()} {
-
     // Create player objects using save state strings.
     std::shared_ptr<std::vector<std::string>> names {save.getPlayers()},
         hands {save.getHands()};
@@ -31,172 +28,177 @@ Core::Core(SaveState &save)
     }
 }
 
-std::vector<Player> Core::createPlayers(const std::vector<std::string> playerNames) {
-    // Check if bag is nullptr.
-    if (bag == nullptr) throw std::runtime_error("Bag is nullptr.");
-    // Generate num of players with corresponding names.
-    std::size_t numPlayers = playerNames.size();
-    std::vector<Player> _players;
-    _players.reserve(numPlayers);
-    for (std::size_t i {0}; i < numPlayers; i++) {
-        _players.emplace_back(Player(playerNames[i], bag));
-    } return _players;
-}
-
-void Core::displayEnd() {
-    std::cout << "\nGame over" << std::endl;
-    // Scoreboard.
-    for (auto& player : players) {
-        std::cout << "Score for " << player.getName() << ": "
-                                  << player.getScore() << std::endl;
-    }
-    // Declare winner.
-    auto winner {
-        std::max_element(players.begin(), players.end(), 
-            [](const Player& a, const Player& b) {
-                return a.getScore() < b.getScore();
-            })[0]
-    };
-    std::cout << "Player " << winner.getName() << " won!\n" << std::endl;
-}
-
 void Core::changeTurn() {
-    if (current >= static_cast<int>(players.size() - 1)) {
-        this->current = 0;
-    } else {
-        this->current++;
-    }
+    current = (current >= players.size() - 1) ? 0 : current + 1;
 }
 
-int Core::handleAction(std::vector<std::string> actVec) {
-    int retStat {SAME_PLAYER};
-    const std::string act {actVec[0]};
-    Player& currentPlayer = players.at(current);
-
-    // Place a tile.
-    if (act == "place") {
-        currentPlayer.refreshPass();
-        if (actVec.size() == 2 && actVec[1] == "Done") {
-            // Replenish hand if bag is not empty.
-            while (bag->size() != 0 &&
-                   currentPlayer.getHand()->size() < HAND_SIZE) {
-                currentPlayer.getHand()->append(bag->pop());
-            }
-            currentPlayer.donePlacing();
-            retStat = NEXT_PLAYER;
-        } else if (actVec.size() == 4) {
-            // Command | place <letter> at <pos>
-            char letter = char(std::toupper(actVec[1][0]));
-
-            // Check if letter is in hand.
-            // and if command contains "at" between the letter and pos.
-            if (currentPlayer.getHand()->contains(letter) &&
-                actVec[2] == "at") {
-                std::string pos = actVec[3];
-
-                // Convert pos to (x, y) coordinates
-                int posX = int(std::toupper(pos[0])) - 65;
-                int posY = std::stoi(pos.substr(1));
-                // TODO: check if remainder of pos is actually
-                // an int before doing that
-
-                // Place tile
-                int value = board->placeTile(posX, posY, letter);
-
-                // If move was valid, remove tile from player hand
-                if (value) {
-                    currentPlayer.getHand()->remove(letter);
-                }
-
-                // Check for bingo, will be true if player's hand is now empty
-                bool bingo = false;
-                if (currentPlayer.getHand()->size() == 0) {
-                    bingo = true;
-                }
-
-                if (value) { // if valid
-                    currentPlayer.startPlacing();
-                    // Increase score.
-                    if (bingo) {
-                        std::cout << "\nBINGO!!!\n" << std::endl;
-                        currentPlayer.addScore(value + BINGO_BONUS);
-                    } else {
-                        currentPlayer.addScore(value);
-                    }
-                    retStat = SAME_PLAYER;
-                } else {
-                    // Illegal move.
-                    retStat = INVALID_ACT;
-                }
-            } else {
-                // Letter is not in player's hand.
-                retStat = INVALID_ACT;
+void Core::runCore() {
+    int coreControl {NEXT_PLAYER};
+    do {
+        if (coreControl != INVALID_ACT && coreControl != SAME_PLAYER) {
+            displayTurn();
+        }
+        std::string word {}, input {};
+        std::vector<std::string> action {};
+        // Process user's selected action into a vector of strings.
+        std::cout << "> " << std::flush;
+        std::getline(std::cin >> std::ws, input);
+        if (!std::cin.eof()) {
+            std::istringstream stream {input};
+            while (stream >> word) {
+                action.emplace_back(word);
             }
         } else {
-            // Vector is of insufficient length.
-            retStat = INVALID_ACT;
+            action.emplace_back("quit");
         }
-    }
-    // Replace a single tile on the player's hand.
-    else if (act == "replace" && actVec.size() == 2 &&
-             !currentPlayer.isPlacing()) {
-        currentPlayer.refreshPass();
-        // Command | replace <repLetter>.
-        std::string repLetter = actVec[1];
-
-        if (repLetter.length() != 1) {
-            //  Replacement letter not a char.
-            retStat = INVALID_ACT;
+        if (action.empty()) {
+            // If there is no action specified.
+            coreControl = INVALID_ACT;
+            std::cout << "Invalid input." << std::endl;
+        } else if (players.at(current).getPass() >= 1) {
+            // Cease if the player exceeds the pass bound.
+            displayEnd();
+            coreControl = QUIT;
+        } else {
+            // Perform action.
+            coreControl = handleAction(action);
         }
-        // Replace letter on hand.
-        else if (!(currentPlayer.getHand()
-                ->replace(repLetter[0], bag->pop()))) {
-            // Tile to be replaced is not in hand.
-            retStat = INVALID_ACT;
+        // Cease if there are no tiles left in bag or hands.
+        if (!bag->size() && !players.at(current).getHand()->size()) {
+            coreControl = QUIT;
         }
-        else {
-            // On successful replacement, add the old letter to the tile bag.
-            bag->append(repLetter[0]);
-            retStat = NEXT_PLAYER;
+        // Update core state if either control is encountered.
+        if (coreControl == QUIT) {
+            displayEnd();
         }
-    }
-    // Don't play this round. Maximum 2 consecutive passes allowed.
-    else if (act == "pass" && actVec.size() == 1 &&
-             !currentPlayer.isPlacing()) {
-        currentPlayer.incrementPass();
-        retStat = NEXT_PLAYER;
-    }
-    // Saves game.
-    else if (act == "save" && actVec.size() == 2 &&
-             !currentPlayer.isPlacing()) {
-        // Command | save <filename>
-        saveGame(actVec[1]);
-        retStat = SAME_PLAYER;
-    }
-    // Quit game. Does not show game end dialogue.
-    else if (act == "quit" && actVec.size() == 1) {
-        retStat = QUIT;
-    }
-    // Invalid command.
-    else {
-        // Command is not part of spec.
-        retStat = INVALID_ACT;
-    }
-    return retStat;
+        else if (coreControl == NEXT_PLAYER) {
+            changeTurn();
+        }
+    } while (coreControl != QUIT);
+    std::cout << "Goodbye" << std::endl;
 }
 
+// Save current core state to file.
+void Core::saveCore(const std::string &file) {
+    std::unique_ptr<SaveState> save {std::make_unique<SaveState>(*this)};
+    save->saveToFile(file);
+}
 
-// TODO - Keep one or the other. Determine this in testing.
-std::ostream &operator<<(std::ostream &os, const Core &core) {
-    os << core.players[core.current].getName()
-       << " it's your turn.\n";
-    for (auto& _p : core.players) {
-        os << "Score for " << _p.getName()
-                  << ": " << _p.getScore() << '\n';
+int Core::handleAction(const std::vector<std::string> &action) {
+    const std::string type {action.at(0)};
+    Player& player {players.at(current)};
+    int state {INVALID_ACT};
+    if (type == "place") {
+        state = handlePlace(player, action);
+    } else if (type == "replace") {
+        state = replaceTile(player, action);
+    } else if (type == "pass") {
+        // Update player object pass count and signal core to next player.
+        player.incrementPass();
+        state = NEXT_PLAYER;
+    } else if (type == "save" && action.size() == 2) {
+        // Save core state to file provided and signal core keep this turn.
+        saveCore(action.at(1));
+        state = SAME_PLAYER;
+    } else if (type == "quit") {
+        state = QUIT;
     }
-    os << core.board->toString() << '\n';
-    os << core.players.at(core.current).handToString() << '\n';
-    return os;
+    return state;
+}
+
+int Core::handlePlace(Player &player, const std::vector<std::string> &action) {
+    int state {INVALID_ACT};
+    if (action.size() == 2 && action.at(1) == "Done") {
+        state = placeDone(player);
+    } else if (action.size() == 4 && action.at(2) == "at") {
+        state = placeTile(player, action);
+    }
+    return state;
+}
+
+int Core::placeDone(Player &player) {
+    int handSize {player.getHand()->size()};
+    // Replenish player's hand whilst there are still tiles in bag.
+    while (bag->size() > 0 && handSize < HAND_SIZE) {
+        player.getHand()->append(bag->pop());
+        ++handSize;
+    }
+    // Signal core transition to next player.
+    player.donePlacing();
+    return NEXT_PLAYER;
+}
+
+int Core::placeTile(Player &player, const std::vector<std::string> &action) {
+    std::cout << "Placing tile." << std::endl;
+    int state {INVALID_ACT};
+    std::string position {action.at(3)};
+    // Convert position to x and y coordinates.
+    std::size_t x {static_cast<size_t>(std::toupper(position.at(0)) - 65)}, 
+        y {static_cast<size_t>(std::stoi(position.substr(1)))};
+    // Place the specified letter at the given coordinates on board.
+    char letter {static_cast<char>(std::toupper(action.at(1).at(0)))};
+    int value {board->placeTile(x, y, letter)};
+    // If the player's action was valid.
+    if (value != 0) {
+        // Delete placed tile from player's hand and reset player state.
+        std::shared_ptr<LinkedList> hand {player.getHand()};
+        hand->remove(letter);
+        player.refreshPass();
+        player.startPlacing();
+        // Calculate the score, including checking for bingo.
+        int score {value};
+        if (hand->size() == 0) {
+            std::cout << "\nBINGO!!!\n\n";
+            score += BINGO_BONUS;
+        }
+        // Add score to player object, and signal core to stay on turn.
+        player.addScore(score);
+        state = SAME_PLAYER;
+    }
+    return state;
+}
+
+int Core::replaceTile(Player &player, const std::vector<std::string> &action) {
+    int state {INVALID_ACT};
+    player.refreshPass();
+    // Get replace character and check for valid input.
+    std::string letter {action.at(1)};
+    if (letter.size() == 1 
+        && player.getHand()->replace(letter.at(0), bag->pop())) {
+        // If valid and replaced tile in hand, put exchanged tile in bag.
+        bag->append(letter.at(0));
+        state = NEXT_PLAYER;
+    }
+    return state;
+}
+
+std::unique_ptr<LinkedList> Core::createBag() {
+    auto tiles {std::make_unique<LinkedList>()};
+    std::ifstream file {"ScrabbleTiles.txt"};
+    if (file) {
+        // Create buffer vector and preallocate storage to avoid resizing.
+        std::vector<char> characters {};
+        characters.reserve(100);
+        std::string line {};
+        // Extract the character for each line; value unnecessary. 
+        while (std::getline(file, line)) {
+            characters.push_back(line.at(0));
+        }
+        // Close file connection once all data is acquired.
+        file.close();
+        // Shuffle the buffer list so characters are read in random order.
+        std::default_random_engine 
+            rand(std::chrono::system_clock::now().time_since_epoch().count());
+        std::shuffle(characters.begin(), characters.end(), rand);
+        // Append reordered characters to linked list.
+        for (char character : characters) {
+            tiles->append(character);
+        }
+    } else {
+        // throw std::runtime_error("Could not open tile bag file");
+        std::cout << "Could not open tile bag file" << std::endl;
+    }
+    return tiles;
 }
 
 /**
@@ -204,78 +206,33 @@ std::ostream &operator<<(std::ostream &os, const Core &core) {
  * @order_of_ops Current name, Score of all players, Board, Current player hand.
  */
 void Core::displayTurn() {
-    std::cout << '\n'
-              << players.at(current).getName()
-              << " it's your turn." << std::endl;
-    for (auto& _p : players) {
-        std::cout << "Score for " << _p.getName()
-                  << ": " << _p.getScore() << std::endl;
+    std::cout << std::endl 
+        << players.at(current).getName() << " it's your turn.\n";
+    for (const auto& player : players) {
+        std::cout 
+            << "Score for " << player.getName()
+            << ": " << player.getScore() << std::endl;
     }
-    std::cout << board->toString() << "\n\n"
-              << "Your hand is\n"
-              << players.at(current).handToString() << '\n'
-              << std::endl;
+    std::cout 
+        << board->toString() << "\n\n"
+        << "Your hand is\n" << players.at(current).handToString() << "\n\n";
 }
 
-void Core::runGame() {
-    // TODO - Perform preliminary checks before starting core.
-    int coreControl{NEXT_PLAYER};
-
-    // Run round.
-    do {
-        if (coreControl != INVALID_ACT && coreControl != SAME_PLAYER)
-            displayTurn();
-
-        std::string word;
-        std::string actionLine;
-        std::vector<std::string> actionList;
-
-        // Get game action as a vector of strings.
-        std::cout << "> " << std::flush;
-        std::getline(std::cin >> std::ws, actionLine);
-        if (std::cin.eof()) {
-            actionList.emplace_back("quit");
-        } else {
-            std::istringstream iss(actionLine);
-            while (iss >> word)
-                actionList.emplace_back(word);
-        }
-
-        // Perform preliminary checks then action.
-        if (actionList.empty()) {
-            // There is no action.
-            coreControl = INVALID_ACT;
-        } else if (players.at(current).getPass() >= 1) {
-            // End game if player exceeded pass limit.
-            displayEnd();
-            coreControl = QUIT;
-        } else {
-            // Perform action.
-            coreControl = handleAction(actionList);
-        }
-
-        // Handle Core Control.
-        if (coreControl == INVALID_ACT) {
-            std::cout << "\nInvalid input.\n" << std::endl;
-        } else if (coreControl == NEXT_PLAYER) {
-            changeTurn();
-        }
-
-        // The below conditional carries greater precedence over core control.
-        // Tile bag is empty and current's hand is empty.
-        if (!bag->size() && !players.at(current).getHand()->size()) {
-            displayEnd();
-            coreControl = QUIT;
-        }
-    } while (coreControl != QUIT);
-    std::cout << "Goodbye" << std::endl;
-}
-
-
-// Save current game state to file using the given file name.
-void Core::saveGame(const std::string &file) {
-    std::unique_ptr<SaveState> save {std::make_unique<SaveState>(*this)};
-    save->saveToFile(file);
+void Core::displayEnd() {
+    std::cout << "\nGame over\n";
+    // Print scoreboard.
+    for (auto& player : players) {
+        std::cout 
+            << "Score for " << player.getName() 
+            << ": " << player.getScore() << std::endl;
+    }
+    // Find and declare winner by checking player scores.
+    auto victor { std::max_element(players.begin(), players.end(), 
+        [](const Player& a, const Player& b) {
+            return a.getScore() < b.getScore();
+        })[0]
+    };
+    std::cout << "Player " << victor.getName() << " won!\n\n";
 }
 
 std::shared_ptr<std::vector<Player>> Core::getPlayers() {
@@ -290,6 +247,20 @@ std::shared_ptr<Board> Core::getBoard() {
     return board;
 }
 
-int Core::getCurrent() const {
+std::size_t Core::getCurrent() const {
     return current;
 }
+
+/*
+    std::ostream &operator<<(std::ostream &os, const Core &core) {
+        os << core.players[core.current].getName()
+        << " it's your turn.\n";
+        for (auto& _p : core.players) {
+            os << "Score for " << _p.getName()
+                    << ": " << _p.getScore() << '\n';
+        }
+        os << core.board->toString() << '\n';
+        os << core.players.at(core.current).handToString() << '\n';
+        return os;
+    }
+*/

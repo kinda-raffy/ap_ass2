@@ -21,7 +21,7 @@ class SaveState {
     std::vector<std::string> players;
     std::vector<std::string> hands;
     std::vector<int> scores;
-    int current;
+    std::size_t current;
 
 public:
 
@@ -36,7 +36,7 @@ public:
     std::shared_ptr<std::vector<std::string>> getPlayers();    
     std::shared_ptr<std::vector<std::string>> getHands();
     std::shared_ptr<std::vector<int>> getScores();
-    int getCurrent();
+    std::size_t getCurrent();
 };
 
 #endif // ASSIGN2_SAVE_STATE_H

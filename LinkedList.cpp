@@ -67,16 +67,17 @@ bool LinkedList::contains(char letter) const {
     return found;
 }
 
-// Replaces the first encounter of node with 'letter' with 'repLetter'.
-bool LinkedList::replace(char letter, char repLetter) {
-    bool retStat {false};
+// Replaces the first instance of first letter with second.
+bool LinkedList::replace(char letter, char replace) {
+    bool success {false};
     std::shared_ptr<Node> current {head};
-    while (current != nullptr && !retStat) {
+    while (current != nullptr && !success) {
         if (current->getLetter() == letter) {
-            current->setLetter(repLetter);
-            retStat = true;
+            current->setLetter(replace);
+            success = true;
         } current = current->getNext();
-    } return retStat;
+    } 
+    return success;
 }
 
 // Delete the first node and return the contained character.

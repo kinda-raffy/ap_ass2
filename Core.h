@@ -1,16 +1,20 @@
 #ifndef AP_ASS2_CORE_H
 #define AP_ASS2_CORE_H
 
+// #include <functional>
+#include <memory>
+#include <random>
+#include <chrono>
 #include <vector>
 #include <sstream>
+#include <fstream>
+#include <algorithm>
+#include <utility>
+
 #include "SaveState.h"
 #include "LinkedList.h"
 #include "Player.h"
 #include "Board.h"
-#include "TileBag.h"
-
-using uniqPtr_LL = std::unique_ptr<LinkedList>;
-using sharPtr_LL = std::shared_ptr<LinkedList>;
 
 // Core iteration control constants.
 #define QUIT 0
@@ -18,39 +22,51 @@ using sharPtr_LL = std::shared_ptr<LinkedList>;
 #define SAME_PLAYER 2
 #define INVALID_ACT 3
 
-// Game rule constants.
+// Rule constants.
 #define BINGO_BONUS 50
 
 class Core {
 
-    std::vector<Player> players;
     std::shared_ptr<LinkedList> bag;
+    std::vector<Player> players;
     std::shared_ptr<Board> board;
-    int current;
-
-    std::vector<Player> createPlayers(std::vector<std::string>);
-    int handleAction(std::vector<std::string>);
-    void changeTurn();
-    void displayTurn();
-    void displayEnd();
+    std::size_t current;
+    /*
+        Maintain a pointer to the requisite handling function.
+        std::function<int(Player &player, const std::vector<std::string> &action)> handler;
+    */
 
 public:
 
-    explicit Core(std::vector<std::string>);
+    explicit Core(const std::vector<std::string>&);
     explicit Core(SaveState&);
     ~Core() = default;
 
-    void runGame();
-    void saveGame(const std::string&);
+    void runCore();
+    void saveCore(const std::string&);
 
-    friend std::ostream& operator << (std::ostream& os, const Core& core);
-    void printDuck();
+    // friend std::ostream& operator<<(std::ostream& os, const Core& core);
 
     std::shared_ptr<std::vector<Player>> getPlayers();
     std::shared_ptr<LinkedList> getBag();
     std::shared_ptr<Board> getBoard();
-    int getCurrent() const;
-};
+    std::size_t getCurrent() const;
+    void printDuck();
 
+private:
+
+    static std::unique_ptr<LinkedList> createBag();
+
+    void changeTurn();
+    void displayTurn();
+    void displayEnd();
+
+    // Action handling functions.
+    int handleAction(const std::vector<std::string>&);
+    int handlePlace(Player&, const std::vector<std::string>&);
+    int placeDone(Player&);
+    int placeTile(Player&, const std::vector<std::string>&);
+    int replaceTile(Player&, const std::vector<std::string>&);
+};
 
 #endif //AP_ASS2_CORE_H

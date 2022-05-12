@@ -3,29 +3,20 @@
 #include "Player.h"
 
 Player::Player(const std::string &name, const std::string &hand, int score)
-        : name{name}, hand{std::make_shared<LinkedList>(hand)},
-          passes{0}, score{score}, currentlyPlacing{false} {
+    : name {name}, hand {std::make_shared<LinkedList>(hand)}, 
+      passes {0}, score {score}, placing {false} {
 }
 
-Player::Player(std::string name, const std::shared_ptr<LinkedList> &tileBag,
-               int score, int playerNum, const std::string &fileName)
-        : passes{0}, currentlyPlacing{false} {
-    this->name = std::move(name);
-    // New player.
-    this->score = 0;
-    setNewHand(tileBag);
+Player::Player(const std::string &name, const std::shared_ptr<LinkedList> bag)
+    : name {name}, hand {std::make_shared<LinkedList>()}, 
+      passes {0}, score {0}, placing {false} {
+    // Transfer the requisite tiles to the player hand.
+    for (std::size_t index {0}; index < HAND_SIZE; ++index) {
+        hand->append(bag->pop());
+    }
 }
 
 Player::~Player() = default;
-
-void Player::setNewHand(const sharPtr_LL& tileBag) {
-    // Set a new hand.
-    sharPtr_LL newHand = std::make_shared<LinkedList>();
-    for (int i = 0; i < HAND_SIZE; i++)
-        newHand->append(tileBag->pop());
-    this->hand = newHand;
-}
-
 
 std::string Player::getName() const {
     return this->name;
@@ -35,15 +26,15 @@ int Player::getScore() const {
     return this->score;
 }
 
-void Player::setScore(int score_) {
-    this->score = score_;
+void Player::setScore(int score) {
+    this->score = score;
 }
 
-void Player::addScore(int score_) {
-    this->score += score_;
+void Player::addScore(int score) {
+    this->score += score;
 }
 
-sharPtr_LL Player::getHand() const {
+std::shared_ptr<LinkedList> Player::getHand() const {
     return this->hand;
 }
 
@@ -52,8 +43,7 @@ std::string Player::handToString() const {
 }
 
 void Player::printHand() const {
-    std::cout << "Your hand is" << std::endl;
-    std::cout << handToString() << std::endl;
+    std::cout << "Your hand is\n" << handToString() << std::endl;
 }
 
 int Player::getPass() const {
@@ -69,13 +59,13 @@ void Player::incrementPass() {
 }
 
 bool Player::isPlacing() const {
-    return currentlyPlacing;
+    return placing;
 }
 
 void Player::startPlacing() {
-    currentlyPlacing = true;
+    placing = true;
 }
 
 void Player::donePlacing() {
-    currentlyPlacing = false;
+    placing = false;
 }
