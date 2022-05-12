@@ -37,7 +37,10 @@ void Core::runCore() {
     do {
         if (coreControl != INVALID_ACT && coreControl != SAME_PLAYER) {
             displayTurn();
+        } else if (coreControl == INVALID_ACT) {
+            std::cout << "Invalid Input" << std::endl;
         }
+
         std::string word {}, input {};
         std::vector<std::string> action {};
         // Process user's selected action into a vector of strings.
@@ -54,7 +57,6 @@ void Core::runCore() {
         if (action.empty()) {
             // If there is no action specified.
             coreControl = INVALID_ACT;
-            std::cout << "Invalid input." << std::endl;
         } else if (players.at(current).getPass() >= 1) {
             // Cease if the player exceeds the pass bound.
             displayEnd();
@@ -90,13 +92,13 @@ int Core::handleAction(const std::vector<std::string> &action) {
     int state {INVALID_ACT};
     if (type == "place") {
         state = handlePlace(player, action);
-    } else if (type == "replace") {
+    } else if (type == "replace" && !player.isPlacing()) {
         state = replaceTile(player, action);
-    } else if (type == "pass") {
+    } else if (type == "pass" && !player.isPlacing()) {
         // Update player object pass count and signal core to next player.
         player.incrementPass();
         state = NEXT_PLAYER;
-    } else if (type == "save" && action.size() == 2) {
+    } else if (type == "save" && action.size() == 2 && !player.isPlacing()) {
         // Save core state to file provided and signal core keep this turn.
         saveCore(action.at(1));
         state = SAME_PLAYER;
@@ -129,7 +131,6 @@ int Core::placeDone(Player &player) {
 }
 
 int Core::placeTile(Player &player, const std::vector<std::string> &action) {
-    std::cout << "Placing tile." << std::endl;
     int state {INVALID_ACT};
     std::string position {action.at(3)};
     // Convert position to x and y coordinates.
