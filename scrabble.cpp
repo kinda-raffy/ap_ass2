@@ -111,5 +111,6 @@ void credits() {
         << "Email: s3888604@student.rmit.edu.au\n\n"
         << "Name: Alexander Mitchell\n"
         << "Student ID: s3902255\n"
-        << "Email: s3902255@student.rmit.edu.au\n\n";
+        << "Email: s3902255@student.rmit.edu.au\n"
+        << "-----------------------------------\n";
 }
