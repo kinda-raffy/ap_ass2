@@ -111,8 +111,8 @@ bool Board::validateBoardString(const std::vector<std::string> &lines) {
         std::regex("( {2,4}[0-9]{1,2})+[ ]+"));
     correct = std::regex_match(lines.at(index++), std::regex("  -+")) 
         && correct;
-    // Verify all lines used to represent board sequentially. End is faulty.
-    const std::regex pattern {"[A-Z]{1}( | [A-Z ])+ |(.*)"};
+    // Verify all lines used to represent board sequentially.
+    const std::regex pattern {"[A-Z]{1}( | [A-Z ])+([ |]{2,3})"};
     while (correct && index < lines.size()) {
         correct = std::regex_match(lines.at(index++), pattern);
     }

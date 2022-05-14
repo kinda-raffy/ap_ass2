@@ -38,10 +38,9 @@ SaveState::SaveState(const std::string &input) {
     }
 }
 
-// FIXME: Once Core is finalised fix this constructor.
-SaveState::SaveState(Core &core) :
-    tiles {core.getBag()->toString()}, board {core.getBoard()->toString()},
-    players {}, hands {}, scores {}, current {core.getCurrent()}  {
+SaveState::SaveState(Core &core) 
+    : tiles {core.getBag()->toString()}, board {core.getBoard()->toString()},
+      players {}, hands {}, scores {}, current {core.getCurrent()}  {
     // Iteratively convert all player info into save strings and store.
     std::shared_ptr<std::vector<Player>> corePlayers {core.getPlayers()};
     for (const Player player : *corePlayers) {
@@ -97,7 +96,7 @@ std::size_t SaveState::getCurrent() {
 }
 
 std::unique_ptr<std::vector<std::string>> 
-    readSaveFile(const std::string &input) {
+    SaveState::readSaveFile(const std::string &input) {
     // Use input string to locate save state file and read.
     std::ifstream file {input};
     auto lines {std::make_unique<std::vector<std::string>>()};
@@ -120,12 +119,13 @@ std::unique_ptr<std::vector<std::string>>
 bool SaveState::validateSaveString(const std::vector<std::string> &save) {
     bool correct {true};
     std::size_t index {0};
-    // Validate all player data.
+    // Validate all player data. Name should be all charcters, score digits.
     while (save.at(index).at(0) != ' ') {
         correct = correct 
             && std::regex_match(save.at(index++), std::regex("[A-Z]+"));
         correct = correct 
             && std::regex_match(save.at(index++), std::regex("[0-9]+"));
+        // Ensure hand is in the correct linked list string layout.
         correct = correct && LinkedList::validateListString(save.at(index++));
     }
     // Validate board and tile bag data. Currently creates a copy of board.
