@@ -37,6 +37,12 @@ public:
     std::shared_ptr<std::vector<std::string>> getHands();
     std::shared_ptr<std::vector<int>> getScores();
     std::size_t getCurrent();
+
+private:
+
+    static std::unique_ptr<std::vector<std::string>> 
+        readSaveFile(const std::string&);
+    static bool validateSaveString(const std::vector<std::string>&);
 };
 
 #endif // ASSIGN2_SAVE_STATE_H

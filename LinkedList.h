@@ -25,15 +25,13 @@ public:
    bool remove(char);
    void append(char);
    void append(std::unique_ptr<Tile>);
-   bool contains(char letter) const;
+   bool contains(char) const;
    bool replace(char, char);
    int size() const;
 
    std::string toString() const;
 
-private:
-
-   bool validateListString(const std::string&);
+   static bool validateListString(const std::string&);
 };
 
 #endif // ASSIGN2_LINKEDLIST_H

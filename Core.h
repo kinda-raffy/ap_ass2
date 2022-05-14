@@ -2,6 +2,7 @@
 #define AP_ASS2_CORE_H
 
 // #include <functional>
+#include <regex>
 #include <memory>
 #include <random>
 #include <chrono>

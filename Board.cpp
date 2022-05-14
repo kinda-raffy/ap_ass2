@@ -91,3 +91,30 @@ int Board::placeTile(std::size_t x, std::size_t y, char letter) {
     }
     return placeValue;
 }
+
+// TODO: Both functions need to be updated for boards of varied size.
+bool Board::validateBoardString(const std::string &save) {
+    std::stringstream board {save};
+    std::vector<std::string> lines {};
+    std::string line {};
+    while (std::getline(board, line)) {
+        lines.push_back(line);
+    }
+    return validateBoardString(lines);
+}
+
+bool Board::validateBoardString(const std::vector<std::string> &lines) {
+    bool correct {true};
+    std::size_t index {0};
+    // Verify header lines individually.
+    correct = std::regex_match(lines.at(index++), 
+        std::regex("( {2,4}[0-9]{1,2})+[ ]+"));
+    correct = std::regex_match(lines.at(index++), std::regex("  -+")) 
+        && correct;
+    // Verify all lines used to represent board sequentially. End is faulty.
+    const std::regex pattern {"[A-Z]{1}( | [A-Z ])+ |(.*)"};
+    while (correct && index < lines.size()) {
+        correct = std::regex_match(lines.at(index++), pattern);
+    }
+    return correct;
+}
