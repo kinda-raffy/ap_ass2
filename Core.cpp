@@ -80,7 +80,7 @@ void Core::doAction(const std::vector<std::string> &action) {
     bool noTiles {!(bag->size() || player.getHand()->size())}, 
         noPasses {player.getPass() > 1};
     control = Control::INVALID;
-    if (!(action.empty() || !noPasses)) {
+    if (!(action.empty() || noPasses)) {
         handleAction(player, action);
     }
     if (noPasses || noTiles) {
