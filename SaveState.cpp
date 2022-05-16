@@ -118,28 +118,15 @@ void SaveState::readSaveFile(const std::string &input,
 
 bool SaveState::validateSaveString(const std::vector<std::string> &save) {
     bool correct {true};
-    std::cout << correct << std::endl;
     std::size_t index {0}, bound {save.size() - 2};
     // Validate all player data. Name should be all charcters, score digits.
     while (save.at(index).at(0) != ' ' && correct) {
         correct = correct && Player::validatePlayerStrings(save, index);
         index += 3;
-        std::cout << correct << std::endl;
     }
-    // Validate board and tile bag data.
-    correct = correct && 
-        Board::validateBoardString(save, index, bound);
-    std::cout << correct << std::endl;
-    /* 
-        std::vector<std::string> board {};
-        while (index < save.size() - 2) {
-            board.push_back(save.at(index++));
-        }
-        Board::validateBoardString(board);
-    */
+    // Validate board, tile bag and current player data.
+    correct = correct && Board::validateBoardString(save, index, bound);
     correct = correct && LinkedList::validateListString(save.at(bound++));
-    std::cout << correct << std::endl;
     correct = correct && std::regex_match(save.at(bound), std::regex("[A-Z]+"));
-    std::cout << correct << std::endl;
     return correct;
 }
