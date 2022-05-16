@@ -69,26 +69,28 @@ void Core::runCore() {
     std::cout << "Goodbye" << std::endl;
 }
 
-// Save current core state to file.
 void Core::saveCore(const std::string &file) {
+    // Create a new save state object using the current state of core.
     auto save {std::make_unique<SaveState>(*this)};
     save->saveToFile(file);
 }
 
 void Core::doAction(const std::vector<std::string> &action) {
     Player &player {players.at(current)};
+    bool noTiles {!(bag->size() || player.getHand()->size())}, 
+        noPasses {player.getPass() > 1};
     control = Control::INVALID;
-    if (!(action.empty() || player.getPass() >= 1)) {
+    if (!(action.empty() || !noPasses)) {
         handleAction(player, action);
     }
-    if (!(bag->size() || player.getHand()->size()) || action.empty()) {
+    if (noPasses || noTiles) {
         control = Control::QUIT;
     }
 }
 
 void Core::handleAction(Player &player, 
     const std::vector<std::string> &action) {
-    
+    // Extract the base action.
     const std::string type {action.at(0)};
     if (type == "place") {
         handlePlace(player, action);
