@@ -100,13 +100,11 @@ void Core::saveCore(const std::string &file) {
 
 void Core::doAction(const std::vector<std::string> &action) {
     Player &player {players.at(current)};
-    bool noTiles {!(bag->size() || player.getHand()->size())}, 
-        noPasses {player.getPass() > 1};
     control = Control::INVALID;
-    if (!(action.empty() || !noPasses)) {
+    if (!action.empty()) {
         handleAction(player, action);
     }
-    if (noPasses || noTiles) {
+    if (player.getPass() == 2 || !(bag->size() || player.getHand()->size())) {
         control = Control::QUIT;
     }
 }
