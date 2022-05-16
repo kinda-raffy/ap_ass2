@@ -71,7 +71,7 @@ void Core::runCore() {
 
 // Save current core state to file.
 void Core::saveCore(const std::string &file) {
-    std::unique_ptr<SaveState> save {std::make_unique<SaveState>(*this)};
+    auto save {std::make_unique<SaveState>(*this)};
     save->saveToFile(file);
 }
 
@@ -130,9 +130,9 @@ void Core::placeDone(Player &player) {
 
 void Core::placeTile(Player &player, const std::vector<std::string> &action) {
     control = Control::INVALID;
-    int value {insertTile(action)};
+    int score {insertTile(action)};
     // If the player's action was valid.
-    if (value != 0) {
+    if (score != 0) {
         // Delete placed tile from player's hand and reset player state.
         std::shared_ptr<LinkedList> hand {player.getHand()};
         hand->remove(action.at(1).at(0));
@@ -141,10 +141,10 @@ void Core::placeTile(Player &player, const std::vector<std::string> &action) {
         // Calculate the score, including checking for bingo.
         if (hand->size() == 0) {
             std::cout << "\nBINGO!!!\n\n";
-            value += BINGO_BONUS;
+            score += BINGO_BONUS;
         }
         // Add score to player object, and signal core to stay on turn.
-        player.addScore(value);
+        player.addScore(score);
         control = Control::SAME;
     }
 }
