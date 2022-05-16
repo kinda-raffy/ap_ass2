@@ -48,24 +48,24 @@ void Core::getInput(std::vector<std::string> &action) {
 }
 
 void Core::runCore() {
-    int control {NEXT_PLAYER};
+    control = NEXT;
     do {
-        if (control != INVALID_ACT && control != SAME_PLAYER) {
+        if (control != Control::INVALID && control != Control::SAME) {
             displayTurn();
-        } else if (control == INVALID_ACT) {
+        } else if (control == Control::INVALID) {
             std::cout << "Invalid Input" << std::endl;
         }
         std::vector<std::string> action {};
         // Retrieve user input and handle the specified action.
         getInput(action);
-        control = doAction(action);
+        doAction(action);
         // Update core state if either control is encountered.
-        if (control == QUIT) {
+        if (control == Control::QUIT) {
             displayEnd();
-        } else if (control == NEXT_PLAYER) {
+        } else if (control == Control::NEXT) {
             changeTurn();
         }
-    } while (control != QUIT);
+    } while (control != Control::QUIT);
     std::cout << "Goodbye" << std::endl;
 }
 
@@ -75,50 +75,48 @@ void Core::saveCore(const std::string &file) {
     save->saveToFile(file);
 }
 
-int Core::doAction(const std::vector<std::string> &action) {
+void Core::doAction(const std::vector<std::string> &action) {
     Player &player {players.at(current)};
-    int control {INVALID_ACT};
+    control = Control::INVALID;
     if (!(action.empty() || player.getPass() >= 1)) {
-        control = handleAction(player, action);
+        handleAction(player, action);
     }
     if (!(bag->size() || player.getHand()->size()) || action.empty()) {
-        control = QUIT;
+        control = Control::QUIT;
     }
-    return control;
 }
 
-int Core::handleAction(Player &player, const std::vector<std::string> &action) {
+void Core::handleAction(Player &player, 
+    const std::vector<std::string> &action) {
+    
     const std::string type {action.at(0)};
-    int state {INVALID_ACT};
     if (type == "place") {
-        state = handlePlace(player, action);
+        handlePlace(player, action);
     } else if (type == "replace" && !player.isPlacing()) {
-        state = replaceTile(player, action);
+        replaceTile(player, action);
     } else if (type == "pass" && !player.isPlacing()) {
         // Update player object pass count and signal core to next player.
         player.incrementPass();
-        state = NEXT_PLAYER;
+        control = Control::NEXT;
     } else if (type == "save" && action.size() == 2 && !player.isPlacing()) {
         // Save core state to file provided and signal core keep this turn.
         saveCore(action.at(1));
-        state = SAME_PLAYER;
+        control = Control::SAME;
     } else if (type == "quit") {
-        state = QUIT;
+        control = Control::QUIT;
     }
-    return state;
 }
 
-int Core::handlePlace(Player &player, const std::vector<std::string> &action) {
-    int state {INVALID_ACT};
+void Core::handlePlace(Player &player, const std::vector<std::string> &action) {
+    control = Control::INVALID;
     if (action.size() == 2 && action.at(1) == "Done") {
-        state = placeDone(player);
+        placeDone(player);
     } else if (action.size() == 4 && action.at(2) == "at") {
-        state = placeTile(player, action);
+        placeTile(player, action);
     }
-    return state;
 }
 
-int Core::placeDone(Player &player) {
+void Core::placeDone(Player &player) {
     int handSize {player.getHand()->size()};
     // Replenish player's hand whilst there are still tiles in bag.
     while (bag->size() > 0 && handSize < HAND_SIZE) {
@@ -127,11 +125,11 @@ int Core::placeDone(Player &player) {
     }
     // Signal core transition to next player.
     player.donePlacing();
-    return NEXT_PLAYER;
+    control = Control::NEXT;
 }
 
-int Core::placeTile(Player &player, const std::vector<std::string> &action) {
-    int state {INVALID_ACT};
+void Core::placeTile(Player &player, const std::vector<std::string> &action) {
+    control = Control::INVALID;
     int value {insertTile(action)};
     // If the player's action was valid.
     if (value != 0) {
@@ -147,9 +145,8 @@ int Core::placeTile(Player &player, const std::vector<std::string> &action) {
         }
         // Add score to player object, and signal core to stay on turn.
         player.addScore(value);
-        state = SAME_PLAYER;
+        control = Control::SAME;
     }
-    return state;
 }
 
 int Core::insertTile(const std::vector<std::string> &action) {
@@ -160,8 +157,8 @@ int Core::insertTile(const std::vector<std::string> &action) {
     );
 }
 
-int Core::replaceTile(Player &player, const std::vector<std::string> &action) {
-    int state {INVALID_ACT};
+void Core::replaceTile(Player &player, const std::vector<std::string> &action) {
+    control = Control::INVALID;
     player.refreshPass();
     // Get replace character and check for valid input.
     std::string letter {action.at(1)};
@@ -169,9 +166,8 @@ int Core::replaceTile(Player &player, const std::vector<std::string> &action) {
         && player.getHand()->replace(letter.at(0), bag->pop())) {
         // If valid and replaced tile in hand, put exchanged tile in bag.
         bag->append(letter.at(0));
-        state = NEXT_PLAYER;
+        control = Control::NEXT;
     }
-    return state;
 }
 
 std::unique_ptr<LinkedList> Core::createBag() {
@@ -206,7 +202,7 @@ std::unique_ptr<LinkedList> Core::createBag() {
 void Core::displayTurn() {
     std::cout << std::endl 
         << players.at(current).getName() << " it's your turn.\n";
-    for (const auto& player : players) {
+    for (const auto &player : players) {
         std::cout 
             << "Score for " << player.getName()
             << ": " << player.getScore() << std::endl;
@@ -219,14 +215,14 @@ void Core::displayTurn() {
 void Core::displayEnd() {
     std::cout << "\nGame over\n";
     // Print scoreboard.
-    for (auto& player : players) {
+    for (auto &player : players) {
         std::cout 
             << "Score for " << player.getName() 
             << ": " << player.getScore() << std::endl;
     }
     // Find and declare winner by checking player scores.
     auto victor { std::max_element(players.begin(), players.end(), 
-        [](const Player& a, const Player& b) {
+        [](const Player &a, const Player &b) {
             return a.getScore() < b.getScore();
         })[0]
     };

@@ -17,16 +17,18 @@
 #include "Player.h"
 #include "Board.h"
 
-// Core iteration control constants.
-#define QUIT 0
-#define NEXT_PLAYER 1
-#define SAME_PLAYER 2
-#define INVALID_ACT 3
-
-// Rule constants.
 #define BINGO_BONUS 50
 
 class Core {
+
+    // Tracks the internal state of the core, influences progression.
+    enum Control {
+        QUIT,
+        NEXT,
+        SAME,
+        INVALID
+    };
+    Control control;
 
     std::shared_ptr<LinkedList> bag;
     std::vector<Player> players;
@@ -58,13 +60,13 @@ private:
     void displayEnd();
 
     // Action handling functions.
-    int doAction(const std::vector<std::string>&);
-    int handleAction(Player&, const std::vector<std::string>&);
-    int handlePlace(Player&, const std::vector<std::string>&);
-    int placeDone(Player&);
-    int placeTile(Player&, const std::vector<std::string>&);
+    void doAction(const std::vector<std::string>&);
+    void handleAction(Player&, const std::vector<std::string>&);
+    void handlePlace(Player&, const std::vector<std::string>&);
+    void placeDone(Player&);
+    void placeTile(Player&, const std::vector<std::string>&);
     int insertTile(const std::vector<std::string>&);
-    int replaceTile(Player&, const std::vector<std::string>&);
+    void replaceTile(Player&, const std::vector<std::string>&);
 };
 
 #endif //AP_ASS2_CORE_H
