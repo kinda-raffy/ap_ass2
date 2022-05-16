@@ -7,10 +7,11 @@ void Core::printDuck() {
 /**
  * @brief Construct a new core object with the given player names.
  * @param players The name of each player in the new game.
+
  */
-Core::Core(const std::vector<std::string> &players) 
-    : bag {std::move(Core::createBag())}, board {std::make_shared<Board>()}, 
-      current {0} {
+Core::Core(const std::vector<std::string> &players)
+        : bag {std::move(Core::createBag())}, board {std::make_shared<Board>()},
+          current {0} {
     // For each player name, add a new player object to the core players.
     for (const std::string &name : players) {
         this->players.emplace_back(name, bag);
@@ -21,7 +22,7 @@ Core::Core(const std::vector<std::string> &players)
  * @brief Construct a core object using previous game data.
  * @param save The save state object encapsulating desired previous game data.
  */
-Core::Core(SaveState &save) 
+Core::Core(SaveState &save)
     : bag {std::make_shared<LinkedList>(save.getTiles())},
       board {std::make_shared<Board>(save.getBoard())}, 
       current {save.getCurrent()} {
@@ -114,7 +115,7 @@ void Core::doAction(const std::vector<std::string> &action) {
     if (!action.empty()) {
         handleAction(player, action);
     }
-    if (player.getPass() == 2 
+    if (player.getPass() == 2
         || !(bag->size() || player.getHand()->size())) {
         control = Control::QUIT;
     }
@@ -129,7 +130,7 @@ void Core::doAction(const std::vector<std::string> &action) {
  * @param player Reference to the player object that has current turn.
  * @param action Processed strings representing the player's chosen action.
  */
-void Core::handleAction(Player &player, 
+void Core::handleAction(Player &player,
     const std::vector<std::string> &action) {
     // Extract the base action.
     const std::string type {action.at(0)};
@@ -160,8 +161,8 @@ void Core::handlePlace(Player &player, const std::vector<std::string> &action) {
     // If player has finished placing tiles and received args are correct.
     if (action.size() == 2 && action.at(1) == "Done") {
         placeDone(player);
-    } else if (action.size() == 4 
-        && action.at(2) == "at" 
+    } else if (action.size() == 4
+        && action.at(2) == "at"
         && player.getHand()->contains(action.at(3).at(0))) {
         // If the args are correct and the hand contains letter to place.
         placeTile(player, action);
@@ -215,7 +216,7 @@ void Core::placeTile(Player &player, const std::vector<std::string> &action) {
 
 /**
  * @brief Place the tile specified in the user's action onto the active board.
- * Derives the board coordinates and specified letter from action strings and 
+ * Derives the board coordinates and specified letter from action strings and
  * return the value of the created tile to be added to player score.
  * @param action Processed strings representing the player's chosen action.
  * @return int The tile value of the letter added to the board. Zero if invalid.
@@ -249,9 +250,9 @@ void Core::replaceTile(Player &player, const std::vector<std::string> &action) {
 }
 
 /**
- * @brief For a new game, read and randomly shuffle the tile bag from file. 
+ * @brief For a new game, read and randomly shuffle the tile bag from file.
  * The pseudo-randomisation process is done using a seed derived from time.
- * @return std::unique_ptr<LinkedList> Pointer to list representing tile bag. 
+ * @return std::unique_ptr<LinkedList> Pointer to list representing tile bag.
  */
 std::unique_ptr<LinkedList> Core::createBag() {
     auto tiles {std::make_unique<LinkedList>()};
@@ -307,17 +308,24 @@ void Core::displayEnd() {
     std::cout << "\nGame over\n";
     // Print scoreboard.
     for (auto &player : players) {
-        std::cout 
-            << "Score for " << player.getName() 
+        std::cout
+            << "Score for " << player.getName()
             << ": " << player.getScore() << std::endl;
     }
-    // Find and declare winner by checking player scores.
-    auto victor { std::max_element(players.begin(), players.end(), 
-        [](const Player &a, const Player &b) {
-            return a.getScore() < b.getScore();
-        })[0]
+    auto isTie = [](const Player &player1, const Player &player2) {
+        return player1.getScore() == player2.getScore();
     };
-    std::cout << "Player " << victor.getName() << " won!\n\n";
+    // Find and declare winner by checking player scores if there is any.
+    if (isTie) {
+        std::cout << "It's a tie!\n" << std::endl;
+    } else {
+        auto victor { std::max_element(players.begin(), players.end(),
+                                       [](const Player &a, const Player &b) {
+                                           return a.getScore() < b.getScore();
+                                       })[0]
+        };
+        std::cout << "Player " << victor.getName() << " won!\n\n";
+    }
 }
 
 std::shared_ptr<std::vector<Player>> Core::getPlayers() {
