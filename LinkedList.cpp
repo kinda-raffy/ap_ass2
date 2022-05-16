@@ -1,6 +1,5 @@
 #include "LinkedList.h"
 
-
 LinkedList::LinkedList()
     : head {nullptr}, tail {nullptr}, length {0} {
 }

@@ -38,6 +38,9 @@ public:
 
     std::string handToString() const;
     void printHand() const;
+
+    static bool validatePlayerStrings(const std::vector<std::string>&, 
+        std::size_t);
 };
 
 

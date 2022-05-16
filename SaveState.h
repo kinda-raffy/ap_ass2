@@ -40,8 +40,7 @@ public:
 
 private:
 
-    static std::unique_ptr<std::vector<std::string>> 
-        readSaveFile(const std::string&);
+    static void readSaveFile(const std::string&, std::vector<std::string>&);
     static bool validateSaveString(const std::vector<std::string>&);
 };
 

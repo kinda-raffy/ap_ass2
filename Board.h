@@ -28,8 +28,9 @@ public:
 
     int placeTile(std::size_t, std::size_t, char);
 
-    static bool validateBoardString(const std::string&);
     static bool validateBoardString(const std::vector<std::string>&);
+    static bool validateBoardString(const std::vector<std::string>&, 
+        std::size_t, std::size_t);
 };
 
 #endif // ASSIGN2_BOARD_H

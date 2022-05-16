@@ -3,31 +3,32 @@
 
 // Create a save state using text file. Auto deduces players and board size.
 SaveState::SaveState(const std::string &input) {
-    auto lines {std::move(SaveState::readSaveFile(input))};
+    std::vector<std::string> lines {};
+    SaveState::readSaveFile(input, lines);
     try {
-        if (!SaveState::validateSaveString(*lines)) {
+        if (!SaveState::validateSaveString(lines)) {
             throw std::runtime_error("Incorrect format in save file.");
         }
         // Up until last two lines containing bag and current player.
-        std::size_t size {lines->size() - 2};
+        std::size_t size {lines.size() - 2};
         // Partition should index the first board line. Assume min two players.
         std::size_t partition {6};
-        while (lines->at(partition).at(0) != ' ') {
+        while (lines.at(partition).at(0) != ' ') {
             ++partition;
         }
         // Read and store player data until board section reached.
         for (std::size_t index {0}; index < partition;) {
-            players.push_back(lines->at(index++));
-            scores.push_back(std::stoi(lines->at(index++)));
-            hands.push_back(lines->at(index++));
+            players.push_back(lines.at(index++));
+            scores.push_back(std::stoi(lines.at(index++)));
+            hands.push_back(lines.at(index++));
         }
         // Read board string beginning at partition index.
         for (; partition < size; ++partition) {
-            board += lines->at(partition) + "\n";
+            board += lines.at(partition) + "\n";
         }
         // Read tile bag and current player data.
-        tiles = lines->at(size++); 
-        const std::string currentPlayer {lines->at(size)};
+        tiles = lines.at(size++); 
+        const std::string currentPlayer {lines.at(size)};
         current = 0;
         while (players.at(current) != currentPlayer) {
             ++current;
@@ -95,11 +96,11 @@ std::size_t SaveState::getCurrent() {
     return current;
 }
 
-std::unique_ptr<std::vector<std::string>> 
-    SaveState::readSaveFile(const std::string &input) {
+void SaveState::readSaveFile(const std::string &input, 
+    std::vector<std::string> &lines) {
+
     // Use input string to locate save state file and read.
     std::ifstream file {input};
-    auto lines {std::make_unique<std::vector<std::string>>()};
     try {
         if (!file) {
             throw std::runtime_error("Save file cannot be opened.");
@@ -107,34 +108,33 @@ std::unique_ptr<std::vector<std::string>>
             // Collect all lines and read into vector.
             std::string line {};
             while (std::getline(file, line)) {
-                lines->emplace_back(line);
+                lines.emplace_back(line);
             }
         }
     } catch (std::runtime_error &re) {
         std::cout << re.what() << std::endl;
     }
-    return lines;
 }
 
 bool SaveState::validateSaveString(const std::vector<std::string> &save) {
     bool correct {true};
     std::size_t index {0};
     // Validate all player data. Name should be all charcters, score digits.
-    while (save.at(index).at(0) != ' ') {
-        correct = correct 
-            && std::regex_match(save.at(index++), std::regex("[A-Z]+"));
-        correct = correct 
-            && std::regex_match(save.at(index++), std::regex("[0-9]+"));
-        // Ensure hand is in the correct linked list string layout.
-        correct = correct && LinkedList::validateListString(save.at(index++));
+    while (save.at(index).at(0) != ' ' && correct) {
+        correct = correct && Player::validatePlayerStrings(save, index);
+        index += 3;
     }
-    // Validate board and tile bag data. Currently creates a copy of board.
-    std::vector<std::string> board {};
-    while (index < save.size() - 2) {
-        board.push_back(save.at(index++));
-    }
-    Board::validateBoardString(board);
-    LinkedList::validateListString(save.at(index++));
+    // Validate board and tile bag data.
+    correct = correct && 
+        Board::validateBoardString(save, index, save.size() - 2);
+    /* 
+        std::vector<std::string> board {};
+        while (index < save.size() - 2) {
+            board.push_back(save.at(index++));
+        }
+        Board::validateBoardString(board);
+    */
+    correct = correct && LinkedList::validateListString(save.at(index++));
     correct = correct && std::regex_match(save.at(index), std::regex("[A-Z]+"));
     return correct;
 }

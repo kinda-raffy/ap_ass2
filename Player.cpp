@@ -69,3 +69,18 @@ void Player::startPlacing() {
 void Player::donePlacing() {
     placing = false;
 }
+
+bool Player::validatePlayerStrings(const std::vector<std::string> &lines, 
+    std::size_t start) {
+
+    bool correct {true};
+    // Ensure player's name is all uppercase alpha characters.
+    correct = correct 
+        && std::regex_match(lines.at(start++), std::regex("[A-Z]+"));
+    // Ensure player's score is numeric.
+    correct = correct 
+        && std::regex_match(lines.at(start++), std::regex("[0-9]+"));
+    // Ensure hand is in the correct linked list string layout.
+    correct = correct && LinkedList::validateListString(lines.at(start));
+    return correct;
+}

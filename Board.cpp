@@ -92,29 +92,26 @@ int Board::placeTile(std::size_t x, std::size_t y, char letter) {
     return placeValue;
 }
 
-// TODO: Both functions need to be updated for boards of varied size.
-bool Board::validateBoardString(const std::string &save) {
-    std::stringstream board {save};
-    std::vector<std::string> lines {};
-    std::string line {};
-    while (std::getline(board, line)) {
-        lines.push_back(line);
+bool Board::validateBoardString(const std::vector<std::string> &lines) {
+    std::size_t lo {0}, hi {lines.size() - 2};
+    while (lines.at(lo).at(0) != ' ') {
+        ++lo;
     }
-    return validateBoardString(lines);
+    return Board::validateBoardString(lines, lo, hi);
 }
 
-bool Board::validateBoardString(const std::vector<std::string> &lines) {
+bool Board::validateBoardString(const std::vector<std::string> &lines, 
+    std::size_t lo, std::size_t hi) {
+    
     bool correct {true};
-    std::size_t index {0};
     // Verify header lines individually.
-    correct = std::regex_match(lines.at(index++), 
+    correct = std::regex_match(lines.at(lo++),
         std::regex("( {2,4}[0-9]{1,2})+[ ]+"));
-    correct = std::regex_match(lines.at(index++), std::regex("  -+")) 
-        && correct;
+    correct = std::regex_match(lines.at(lo++), std::regex("  -+")) && correct;
     // Verify all lines used to represent board sequentially.
     const std::regex pattern {"[A-Z]{1}( | [A-Z ])+([ |]{2,3})"};
-    while (correct && index < lines.size()) {
-        correct = std::regex_match(lines.at(index++), pattern);
+    while (correct && lo < hi) {
+        correct = std::regex_match(lines.at(lo++), pattern);
     }
     return correct;
 }
