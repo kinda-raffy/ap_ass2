@@ -101,6 +101,8 @@ bool LinkedList::remove(char letter) {
         // Superfluous storage auto deleted by smart pointers.
         if (current == head) {
             head = head->getNext();
+        } else if (current == tail) {
+            tail = previous;
         } else {
             previous->setNext(current->getNext());
         }

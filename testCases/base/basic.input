@@ -12,4 +12,5 @@ place A at B2
 place A at B3
 place Done
 pass
-replace C with V
+pass
+quit
