@@ -44,7 +44,7 @@ SaveState::SaveState(Core &core)
       players {}, hands {}, scores {}, current {core.getCurrent()}  {
     // Iteratively convert all player info into save strings and store.
     std::shared_ptr<std::vector<Player>> corePlayers {core.getPlayers()};
-    for (const Player player : *corePlayers) {
+    for (Player& player : *corePlayers) {
         players.push_back(player.getName());
         scores.push_back(player.getScore());
         hands.push_back(player.handToString());
