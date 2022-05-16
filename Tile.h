@@ -15,9 +15,10 @@ public:
    ~Tile() = default;
 
    int getValue() const;
-
    char getLetter() const;
    void setLetter(char);
+
+   static int getTileValue(char);
 };
 
 #endif // ASSIGN2_TILE_H

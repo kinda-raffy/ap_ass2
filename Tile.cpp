@@ -39,14 +39,18 @@ Tile::Tile(const Tile &source)
 	: Tile {source.letter} {
 }
 
-int Tile::getValue() const {
-	return values.at(letter);
-}
-
 char Tile::getLetter() const {
 	return letter;
 }
 
 void Tile::setLetter(char letter) {
 	this->letter = letter;
+}
+
+int Tile::getValue() const {
+	return values.at(letter);
+}
+
+int Tile::getTileValue(char letter) {
+	return values.at(letter);
 }

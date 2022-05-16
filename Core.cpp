@@ -32,6 +32,7 @@ void Core::changeTurn() {
     current = (current >= players.size() - 1) ? 0 : current + 1;
 }
 
+// TODO: This is the last function that probably needs to be clearer.
 void Core::runCore() {
     int coreControl {NEXT_PLAYER};
     do {
@@ -90,6 +91,7 @@ int Core::handleAction(const std::vector<std::string> &action) {
     const std::string type {action.at(0)};
     Player& player {players.at(current)};
     int state {INVALID_ACT};
+    for (const auto &act : action) std::cout << act << std::endl;
     if (type == "place") {
         state = handlePlace(player, action);
     } else if (type == "replace" && !player.isPlacing()) {
@@ -132,31 +134,32 @@ int Core::placeDone(Player &player) {
 
 int Core::placeTile(Player &player, const std::vector<std::string> &action) {
     int state {INVALID_ACT};
-    std::string position {action.at(3)};
-    // Convert position to x and y coordinates.
-    std::size_t x {static_cast<size_t>(std::toupper(position.at(0)) - 65)}, 
-        y {static_cast<size_t>(std::stoi(position.substr(1)))};
-    // Place the specified letter at the given coordinates on board.
-    char letter {static_cast<char>(std::toupper(action.at(1).at(0)))};
-    int value {board->placeTile(x, y, letter)};
+    int value {insertTile(action)};
     // If the player's action was valid.
     if (value != 0) {
         // Delete placed tile from player's hand and reset player state.
         std::shared_ptr<LinkedList> hand {player.getHand()};
-        hand->remove(letter);
+        hand->remove(action.at(1).at(0));
         player.refreshPass();
         player.startPlacing();
         // Calculate the score, including checking for bingo.
-        int score {value};
         if (hand->size() == 0) {
             std::cout << "\nBINGO!!!\n\n";
-            score += BINGO_BONUS;
+            value += BINGO_BONUS;
         }
         // Add score to player object, and signal core to stay on turn.
-        player.addScore(score);
+        player.addScore(value);
         state = SAME_PLAYER;
     }
     return state;
+}
+
+int Core::insertTile(const std::vector<std::string> &action) {
+    std::string position {action.at(3)};
+    return board->placeTile(
+        std::toupper(position.at(0)) - 65, std::stoi(position.substr(1)),
+        static_cast<char>(std::toupper(action.at(1).at(0)))
+    );
 }
 
 int Core::replaceTile(Player &player, const std::vector<std::string> &action) {
@@ -202,10 +205,6 @@ std::unique_ptr<LinkedList> Core::createBag() {
     return tiles;
 }
 
-/**
- * @brief Displays game at the start of every turn.
- * @order_of_ops Current name, Score of all players, Board, Current player hand.
- */
 void Core::displayTurn() {
     std::cout << std::endl 
         << players.at(current).getName() << " it's your turn.\n";
@@ -252,16 +251,3 @@ std::size_t Core::getCurrent() const {
     return current;
 }
 
-/*
-    std::ostream &operator<<(std::ostream &os, const Core &core) {
-        os << core.players[core.current].getName()
-        << " it's your turn.\n";
-        for (auto& _p : core.players) {
-            os << "Score for " << _p.getName()
-                    << ": " << _p.getScore() << '\n';
-        }
-        os << core.board->toString() << '\n';
-        os << core.players.at(core.current).handToString() << '\n';
-        return os;
-    }
-*/

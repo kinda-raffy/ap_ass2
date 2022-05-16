@@ -32,10 +32,6 @@ class Core {
     std::vector<Player> players;
     std::shared_ptr<Board> board;
     std::size_t current;
-    /*
-        Maintain a pointer to the requisite handling function.
-        std::function<int(Player &player, const std::vector<std::string> &action)> handler;
-    */
 
 public:
 
@@ -45,8 +41,6 @@ public:
 
     void runCore();
     void saveCore(const std::string&);
-
-    // friend std::ostream& operator<<(std::ostream& os, const Core& core);
 
     std::shared_ptr<std::vector<Player>> getPlayers();
     std::shared_ptr<LinkedList> getBag();
@@ -67,6 +61,7 @@ private:
     int handlePlace(Player&, const std::vector<std::string>&);
     int placeDone(Player&);
     int placeTile(Player&, const std::vector<std::string>&);
+    int insertTile(const std::vector<std::string>&);
     int replaceTile(Player&, const std::vector<std::string>&);
 };
 
