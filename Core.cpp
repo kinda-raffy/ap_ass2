@@ -92,23 +92,43 @@ void Core::runCore() {
     std::cout << "Goodbye" << std::endl;
 }
 
+/**
+ * @brief Convert current internal core state to strings and save to file.
+ * @param file File title where the core save state should be stored.
+ */
 void Core::saveCore(const std::string &file) {
     // Create a new save state object using the current state of core.
     auto save {std::make_unique<SaveState>(*this)};
     save->saveToFile(file);
 }
 
+/**
+ * @brief Ensure an action exists and update state after action is performed.
+ * If no tiles are left in the bag or either player hand, or a player exceeds
+ * their allocated pass limit, the game will terminate.
+ * @param action The strings specifying action to be performed.
+ */
 void Core::doAction(const std::vector<std::string> &action) {
     Player &player {players.at(current)};
     control = Control::INVALID;
     if (!action.empty()) {
         handleAction(player, action);
     }
-    if (player.getPass() == 2 || !(bag->size() || player.getHand()->size())) {
+    if (player.getPass() == 2 
+        || !(bag->size() || player.getHand()->size())) {
         control = Control::QUIT;
     }
 }
 
+/**
+ * @brief Delegate processes based on type of user's specified action.
+ * Core's internal flow control is automatically updated given certain
+ * conditions: if the player has passed, move to the next player; if the
+ * game has been saved remain on the same player, and quit if the player
+ * has chosen to do so.
+ * @param player Reference to the player object whose term
+ * @param action 
+ */
 void Core::handleAction(Player &player, 
     const std::vector<std::string> &action) {
     // Extract the base action.
@@ -134,7 +154,10 @@ void Core::handlePlace(Player &player, const std::vector<std::string> &action) {
     control = Control::INVALID;
     if (action.size() == 2 && action.at(1) == "Done") {
         placeDone(player);
-    } else if (action.size() == 4 && action.at(2) == "at") {
+    } else if (action.size() == 4 
+        && action.at(2) == "at" 
+        && player.getHand()->contains(action.at(3).at(0))) {
+        // If the args are correct and the hand contains letter to place.
         placeTile(player, action);
     }
 }
