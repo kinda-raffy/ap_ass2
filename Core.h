@@ -51,13 +51,15 @@ public:
 private:
 
     static std::unique_ptr<LinkedList> createBag();
+    static void getInput(std::vector<std::string>&);
 
     void changeTurn();
     void displayTurn();
     void displayEnd();
 
     // Action handling functions.
-    int handleAction(const std::vector<std::string>&);
+    int doAction(const std::vector<std::string>&);
+    int handleAction(Player&, const std::vector<std::string>&);
     int handlePlace(Player&, const std::vector<std::string>&);
     int placeDone(Player&);
     int placeTile(Player&, const std::vector<std::string>&);

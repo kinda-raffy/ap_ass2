@@ -32,52 +32,40 @@ void Core::changeTurn() {
     current = (current >= players.size() - 1) ? 0 : current + 1;
 }
 
-// TODO: This is the last function that probably needs to be clearer.
+void Core::getInput(std::vector<std::string> &action) {
+    std::cout << "> " << std::flush;
+    std::string word {}, input {};
+    // Process user's selected action into a vector of strings.
+    std::getline(std::cin >> std::ws, input);
+    if (!std::cin.eof()) {
+        std::stringstream stream {input};
+        while (stream >> word) {
+            action.emplace_back(word);
+        }
+    } else {
+        action.emplace_back("quit");
+    }
+}
+
 void Core::runCore() {
-    int coreControl {NEXT_PLAYER};
+    int control {NEXT_PLAYER};
     do {
-        if (coreControl != INVALID_ACT && coreControl != SAME_PLAYER) {
+        if (control != INVALID_ACT && control != SAME_PLAYER) {
             displayTurn();
-        } else if (coreControl == INVALID_ACT) {
+        } else if (control == INVALID_ACT) {
             std::cout << "Invalid Input" << std::endl;
         }
-
-        std::string word {}, input {};
         std::vector<std::string> action {};
-        // Process user's selected action into a vector of strings.
-        std::cout << "> " << std::flush;
-        std::getline(std::cin >> std::ws, input);
-        if (!std::cin.eof()) {
-            std::istringstream stream {input};
-            while (stream >> word) {
-                action.emplace_back(word);
-            }
-        } else {
-            action.emplace_back("quit");
-        }
-        if (action.empty()) {
-            // If there is no action specified.
-            coreControl = INVALID_ACT;
-        } else if (players.at(current).getPass() >= 1) {
-            // Cease if the player exceeds the pass bound.
-            displayEnd();
-            coreControl = QUIT;
-        } else {
-            // Perform action.
-            coreControl = handleAction(action);
-        }
-        // Cease if there are no tiles left in bag or hands.
-        if (!bag->size() && !players.at(current).getHand()->size()) {
-            coreControl = QUIT;
-        }
+        // Retrieve user input and handle the specified action.
+        getInput(action);
+        control = doAction(action);
         // Update core state if either control is encountered.
-        if (coreControl == QUIT) {
+        if (control == QUIT) {
             displayEnd();
-        }
-        else if (coreControl == NEXT_PLAYER) {
+        } else if (control == NEXT_PLAYER) {
             changeTurn();
         }
-    } while (coreControl != QUIT);
+    } while (control != QUIT);
     std::cout << "Goodbye" << std::endl;
 }
 
@@ -87,11 +75,21 @@ void Core::saveCore(const std::string &file) {
     save->saveToFile(file);
 }
 
-int Core::handleAction(const std::vector<std::string> &action) {
+int Core::doAction(const std::vector<std::string> &action) {
+    Player &player {players.at(current)};
+    int control {INVALID_ACT};
+    if (!(action.empty() || player.getPass() >= 1)) {
+        control = handleAction(player, action);
+    }
+    if (!(bag->size() || player.getHand()->size()) || action.empty()) {
+        control = QUIT;
+    }
+    return control;
+}
+
+int Core::handleAction(Player &player, const std::vector<std::string> &action) {
     const std::string type {action.at(0)};
-    Player& player {players.at(current)};
     int state {INVALID_ACT};
-    for (const auto &act : action) std::cout << act << std::endl;
     if (type == "place") {
         state = handlePlace(player, action);
     } else if (type == "replace" && !player.isPlacing()) {
