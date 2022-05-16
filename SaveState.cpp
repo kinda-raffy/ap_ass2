@@ -101,15 +101,13 @@ void SaveState::readSaveFile(const std::string &input,
     std::vector<std::string> &lines) {
 
     std::string fileName = input;
-    std::string extension = ".save";
-    if(input.size() > 5){
-        if(input.substr(input.size() - 5, input.size()) != extension){
-            std::cout << input.substr(-6,-1);
-            fileName += extension;
+    if(input.size() > EXTLENGTH){
+        if(input.substr(input.size() - EXTLENGTH, input.size()) != EXTENSION){
+            fileName += EXTENSION;
         }
     }
     else{
-        fileName += extension;    
+        fileName += EXTENSION;    
     }
 
 
