@@ -15,6 +15,8 @@ class Board {
     std::size_t size;
     std::vector<std::vector<Tile>> board;
 
+    bool isEmpty;
+
 public:
 
     // Boards can be constructed using size or string representation.

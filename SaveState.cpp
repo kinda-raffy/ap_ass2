@@ -53,7 +53,8 @@ SaveState::SaveState(Core &core)
 
 // TODO: Test to verify that this works as intended.
 void SaveState::saveToFile(const std::string &location) const {
-    std::ofstream out {location};
+    std::string fileName = location + ".save";
+    std::ofstream out {fileName};
     // If the output file was successfully opened, then write contents.
     if (out) {
         std::size_t index {0};
@@ -99,8 +100,19 @@ std::size_t SaveState::getCurrent() {
 void SaveState::readSaveFile(const std::string &input, 
     std::vector<std::string> &lines) {
 
+    std::string fileName = input;
+    if(input.size() > EXTLENGTH){
+        if(input.substr(input.size() - EXTLENGTH, input.size()) != EXTENSION){
+            fileName += EXTENSION;
+        }
+    }
+    else{
+        fileName += EXTENSION;    
+    }
+
+
     // Use input string to locate save state file and read.
-    std::ifstream file {input};
+    std::ifstream file {fileName};
     try {
         if (!file) {
             throw std::runtime_error("Save file cannot be opened.");

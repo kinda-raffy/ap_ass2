@@ -13,9 +13,6 @@ class Player {
     int score;
     bool placing;
 
-    void setNewHand(const std::shared_ptr<LinkedList>& tileBag);
-    void setLoadedHand(int playerNum, const std::string& fileName);
-
 public:
 
     Player(const std::string&, std::shared_ptr<LinkedList>);
