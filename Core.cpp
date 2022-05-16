@@ -250,7 +250,7 @@ void Core::replaceTile(Player &player, const std::vector<std::string> &action) {
 
 /**
  * @brief For a new game, read and randomly shuffle the tile bag from file. 
- * 
+ * The pseudo-randomisation process is done using a seed derived from time.
  * @return std::unique_ptr<LinkedList> Pointer to list representing tile bag. 
  */
 std::unique_ptr<LinkedList> Core::createBag() {
@@ -282,6 +282,10 @@ std::unique_ptr<LinkedList> Core::createBag() {
     return tiles;
 }
 
+/**
+ * @brief Print to standard all information required when transitioning between
+ * different player's turns. Includes player's name, score, hand, and board.
+ */
 void Core::displayTurn() {
     std::cout << std::endl 
         << players.at(current).getName() << " it's your turn.\n";
@@ -295,6 +299,10 @@ void Core::displayTurn() {
         << "Your hand is\n" << players.at(current).handToString() << "\n\n";
 }
 
+/**
+ * @brief Print all necessary information at the end or termination of a game.
+ * Includes scores for each player and determination of the overall winner.
+ */
 void Core::displayEnd() {
     std::cout << "\nGame over\n";
     // Print scoreboard.
