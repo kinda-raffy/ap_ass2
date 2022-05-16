@@ -4,23 +4,33 @@ void Core::printDuck() {
     std::cout << "https://imgur.com/gallery/w9Mjo4y" << std::endl;
 }
 
+/**
+ * @brief Construct a new core object with the given player names.
+ * @param players The name of each player in the new game.
+ */
 Core::Core(const std::vector<std::string> &players) 
     : bag {std::move(Core::createBag())}, board {std::make_shared<Board>()}, 
       current {0} {
+    // For each player name, add a new player object to the core players.
     for (const std::string &name : players) {
         this->players.emplace_back(name, bag);
     }
 }
 
+/**
+ * @brief Construct a core object using previous game data.
+ * @param save The save state object encapsulating desired previous game data.
+ */
 Core::Core(SaveState &save) 
     : bag {std::make_shared<LinkedList>(save.getTiles())},
       board {std::make_shared<Board>(save.getBoard())}, 
       current {save.getCurrent()} {
-    // Create player objects using save state strings.
+    // Read save state strings into local vectors.
     std::shared_ptr<std::vector<std::string>> names {save.getPlayers()},
         hands {save.getHands()};
     std::shared_ptr<std::vector<int>> scores {save.getScores()};
     std::size_t index {0}, bound {names->size()};
+    // Construct new player objects from all corresponding strings.
     while (index < bound) {
         Player player {names->at(index), hands->at(index), scores->at(index)};
         players.emplace_back(player);
@@ -28,10 +38,17 @@ Core::Core(SaveState &save)
     }
 }
 
+/**
+ * @brief Move to the next player by updating internal core state.
+ */
 void Core::changeTurn() {
     current = (current >= players.size() - 1) ? 0 : current + 1;
 }
 
+/**
+ * @brief Read the user's desired action from standard input.
+ * @param action Vector that user's decision should be read into.
+ */
 void Core::getInput(std::vector<std::string> &action) {
     std::cout << "> " << std::flush;
     std::string word {}, input {};
@@ -43,13 +60,19 @@ void Core::getInput(std::vector<std::string> &action) {
             action.emplace_back(word);
         }
     } else {
+        // If the end of standard input is reached, signal to quit.
         action.emplace_back("quit");
     }
 }
 
+/**
+ * @brief Main function to initiate a new game with data stored in core fields.
+ * Loops for each user action until a sequence of events which signals quit.
+ */
 void Core::runCore() {
     control = NEXT;
     do {
+        // Print the context-appropriate prompt to standard output for player.
         if (control != Control::INVALID && control != Control::SAME) {
             displayTurn();
         } else if (control == Control::INVALID) {
