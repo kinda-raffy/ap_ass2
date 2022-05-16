@@ -10,6 +10,9 @@
 #include <memory>
 #include <algorithm>
 
+#define EXTENSION ".save"
+#define EXTLENGTH 5
+
 // Forward declaration could fix yesterday's error.
 class Core;
 
