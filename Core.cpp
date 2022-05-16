@@ -126,8 +126,8 @@ void Core::doAction(const std::vector<std::string> &action) {
  * conditions: if the player has passed, move to the next player; if the
  * game has been saved remain on the same player, and quit if the player
  * has chosen to do so.
- * @param player Reference to the player object whose term
- * @param action 
+ * @param player Reference to the player object that has current turn.
+ * @param action Processed strings representing the player's chosen action.
  */
 void Core::handleAction(Player &player, 
     const std::vector<std::string> &action) {
@@ -150,8 +150,14 @@ void Core::handleAction(Player &player,
     }
 }
 
+/**
+ * @brief Validate input and select which placing process should be undertaken.
+ * @param player Reference to the player object that has current turn.
+ * @param action Processed strings representing the player's chosen action.
+ */
 void Core::handlePlace(Player &player, const std::vector<std::string> &action) {
     control = Control::INVALID;
+    // If player has finished placing tiles and received args are correct.
     if (action.size() == 2 && action.at(1) == "Done") {
         placeDone(player);
     } else if (action.size() == 4 
@@ -162,6 +168,11 @@ void Core::handlePlace(Player &player, const std::vector<std::string> &action) {
     }
 }
 
+/**
+ * @brief Refill hand when player has placed tiles and finished their turn.
+ * Core is signalled to transition to the next player in queue.
+ * @param player Reference to the player object that has current turn.
+ */
 void Core::placeDone(Player &player) {
     int handSize {player.getHand()->size()};
     // Replenish player's hand whilst there are still tiles in bag.
@@ -174,6 +185,13 @@ void Core::placeDone(Player &player) {
     control = Control::NEXT;
 }
 
+/**
+ * @brief Take specified tile in player's hand and place it on the active board.
+ * Find and update the current player's score if the tile placement was valid.
+ * Player's pass count is also reset, and bingo adds fifty to the score.
+ * @param player Reference to the player object that has current turn.
+ * @param action Processed strings representing the player's chosen action.
+ */
 void Core::placeTile(Player &player, const std::vector<std::string> &action) {
     control = Control::INVALID;
     int score {insertTile(action)};
@@ -195,14 +213,28 @@ void Core::placeTile(Player &player, const std::vector<std::string> &action) {
     }
 }
 
+/**
+ * @brief Place the tile specified in the user's action onto the active board.
+ * Derives the board coordinates and specified letter from action strings and 
+ * return the value of the created tile to be added to player score.
+ * @param action Processed strings representing the player's chosen action.
+ * @return int The tile value of the letter added to the board. Zero if invalid.
+ */
 int Core::insertTile(const std::vector<std::string> &action) {
     std::string position {action.at(3)};
+    // Derive row and col positions using string
     return board->placeTile(
         std::toupper(position.at(0)) - 65, std::stoi(position.substr(1)),
         static_cast<char>(std::toupper(action.at(1).at(0)))
     );
 }
 
+/**
+ * @brief Replace specified tile in player hand with random tile from bag.
+ * Core is signalled to transition to the next player's turn afterward.
+ * @param player Reference to the player object that has current turn.
+ * @param action Processed strings representing the player's chosen action.
+ */
 void Core::replaceTile(Player &player, const std::vector<std::string> &action) {
     control = Control::INVALID;
     player.refreshPass();
@@ -216,6 +248,11 @@ void Core::replaceTile(Player &player, const std::vector<std::string> &action) {
     }
 }
 
+/**
+ * @brief For a new game, read and randomly shuffle the tile bag from file. 
+ * 
+ * @return std::unique_ptr<LinkedList> Pointer to list representing tile bag. 
+ */
 std::unique_ptr<LinkedList> Core::createBag() {
     auto tiles {std::make_unique<LinkedList>()};
     std::ifstream file {"ScrabbleTiles.txt"};
