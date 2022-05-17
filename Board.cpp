@@ -81,7 +81,7 @@ std::string Board::toString() const {
 }
 
 int Board::placeTile(std::size_t x, std::size_t y, char letter) {
-    int placeValue = 0;
+    int value {0};
     // Size types are unsigned, so only upper bound checking required.
     if (x < size && y < size) {
         bool adjacent {true};
@@ -98,10 +98,11 @@ int Board::placeTile(std::size_t x, std::size_t y, char letter) {
         }
         if (adjacent && board.at(x).at(y).getLetter() == '-') {
             board.at(x).at(y).setLetter(letter);
+            value = Tile::getTileValue(letter);
             empty = false;
         }
     }
-    return Tile::getTileValue(letter);
+    return value;
 }
 
 bool Board::validateBoardString(const std::vector<std::string> &lines) {
