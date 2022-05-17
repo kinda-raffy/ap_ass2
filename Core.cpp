@@ -312,7 +312,7 @@ void Core::displayEnd() {
             << "Score for " << player.getName()
             << ": " << player.getScore() << std::endl;
     }
-    bool tie = players.at(0).getScore() == players.at(1).getScore()
+    bool tie = players.at(0).getScore() == players.at(1).getScore();
     // Find and declare winner by checking player scores if there is any.
     if (tie) {
         std::cout << "It's a tie!\n" << std::endl;
