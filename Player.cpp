@@ -70,6 +70,7 @@ void Player::startPlacing() {
 
 void Player::donePlacing() {
     placing = false;
+    // Reset turn-specific restrictions on directional placement.
     turn.clear();
     direction = Direction::NONE;
 }
@@ -79,17 +80,21 @@ Direction Player::getDirection() const {
 }
 
 std::string Player::prevTile() const {
+    // Return the previously placed board coordinate on current turn.
     std::size_t length {turn.size()};
     return (length == 0) ? "" : turn.at(length - 1);
 }
 
 void Player::updatePlace(const std::string &coordinate) {
     try {
+        // Ensure board coordinate is in the correct layout.
         if (!std::regex_match(coordinate, std::regex("[A-Z]{1}[0-9]{1,2}"))) {
             throw std::runtime_error("Invalid board coordinate.");
         }
         std::string previous {prevTile()};
+        // Add board coordinate to vector of previous placements.
         turn.push_back(coordinate);
+        // If second tile, determine the valid axis for current turn.
         if (turn.size() == 2) {
             if (previous.at(0) == coordinate.at(0)) {
                 direction = Direction::X_AXIS;
