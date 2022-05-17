@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Board.h"
 #include "Tile.h"
 #include "SaveState.h"
@@ -11,7 +12,6 @@ Board::Board(std::size_t size)
     }
 }
 
-// FIXME: Delete debug print when verified.
 Board::Board(const std::string &state)
     : size {0}, board {}, empty {true} {
     std::istringstream input {state};
@@ -29,7 +29,7 @@ Board::Board(const std::string &state)
         while (index < line.size()) {
             // Create tile for each character and point index to next position.
             char letter = line.at(index);
-            empty = empty && letter != ' ';
+            empty = empty && letter == ' ';
             Tile tile {(letter == ' ') ? '-' : letter};
             board.at(size).push_back(tile);
             index += 4;
