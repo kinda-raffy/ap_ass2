@@ -7,6 +7,6 @@ place Done
 place C at A3
 place A at A4
 place S at A5
-save testCases/saveGame/saveGame.expsave
 place Done
+save testCases/saveGame/saveGame
 quit

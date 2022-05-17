@@ -1,17 +1,21 @@
 2
-testCases/multipleSaves1/newGame.save
+testCases/multipleSaves/newGame.save
 place T at D5
-save testCases/multipleSaves/multipleSaves1.expsave
-place I at D6
-save testCases/multipleSaves/multipleSaves2.expsave
-place X at D7
-save testCases/multipleSaves/multipleSaves3.expsave
 place Done
+save testCases/multipleSaves/multipleSaves1
 place C at E6
-save testCases/multipleSaves/multipleSaves4.expsave
-place A at E7
-save testCases/multipleSaves/multipleSaves5.expsave
-place V at E8
-save testCases/multipleSaves/multipleSaves6.expsave
 place Done
+save testCases/multipleSaves/multipleSaves4
+place I at D6
+place Done
+save testCases/multipleSaves/multipleSaves2
+place A at E7
+place Done
+save testCases/multipleSaves/multipleSaves5
+place X at D7
+place Done
+save testCases/multipleSaves/multipleSaves3
+place V at E8
+place Done
+save testCases/multipleSaves/multipleSaves6
 quit
