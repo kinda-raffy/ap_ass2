@@ -4,11 +4,6 @@ void Core::printDuck() {
     std::cout << "https://imgur.com/gallery/w9Mjo4y" << std::endl;
 }
 
-/**
- * @brief Construct a new core object with the given player names.
- * @param players The name of each player in the new game.
-
- */
 Core::Core(const std::vector<std::string> &players)
         : bag {std::move(Core::createBag())}, board {std::make_shared<Board>()},
           current {0} {
@@ -18,10 +13,6 @@ Core::Core(const std::vector<std::string> &players)
     }
 }
 
-/**
- * @brief Construct a core object using previous game data.
- * @param save The save state object encapsulating desired previous game data.
- */
 Core::Core(SaveState &save)
     : bag {std::make_shared<LinkedList>(save.getTiles())},
       board {std::make_shared<Board>(save.getBoard())}, 
@@ -39,17 +30,10 @@ Core::Core(SaveState &save)
     }
 }
 
-/**
- * @brief Move to the next player by updating internal core state.
- */
 void Core::changeTurn() {
     current = (current >= players.size() - 1) ? 0 : current + 1;
 }
 
-/**
- * @brief Read the user's desired action from standard input.
- * @param action Vector that user's decision should be read into.
- */
 void Core::getInput(std::vector<std::string> &action) {
     std::cout << "> " << std::flush;
     std::string word {}, input {};
@@ -58,11 +42,14 @@ void Core::getInput(std::vector<std::string> &action) {
     if (!std::cin.eof()) {
         std::stringstream stream {input};
         bool save {false};
+        // Iterate over individual words in user input.
         while (stream >> word) {
+            // If not save directive, convert to uppercase for robust handling.
             if (!save) {
                 std::transform(word.begin(), word.end(), word.begin(), toupper);
             }
-            if (word == "SAVE") {save = true;}
+            // Detects if the input action is a save directive.
+            save = word == "SAVE";
             action.emplace_back(word);
         }
     } else {
@@ -71,10 +58,6 @@ void Core::getInput(std::vector<std::string> &action) {
     }
 }
 
-/**
- * @brief Main function to initiate a new game with data stored in core fields.
- * Loops for each user action until a sequence of events which signals quit.
- */
 void Core::runCore() {
     control = NEXT;
     do {
@@ -96,43 +79,26 @@ void Core::runCore() {
     displayEnd();
 }
 
-/**
- * @brief Convert current internal core state to strings and save to file.
- * @param file File title where the core save state should be stored.
- */
 void Core::saveCore(const std::string &file) {
     // Create a new save state object using the current state of core.
     auto save {std::make_unique<SaveState>(*this)};
     save->saveToFile(file);
 }
 
-/**
- * @brief Ensure an action exists and update state after action is performed.
- * If no tiles are left in the bag or either player hand, or a player exceeds
- * their allocated pass limit, the game will terminate.
- * @param action The strings specifying action to be performed.
- */
 void Core::doAction(const std::vector<std::string> &action) {
     Player &player {players.at(current)};
     control = Control::INVALID;
+    // If any action has been specified, handle that action.
     if (!action.empty()) {
         handleAction(player, action);
     }
+    // If the player has exceeded pass bound or no tiles are left, signal quit.
     if (player.getPass() == 2
         || !(bag->size() || player.getHand()->size())) {
         control = Control::QUIT;
     }
 }
 
-/**
- * @brief Delegate processes based on type of user's specified action.
- * Core's internal flow control is automatically updated given certain
- * conditions: if the player has passed, move to the next player; if the
- * game has been saved remain on the same player, and quit if the player
- * has chosen to do so.
- * @param player Reference to the player object that has current turn.
- * @param action Processed strings representing the player's chosen action.
- */
 void Core::handleAction(Player &player,
     const std::vector<std::string> &action) {
     // Extract the base action.
@@ -154,11 +120,6 @@ void Core::handleAction(Player &player,
     }
 }
 
-/**
- * @brief Validate input and select which placing process should be undertaken.
- * @param player Reference to the player object that has current turn.
- * @param action Processed strings representing the player's chosen action.
- */
 void Core::handlePlace(Player &player, const std::vector<std::string> &action) {
     control = Control::INVALID;
     // If player has finished placing tiles and received args are correct.
@@ -172,11 +133,6 @@ void Core::handlePlace(Player &player, const std::vector<std::string> &action) {
     }
 }
 
-/**
- * @brief Refill hand when player has placed tiles and finished their turn.
- * Core is signalled to transition to the next player in queue.
- * @param player Reference to the player object that has current turn.
- */
 void Core::placeDone(Player &player) {
     std::size_t handSize {player.getHand()->size()};
     // Replenish player's hand whilst there are still tiles in bag.
@@ -184,18 +140,11 @@ void Core::placeDone(Player &player) {
         player.getHand()->append(bag->pop());
         ++handSize;
     }
-    // Signal core transition to next player.
+    // Signal core transition to next player and reset turn-specific data.
     player.donePlacing();
     control = Control::NEXT;
 }
 
-/**
- * @brief Take specified tile in player's hand and place it on the active board.
- * Find and update the current player's score if the tile placement was valid.
- * Player's pass count is also reset, and bingo adds fifty to the score.
- * @param player Reference to the player object that has current turn.
- * @param action Processed strings representing the player's chosen action.
- */
 void Core::placeTile(Player &player, const std::vector<std::string> &action) {
     control = Control::INVALID;
     int score = verifyPlace(player, action) ? insertTile(action) : 0;
@@ -218,16 +167,9 @@ void Core::placeTile(Player &player, const std::vector<std::string> &action) {
     }
 }
 
-/**
- * @brief Place the tile specified in the user's action onto the active board.
- * Derives the board coordinates and specified letter from action strings and
- * return the value of the created tile to be added to player score.
- * @param action Processed strings representing the player's chosen action.
- * @return int The tile value of the letter added to the board. Zero if invalid.
- */
 int Core::insertTile(const std::vector<std::string> &action) {
     std::string position {action.at(3)};
-    // Derive row and col positions using string
+    // Derive row and col positions, try .
     return board->placeTile(
         std::toupper(position.at(0)) - 65, std::stoi(position.substr(1)),
         static_cast<char>(std::toupper(action.at(1).at(0)))
@@ -236,8 +178,11 @@ int Core::insertTile(const std::vector<std::string> &action) {
 
 bool Core::verifyPlace(Player &player, const std::vector<std::string> &action) {
     bool valid {true};
+    // Retrieve the current tile to be placed and the previously placed tile.
     const std::string prev {player.prevTile()}, curr {action.at(3)};
+    // If the player has placed at least another tile this turn.
     if (!prev.empty()) {
+        // Extract all relevant coordinate info in workable data types.
         const std::size_t 
             prevRow {static_cast<std::size_t>(prev.at(0) - 65)},
             currRow {static_cast<std::size_t>(curr.at(0) - 65)},
@@ -246,34 +191,35 @@ bool Core::verifyPlace(Player &player, const std::vector<std::string> &action) {
         std::size_t hi, lo;
         Direction direction {player.getDirection()};
         bool xAxis {prevRow == currRow}, yAxis {prevCol == currCol};
-        // Check if coordinates correspond across the x or y axes.
+        // Coordinates correspond horizontally, player isn't placing vertically.
         if (xAxis && direction != Direction::Y_AXIS) {
+            // Establish the range of positions to be validated on board.
             hi = std::max(prevCol, currCol);
             lo = std::min(prevCol, currCol) + 1;
+            // Iterate over identified positions to ensure they're filled.
             while (lo < hi && valid) {
                 valid = board->getLetter(currRow, lo) != '-';
                 ++lo;
             }
+        // Coordinates correspond vertically, player isn't placing horizontally.
         } else if (yAxis && direction != Direction::X_AXIS) {
+            // Establish the range of positions to be validated on board.
             hi = std::max(prevRow, currRow);
             lo = std::min(prevRow, currRow) + 1;
+            // Iterate over identified positions to ensure they're filled.
             while (lo < hi && valid) {
                 valid = board->getLetter(lo, currCol) != '-';
                 ++lo;
             }
         } else {
+            // If the action corresponds in neither direction, it's invalid.
             valid = false;
         }
     }
+    // Return if action is valid in context of player's turn.
     return valid;
 }
 
-/**
- * @brief Replace specified tile in player hand with random tile from bag.
- * Core is signalled to transition to the next player's turn afterward.
- * @param player Reference to the player object that has current turn.
- * @param action Processed strings representing the player's chosen action.
- */
 void Core::replaceTile(Player &player, const std::vector<std::string> &action) {
     control = Control::INVALID;
     player.refreshPass();
@@ -287,11 +233,6 @@ void Core::replaceTile(Player &player, const std::vector<std::string> &action) {
     }
 }
 
-/**
- * @brief For a new game, read and randomly shuffle the tile bag from file.
- * The pseudo-randomisation process is done using a seed derived from time.
- * @return std::unique_ptr<LinkedList> Pointer to list representing tile bag.
- */
 std::unique_ptr<LinkedList> Core::createBag() {
     auto tiles {std::make_unique<LinkedList>()};
     std::ifstream file {"ScrabbleTiles.txt"};
@@ -321,27 +262,22 @@ std::unique_ptr<LinkedList> Core::createBag() {
     return tiles;
 }
 
-/**
- * @brief Print to standard all information required when transitioning between
- * different player's turns. Includes player's name, score, hand, and board.
- */
 void Core::displayTurn() {
+    // Display indication of current player's turn.
     std::cout << std::endl 
         << players.at(current).getName() << " it's your turn.\n";
+    // Display scores for each player.
     for (const auto &player : players) {
         std::cout 
             << "Score for " << player.getName()
             << ": " << player.getScore() << std::endl;
     }
+    // Display tiles in current player's hand.
     std::cout 
         << board->toString() << "\n\n"
         << "Your hand is\n" << players.at(current).handToString() << "\n\n";
 }
 
-/**
- * @brief Print all necessary information at the end or termination of a game.
- * Includes scores for each player and determination of the overall winner.
- */
 void Core::displayEnd() {
     std::cout << "\nGame over\n";
     // Print scoreboard.
@@ -351,7 +287,7 @@ void Core::displayEnd() {
             << ": " << player.getScore() << std::endl;
     }
     bool tie {players.at(0).getScore() == players.at(1).getScore()};
-    // Find and declare winner by checking player scores if there is any.
+    // Find and declare winner by checking player scores if there are any.
     if (tie) {
         std::cout << "It's a tie!\n" << std::endl;
     } else {

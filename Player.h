@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-// Tracks the colinearity of players consecutive tile additions each turn.
+// Tracks the colinearity of player's consecutive tile additions each turn.
 enum Direction {
     X_AXIS,
     Y_AXIS,
