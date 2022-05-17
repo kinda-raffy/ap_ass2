@@ -88,7 +88,7 @@ int Board::placeTile(std::size_t x, std::size_t y, char letter) {
         if (!empty) {
             const std::array<int, 4> sign {1, -1, 0, 0};
             std::size_t length {sign.size()};
-            for (int lo {0}, hi {length - 1}; lo < length; ++lo, --hi) {
+            for (std::size_t lo {0}, hi {length - 1}; lo < length; ++lo, --hi) {
                 std::size_t row {x + sign.at(lo)}, col {y + sign.at(hi)};
                 if (row < size && col < size) {
                     adjacent = adjacent 
