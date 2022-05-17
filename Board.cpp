@@ -1,7 +1,5 @@
-#include <iostream>
 #include "Board.h"
 #include "Tile.h"
-#include "SaveState.h"
 
 Board::Board(std::size_t size)
     : size {size}, board {std::vector<std::vector<Tile>> {}}, empty {true} {
