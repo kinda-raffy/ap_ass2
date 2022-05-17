@@ -54,7 +54,7 @@ void Core::getInput(std::vector<std::string> &action) {
         }
     } else {
         // If the end of standard input is reached, signal to quit.
-        action.emplace_back("quit");
+        action.emplace_back("QUIT");
     }
 }
 
