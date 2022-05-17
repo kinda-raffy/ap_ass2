@@ -88,9 +88,9 @@ void Player::updatePlace(const std::string &coordinate) {
         if (!std::regex_match(coordinate, std::regex("[A-Z]{1}[0-9]{1,2}"))) {
             throw std::runtime_error("Invalid board coordinate.");
         }
+        std::string previous {prevTile()};
         turn.push_back(coordinate);
         if (turn.size() == 2) {
-            std::string previous {prevTile()};
             if (previous.at(0) == coordinate.at(0)) {
                 direction = Direction::X_AXIS;
             } else if (previous.substr(1) == coordinate.substr(1)) {

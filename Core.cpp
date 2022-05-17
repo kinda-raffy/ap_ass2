@@ -193,7 +193,9 @@ void Core::placeDone(Player &player) {
  */
 void Core::placeTile(Player &player, const std::vector<std::string> &action) {
     control = Control::INVALID;
-    int score {insertTile(action)};
+    int score;
+    if (verifyPlace(player, action)) score = insertTile(action);
+    else score = 0;
     // If the player's action was valid.
     if (score != 0) {
         // Delete placed tile from player's hand and reset player state.
@@ -232,24 +234,27 @@ int Core::insertTile(const std::vector<std::string> &action) {
 bool Core::verifyPlace(Player &player, const std::vector<std::string> &action) {
     bool valid {true};
     const std::string prev {player.prevTile()}, curr {action.at(3)};
-    if (prev != "") {
-        const char prevRow {prev.at(0)}, currRow {curr.at(0)};
-        std::size_t hi {}, lo {},
-            prevCol {static_cast<std::size_t>(std::stoi(prev.substr(1)))}, 
-            currCol {static_cast<std::size_t>(std::stoi(curr.substr(1)))};
+    if (!prev.empty()) {
+        std::size_t const prevRow{static_cast<std::size_t>(prev.at(0) - 65)},
+                          currRow{static_cast<std::size_t>(curr.at(0) - 65)},
+                          prevCol {static_cast<std::size_t>(
+                                  std::stoi(prev.substr(1)))},
+                          currCol {static_cast<std::size_t>(
+                                  std::stoi(curr.substr(1)))};
+        std::size_t hi, lo;
         Direction direction {player.getDirection()};
         bool xAxis {prevRow == currRow}, yAxis {prevCol == currCol};
         // Check if coordinates correspond across the x or y axes.
         if (xAxis && direction != Direction::Y_AXIS) {
-            hi = std::max(prevCol, currCol); 
-            lo = std::min(prevCol, currCol);
+            hi = std::max(prevCol, currCol);
+            lo = std::min(prevCol, currCol) + 1;
             while (lo < hi && valid) {
                 valid = board->getLetter(currRow, lo) != '-';
                 ++lo;
             }
         } else if (yAxis && direction != Direction::X_AXIS) {
-            hi = static_cast<std::size_t>(std::max(prevRow, currRow)); 
-            lo = static_cast<std::size_t>(std::min(prevRow, currRow));
+            hi = std::max(prevRow, currRow);
+            lo = std::min(prevRow, currRow) + 1;
             while (lo < hi && valid) {
                 valid = board->getLetter(lo, currCol) != '-';
                 ++lo;
