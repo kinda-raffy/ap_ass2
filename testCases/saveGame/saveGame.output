@@ -5,76 +5,93 @@ Welcome to Scrabble!
 3. Credits (Show student information)
 4. Quit
 
-> Invalid choice
-1. New Game
-2. Load Game
-3. Credits (Show student information)
-4. Quit
+> Enter the filename from which load a game
+> Scrabble game successfully loaded
 
-> Invalid choice
-1. New Game
-2. Load Game
-3. Credits (Show student information)
-4. Quit
+A it's your turn.
+Score for A: 0
+Score for B: 0
+    0   1   2   3   4   5   6   7   8   9   10  11  12  13  14 
+  -------------------------------------------------------------
+A |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+B |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+C |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+D |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+E |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+F |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+G |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+H |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+I |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+J |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+K |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+L |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+M |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+N |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+O |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 
-> Invalid choice
-1. New Game
-2. Load Game
-3. Credits (Show student information)
-4. Quit
 
-> Invalid choice
-1. New Game
-2. Load Game
-3. Credits (Show student information)
-4. Quit
+Your hand is
+T-1, R-1, D-2, L-1, X-8, I-1, L-1
 
-> Invalid choice
-1. New Game
-2. Load Game
-3. Credits (Show student information)
-4. Quit
+> > > > 
+B it's your turn.
+Score for A: 4
+Score for B: 0
+    0   1   2   3   4   5   6   7   8   9   10  11  12  13  14 
+  -------------------------------------------------------------
+A | T | R | D |   |   |   |   |   |   |   |   |   |   |   |   | 
+B |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+C |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+D |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+E |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+F |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+G |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+H |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+I |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+J |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+K |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+L |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+M |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+N |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+O |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 
-> Invalid choice
-1. New Game
-2. Load Game
-3. Credits (Show student information)
-4. Quit
 
-> Invalid choice
-1. New Game
-2. Load Game
-3. Credits (Show student information)
-4. Quit
+Your hand is
+C-3, A-1, S-1, T-1, A-1, Y-4, V-4
 
-> Invalid choice
-1. New Game
-2. Load Game
-3. Credits (Show student information)
-4. Quit
+> > > > 
+A it's your turn.
+Score for A: 4
+Score for B: 5
+    0   1   2   3   4   5   6   7   8   9   10  11  12  13  14 
+  -------------------------------------------------------------
+A | T | R | D | C | A | S |   |   |   |   |   |   |   |   |   | 
+B |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+C |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+D |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+E |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+F |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+G |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+H |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+I |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+J |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+K |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+L |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+M |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+N |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+O |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 
-> Invalid choice
-1. New Game
-2. Load Game
-3. Credits (Show student information)
-4. Quit
 
-> Invalid choice
-1. New Game
-2. Load Game
-3. Credits (Show student information)
-4. Quit
+Your hand is
+L-1, X-8, I-1, L-1, B-3, M-3, A-1
 
-> Invalid choice
-1. New Game
-2. Load Game
-3. Credits (Show student information)
-4. Quit
+> 
+Game successfully saved
 
-> Invalid choice
-1. New Game
-2. Load Game
-3. Credits (Show student information)
-4. Quit
+> 
+Game over
+Score for A: 4
+Score for B: 5
+Player B won!
 
-> Goodbye
+Goodbye
