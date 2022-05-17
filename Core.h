@@ -62,7 +62,7 @@ public:
      */
     void saveCore(const std::string&);
 
-    // Getters and setters used for converting into save state.
+    // Getters used for converting into save state.
     std::shared_ptr<std::vector<Player>> getPlayers();
     std::shared_ptr<LinkedList> getBag();
     std::shared_ptr<Board> getBoard();

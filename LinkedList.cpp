@@ -132,6 +132,7 @@ std::string LinkedList::toString() const {
 }
 
 bool LinkedList::validateListString(const std::string &list) {
-    const std::regex pattern {"([A-Z]{1}-[0-9]{1,2}(, )?)+"};
+    // Check that the string is either empty or in the correct format.
+    const std::regex pattern {"([A-Z]{1}-[0-9]{1,2}(, )?)*"};
     return std::regex_match(list, pattern);
 }
