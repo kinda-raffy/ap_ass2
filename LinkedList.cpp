@@ -57,7 +57,7 @@ void LinkedList::append(std::unique_ptr<Tile> tile) {
 bool LinkedList::contains(char letter) const {
     std::shared_ptr<Node> current{head};
     bool found {false};
-    while (current != nullptr) {
+    while (current != nullptr && !found) {
         if (current->getLetter() == letter) {
             found = true;
         }
