@@ -163,7 +163,7 @@ void Core::handlePlace(Player &player, const std::vector<std::string> &action) {
         placeDone(player);
     } else if (action.size() == 4
         && action.at(2) == "at"
-        && player.getHand()->contains(action.at(3).at(0))) {
+        && player.getHand()->contains(action.at(1).at(0))) {
         // If the args are correct and the hand contains letter to place.
         placeTile(player, action);
     }
