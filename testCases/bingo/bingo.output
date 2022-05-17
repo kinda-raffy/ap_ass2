@@ -33,25 +33,16 @@ O |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
 Your hand is
 T-1, R-1, D-2, L-1, X-8, I-1, L-1
 
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
+> > > > > > > 
+BINGO!!!
+
 > 
 B it's your turn.
-Score for A: 0
+Score for A: 65
 Score for B: 0
     0   1   2   3   4   5   6   7   8   9   10  11  12  13  14 
   -------------------------------------------------------------
-A |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+A | T | R | D | L | X | I | L |   |   |   |   |   |   |   |   | 
 B |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 C |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 D |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
@@ -71,75 +62,17 @@ O |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
 Your hand is
 C-3, A-1, S-1, T-1, A-1, Y-4, V-4
 
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> 
-A it's your turn.
-Score for A: 0
-Score for B: 0
-    0   1   2   3   4   5   6   7   8   9   10  11  12  13  14 
-  -------------------------------------------------------------
-A |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-B |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-C |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-D |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-E |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-F |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-G |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-H |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-I |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-J |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-K |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-L |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-M |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-N |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-O |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-
-
-Your hand is
-T-1, R-1, D-2, L-1, X-8, I-1, L-1
-
-> 
-B it's your turn.
-Score for A: 0
-Score for B: 0
-    0   1   2   3   4   5   6   7   8   9   10  11  12  13  14 
-  -------------------------------------------------------------
-A |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-B |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-C |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-D |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-E |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-F |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-G |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-H |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-I |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-J |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-K |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-L |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-M |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-N |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-O |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-
-
-Your hand is
-C-3, A-1, S-1, T-1, A-1, Y-4, V-4
+> > > > > > > 
+BINGO!!!
 
 > 
 A it's your turn.
-Score for A: 0
-Score for B: 0
+Score for A: 65
+Score for B: 65
     0   1   2   3   4   5   6   7   8   9   10  11  12  13  14 
   -------------------------------------------------------------
-A |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-B |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+A | T | R | D | L | X | I | L |   |   |   |   |   |   |   |   | 
+B | C | A | S | T | A | Y | V |   |   |   |   |   |   |   |   | 
 C |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 D |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 E |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
@@ -156,12 +89,12 @@ O |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
 
 
 Your hand is
-T-1, R-1, D-2, L-1, X-8, I-1, L-1
+B-3, M-3, A-1, E-1, E-1, R-1, A-1
 
-> 
+> > 
 Game over
-Score for A: 0
-Score for B: 0
-It's a tie!
+Score for A: 68
+Score for B: 65
+Player A won!
 
 Goodbye

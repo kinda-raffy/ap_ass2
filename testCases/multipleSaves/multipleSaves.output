@@ -33,20 +33,20 @@ O |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
 Your hand is
 T-1, R-1, D-2, L-1, X-8, I-1, L-1
 
-> > > > > > 
+> > 
 B it's your turn.
-Score for A: 13
+Score for A: 1
 Score for B: 0
     0   1   2   3   4   5   6   7   8   9   10  11  12  13  14 
   -------------------------------------------------------------
 A |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 B |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 C |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-D |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
+D |   |   |   |   |   | T |   |   |   |   |   |   |   |   |   | 
 E |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 F |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 G |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
-H |   | I | D | T | X | L |   |   |   |   |   |   |   |   |   | 
+H |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 I |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 J |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
 K |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | 
@@ -59,15 +59,37 @@ O |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
 Your hand is
 C-3, A-1, S-1, T-1, A-1, Y-4, V-4
 
-> Invalid Input
-> Invalid Input
-> Invalid Input
-> Invalid Input
+> 
+Game successfully saved
+
 > Invalid Input
 > Invalid Input
 > 
+Game successfully saved
+
+> Invalid Input
+> Invalid Input
+> 
+Game successfully saved
+
+> Invalid Input
+> Invalid Input
+> 
+Game successfully saved
+
+> Invalid Input
+> Invalid Input
+> 
+Game successfully saved
+
+> Invalid Input
+> Invalid Input
+> 
+Game successfully saved
+
+> 
 Game over
-Score for A: 13
+Score for A: 1
 Score for B: 0
 Player A won!
 
