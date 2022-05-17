@@ -61,7 +61,6 @@ void loadSavedCore() {
     // No need to tell what happened, we just know the save file is malformed
     catch (std::exception &exception) {
         loadError = true;
-        std::cout << exception.what() << std::endl;
         std::cout << "Error loading save - exiting." << std::endl;
     }
     if (!loadError) core->runCore();
