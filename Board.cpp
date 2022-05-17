@@ -87,10 +87,10 @@ int Board::placeTile(std::size_t x, std::size_t y, char letter) {
         bool adjacent {true};
         if (!empty) {
             const std::array<int, 4> sign {1, -1, 0, 0};
+            std::size_t length {sign.size()};
             adjacent = false;
-            for (int index {0}; index < sign.size(); ++index) {
-                std::size_t row {x + sign.at(index)}, 
-                    col {y + sign.at(size - index - 1)};
+            for (int lo {0}, hi {length - 1}; lo < length; ++lo, --hi) {
+                std::size_t row {x + sign.at(lo)}, col {y + sign.at(hi)};
                 if (row < size && col < size) {
                     adjacent = board.at(row).at(col).getLetter() != '-';
                 }
