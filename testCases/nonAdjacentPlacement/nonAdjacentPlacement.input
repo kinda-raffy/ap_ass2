@@ -1,0 +1,13 @@
+2
+testCases/nonAdjacentPlacement/nonAdjacentPlacement
+place D at H1
+place I at H2
+place R at H3
+place T at H4
+place Done
+place Y at A0
+place Y at G0
+place Y at I5
+place Y at H5
+place Done
+quit
