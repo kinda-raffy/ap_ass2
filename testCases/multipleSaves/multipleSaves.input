@@ -1,5 +1,5 @@
 2
-testCases/multipleSaves/newGame.save
+testCases/multipleSaves/multipleSaves.save
 place T at D5
 place Done
 save testCases/multipleSaves/multipleSaves1

@@ -1,5 +1,5 @@
 2
-testCases/saveGame/newGame.save
+testCases/saveGame/saveGame.save
 place T at A0
 place R at A1
 place D at A2
@@ -8,5 +8,5 @@ place C at A3
 place A at A4
 place S at A5
 place Done
-save testCases/saveGame/saveGame
+save testCases/saveGame/saveGame1
 quit
