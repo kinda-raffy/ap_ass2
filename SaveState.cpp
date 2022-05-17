@@ -1,7 +1,6 @@
 #include "SaveState.h"
 #include "Core.h"
 
-// Create a save state using text file. Auto deduces players and board size.
 SaveState::SaveState(const std::string &input) {
     std::vector<std::string> lines {};
     SaveState::readSaveFile(input, lines);
@@ -51,7 +50,6 @@ SaveState::SaveState(Core &core)
     }
 }
 
-// TODO: Test to verify that this works as intended.
 void SaveState::saveToFile(const std::string &location) const {
     std::string fileName = location + ".save";
     std::ofstream out {fileName};
@@ -59,11 +57,13 @@ void SaveState::saveToFile(const std::string &location) const {
     if (out) {
         std::size_t index {0};
         while (index < players.size()) {
+            // Player info consists of name, score and hand.
             out << players.at(index) << std::endl
                 << scores.at(index) << std::endl
                 << hands.at(index) << std::endl;
             ++index;
         }
+        // Print board, current tile bag and player to the end of file.
         out << board << tiles << std::endl << players.at(current) << std::endl;
         std::cout << "\nGame successfully saved\n" << std::endl;
     } else {
@@ -99,21 +99,17 @@ std::size_t SaveState::getCurrent() {
 
 void SaveState::readSaveFile(const std::string &input, 
     std::vector<std::string> &lines) {
-
     std::string fileName = input;
-    if(input.size() > EXTLENGTH){
-        if(input.substr(input.size() - EXTLENGTH, input.size()) != EXTENSION){
-            fileName += EXTENSION;
-        }
+    // Determine whether or not the `.save` suffix should be added.
+    const std::string suffix {".save"};
+    if (input.size() <= suffix.size() 
+        || input.substr(input.size() - suffix.size()) != suffix) {
+        fileName += suffix;
     }
-    else{
-        fileName += EXTENSION;    
-    }
-
-
     // Use input string to locate save state file and read.
     std::ifstream file {fileName};
     try {
+        // Check if file was successfully opened.
         if (!file) {
             throw std::runtime_error("Save file cannot be opened.");
         } else {

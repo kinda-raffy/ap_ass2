@@ -1,0 +1,13 @@
+2
+testCases/tiedGame/tiedGame.save
+place C at A0
+place A at B0
+place T at C0
+place S at D0
+place Done
+place C at A1
+place A at B1
+place T at C1
+place S at D1
+place Done
+quit
