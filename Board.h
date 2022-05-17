@@ -4,6 +4,7 @@
 #include "Tile.h"
 #include "SaveState.h"
 
+#include <array>
 #include <vector>
 #include <memory>
 #include <string>
@@ -15,7 +16,7 @@ class Board {
     std::size_t size;
     std::vector<std::vector<Tile>> board;
 
-    bool isEmpty;
+    bool empty;
 
 public:
 

@@ -1,7 +1,7 @@
 #include "Board.h"
 
 Board::Board(std::size_t size)
-    : size {size}, board {std::vector<std::vector<Tile>> {}}, isEmpty{true} {
+    : size {size}, board {std::vector<std::vector<Tile>> {}}, empty {true} {
     for (std::size_t index {0}; index < size; ++index) {
         // Create row and initialise all positions to null tiles.
         std::vector<Tile> row(size, Tile {'-'});
@@ -11,7 +11,7 @@ Board::Board(std::size_t size)
 
 // FIXME: Delete debug print when verified.
 Board::Board(const std::string &state)
-    : size {0}, board {}, isEmpty {true} {
+    : size {0}, board {}, empty {true} {
     std::istringstream input {state};
     std::string line {};
     // Skip the first two lines. Better way to do this?
@@ -27,9 +27,9 @@ Board::Board(const std::string &state)
         while (index < line.size()) {
             // Create tile for each character and point index to next position.
             char letter = line.at(index);
-            if (isEmpty && letter != ' ') isEmpty = false;
-            Tile position {(letter == ' ') ? '-' : letter};
-            board.at(size).push_back(position);
+            empty = empty && letter != ' ';
+            Tile tile {(letter == ' ') ? '-' : letter};
+            board.at(size).push_back(tile);
             index += 4;
         }
         ++size;
@@ -84,25 +84,24 @@ int Board::placeTile(std::size_t x, std::size_t y, char letter) {
     int placeValue = 0;
     // Size types are unsigned, so only upper bound checking required.
     if (x < size && y < size) {
-        bool tileAdjacent;
-        if (isEmpty) tileAdjacent = true;
-        else {
-            int xOffset[] {1, -1, 0, 0};
-            int yOffset[] {0, 0, 1, -1};
-            tileAdjacent = false;
-            for (int i = 0; i < 4 && !tileAdjacent; ++i) {
-                if (x + xOffset[i] < size && y + yOffset[i] < size &&
-                    board.at(x + xOffset[i]).at(y + yOffset[i])
-                            .getLetter() != '-') tileAdjacent = true;
+        bool adjacent {true};
+        if (!empty) {
+            const std::array<int, 4> sign {1, -1, 0, 0};
+            adjacent = false;
+            for (int index {0}; index < sign.size(); ++index) {
+                std::size_t row {x + sign.at(index)}, 
+                    col {y + sign.at(size - index - 1)};
+                if (row < size && col < size) {
+                    adjacent = board.at(row).at(col).getLetter() != '-';
+                }
             }
         }
-        if (tileAdjacent && board.at(x).at(y).getLetter() == '-') {
+        if (adjacent && board.at(x).at(y).getLetter() == '-') {
             board.at(x).at(y).setLetter(letter);
-            placeValue = board.at(x).at(y).getValue();
-            if (isEmpty) isEmpty = false;
+            empty = false;
         }
     }
-    return placeValue;
+    return Tile::getTileValue(letter);
 }
 
 bool Board::validateBoardString(const std::vector<std::string> &lines) {
