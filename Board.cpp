@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Board.h"
 #include "Tile.h"
 #include "SaveState.h"
@@ -11,7 +12,6 @@ Board::Board(std::size_t size)
     }
 }
 
-// FIXME: Delete debug print when verified.
 Board::Board(const std::string &state)
     : size {0}, board {}, empty {true} {
     std::istringstream input {state};
@@ -29,7 +29,7 @@ Board::Board(const std::string &state)
         while (index < line.size()) {
             // Create tile for each character and point index to next position.
             char letter = line.at(index);
-            empty = empty && letter != ' ';
+            empty = empty && letter == ' ';
             Tile tile {(letter == ' ') ? '-' : letter};
             board.at(size).push_back(tile);
             index += 4;
@@ -119,7 +119,6 @@ bool Board::validateBoardString(const std::vector<std::string> &lines) {
     return Board::validateBoardString(lines, lo, hi);
 }
 
-// TODO: Fix pattern regex? Or hope it isn't noticed.
 bool Board::validateBoardString(const std::vector<std::string> &lines, 
     std::size_t lo, std::size_t hi) {
     
@@ -129,7 +128,7 @@ bool Board::validateBoardString(const std::vector<std::string> &lines,
         std::regex("( {2,4}[0-9]{1,2})+[ ]+"));
     correct = std::regex_match(lines.at(lo++), std::regex("  -+")) && correct;
     // Verify all lines used to represent board sequentially.
-    const std::regex pattern {"[A-Z]{1}( | [A-Z ])+(.*)"};
+    const std::regex pattern {"[A-Z]{1}( \\| [A-Z ])+ \\| "};
     while (correct && lo < hi) {
         correct = std::regex_match(lines.at(lo++), pattern);
     }
