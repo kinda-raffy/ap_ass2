@@ -1,0 +1,12 @@
+2
+testCases/newGame.save
+place T at A0
+place R at A1
+place D at A2
+place Done
+place C at A3
+place A at A4
+place S at A5
+save testCases/saveGame/saveGame.expsave
+place Done
+quit
