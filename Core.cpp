@@ -175,7 +175,7 @@ void Core::handlePlace(Player &player, const std::vector<std::string> &action) {
  * @param player Reference to the player object that has current turn.
  */
 void Core::placeDone(Player &player) {
-    int handSize {player.getHand()->size()};
+    std::size_t handSize {player.getHand()->size()};
     // Replenish player's hand whilst there are still tiles in bag.
     while (bag->size() > 0 && handSize < HAND_SIZE) {
         player.getHand()->append(bag->pop());

@@ -19,7 +19,7 @@ LinkedList::LinkedList(const std::string &list)
 
 LinkedList::LinkedList(const LinkedList &source)
     : head {nullptr}, tail {nullptr}, length {source.length} {
-    int index {0};
+    std::size_t index {0};
     std::shared_ptr<Node> current {source.head}, previous {nullptr};
     while (index < length) {
         // Construct a copy of current node in source list.
