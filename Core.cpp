@@ -84,13 +84,11 @@ void Core::runCore() {
         getInput(action);
         doAction(action);
         // Update core state if either control is encountered.
-        if (control == Control::QUIT) {
-            displayEnd();
-        } else if (control == Control::NEXT) {
+        if (control == Control::NEXT) {
             changeTurn();
         }
     } while (control != Control::QUIT);
-    std::cout << "Goodbye" << std::endl;
+    displayEnd();
 }
 
 /**
@@ -201,6 +199,7 @@ void Core::placeTile(Player &player, const std::vector<std::string> &action) {
         // Delete placed tile from player's hand and reset player state.
         std::shared_ptr<LinkedList> hand {player.getHand()};
         hand->remove(action.at(1).at(0));
+        player.updatePlace(action.at(3));
         player.refreshPass();
         player.startPlacing();
         // Calculate the score, including checking for bingo.
@@ -228,6 +227,40 @@ int Core::insertTile(const std::vector<std::string> &action) {
         std::toupper(position.at(0)) - 65, std::stoi(position.substr(1)),
         static_cast<char>(std::toupper(action.at(1).at(0)))
     );
+}
+
+bool Core::verifyPlace(Player &player, const std::vector<std::string> &action) {
+    std::cout << "VERIFYING" << std::endl;
+    bool valid {true};
+    const std::string prev {player.prevTile()}, curr {action.at(3)};
+    if (prev != "") {
+        const char prevRow {prev.at(0)}, currRow {curr.at(0)};
+        std::size_t hi {}, lo {},
+            prevCol {static_cast<std::size_t>(std::stoi(prev.substr(1)))}, 
+            currCol {static_cast<std::size_t>(std::stoi(curr.substr(1)))};
+        Direction direction {player.getDirection()};
+        bool xAxis {prevRow == currRow}, yAxis {prevCol == currCol};
+        // Check if coordinates correspond across the x or y axes.
+        if (xAxis && direction != Direction::Y_AXIS) {
+            hi = std::max(prevCol, currCol); 
+            lo = std::min(prevCol, currCol);
+            while (lo < hi && valid) {
+                valid = board->getLetter(currRow, lo) != '-';
+                ++lo;
+            }
+        } else if (yAxis && direction != Direction::X_AXIS) {
+            hi = static_cast<std::size_t>(std::max(prevRow, currRow)); 
+            lo = static_cast<std::size_t>(std::min(prevRow, currRow));
+            while (lo < hi && valid) {
+                valid = board->getLetter(lo, currCol) != '-';
+                ++lo;
+            }
+        } else {
+            valid = false;
+        }
+    }
+    std::cout << "VERIFIED" << std::endl;
+    return valid;
 }
 
 /**
@@ -312,15 +345,15 @@ void Core::displayEnd() {
             << "Score for " << player.getName()
             << ": " << player.getScore() << std::endl;
     }
-    bool tie = players.at(0).getScore() == players.at(1).getScore();
+    bool tie {players.at(0).getScore() == players.at(1).getScore()};
     // Find and declare winner by checking player scores if there is any.
     if (tie) {
         std::cout << "It's a tie!\n" << std::endl;
     } else {
         auto victor { std::max_element(players.begin(), players.end(),
-                                       [](const Player &a, const Player &b) {
-                                           return a.getScore() < b.getScore();
-                                       })[0]
+            [](const Player &a, const Player &b) {
+                return a.getScore() < b.getScore();
+            })[0]
         };
         std::cout << "Player " << victor.getName() << " won!\n\n";
     }

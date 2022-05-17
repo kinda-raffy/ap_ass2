@@ -1,15 +1,17 @@
 #include <fstream>
 #include <utility>
+
+#include "LinkedList.h"
 #include "Player.h"
 
 Player::Player(const std::string &name, const std::string &hand, int score)
-    : name {name}, hand {std::make_shared<LinkedList>(hand)}, 
-      passes {0}, score {score}, placing {false} {
+    : name {name}, hand {std::make_shared<LinkedList>(hand)}, passes {0}, 
+      score {score}, placing {false}, direction {Direction::NONE} {
 }
 
 Player::Player(const std::string &name, const std::shared_ptr<LinkedList> bag)
     : name {name}, hand {std::make_shared<LinkedList>()}, 
-      passes {0}, score {0}, placing {false} {
+      passes {0}, score {0}, placing {false}, direction {Direction::NONE} {
     // Transfer the requisite tiles to the player hand.
     for (std::size_t index {0}; index < HAND_SIZE; ++index) {
         hand->append(bag->pop());
@@ -68,6 +70,38 @@ void Player::startPlacing() {
 
 void Player::donePlacing() {
     placing = false;
+    turn.clear();
+    direction = Direction::NONE;
+}
+
+Direction Player::getDirection() const {
+    return direction;
+}
+
+std::string Player::prevTile() const {
+    std::size_t length {turn.size()};
+    return (length == 0) ? "" : turn.at(length - 1);
+}
+
+void Player::updatePlace(const std::string &coordinate) {
+    try {
+        if (!std::regex_match(coordinate, std::regex("[A-Z]{1}[0-9]{1,2}"))) {
+            throw std::runtime_error("Invalid board coordinate.");
+        }
+        turn.push_back(coordinate);
+        if (turn.size() == 2) {
+            std::string previous {prevTile()};
+            if (previous.at(0) == coordinate.at(0)) {
+                direction = Direction::X_AXIS;
+            } else if (previous.substr(1) == coordinate.substr(1)) {
+                direction = Direction::Y_AXIS;
+            } else {
+                throw std::runtime_error("Player cannot place tile here.");
+            }
+        }
+    } catch (const std::runtime_error &re) {
+        std::cout << re.what() << std::endl;
+    }
 }
 
 bool Player::validatePlayerStrings(const std::vector<std::string> &lines, 

@@ -14,6 +14,7 @@ void handleSelection();
 int main() {
     greet();
     handleSelection();
+    std::cout << "Goodbye" << std::endl;
     return EXIT_SUCCESS;
 }
 
@@ -81,7 +82,6 @@ void handleSelection() {
         } else if (choice == 3) {
             credits();
         } else if (choice == 4 || std::cin.eof()) {
-            std::cout << "Goodbye\n";
             quit = true;
         } else {
             std::cout << "Invalid choice\n";

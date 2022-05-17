@@ -1,9 +1,20 @@
 #ifndef AP_ASS2_PLAYER_H
 #define AP_ASS2_PLAYER_H
 
-#include "LinkedList.h"
-
 #define HAND_SIZE 7
+
+#include <regex>
+#include <string>
+#include <vector>
+
+// Tracks the colinearity of players consecutive tile additions each turn.
+enum Direction {
+    X_AXIS,
+    Y_AXIS,
+    NONE
+};
+
+class LinkedList;
 
 class Player {
 
@@ -12,6 +23,9 @@ class Player {
     int passes;
     int score;
     bool placing;
+
+    Direction direction;
+    std::vector<std::string> turn;
 
 public:
 
@@ -32,6 +46,12 @@ public:
     bool isPlacing() const;
     void startPlacing();
     void donePlacing();
+
+    // For validating consecutive tile additions.
+    Direction getDirection() const;
+    void setDirection(Direction);
+    std::string prevTile() const;
+    void updatePlace(const std::string&);
 
     std::string handToString() const;
     void printHand() const;

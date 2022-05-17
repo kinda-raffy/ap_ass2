@@ -65,6 +65,7 @@ private:
     void placeDone(Player&);
     void placeTile(Player&, const std::vector<std::string>&);
     int insertTile(const std::vector<std::string>&);
+    bool verifyPlace(Player&, const std::vector<std::string>&);
     void replaceTile(Player&, const std::vector<std::string>&);
 };
 

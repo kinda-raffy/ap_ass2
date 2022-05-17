@@ -1,4 +1,6 @@
 #include "Board.h"
+#include "Tile.h"
+#include "SaveState.h"
 
 Board::Board(std::size_t size)
     : size {size}, board {std::vector<std::vector<Tile>> {}}, empty {true} {
@@ -42,6 +44,10 @@ Board::Board(const Board &source)
     for (std::size_t index{0}; index < size; ++index) {
         board.push_back(source.board.at(index));
     }
+}
+
+char Board::getLetter(std::size_t x, std::size_t y) const {
+    return (x < size && y < size) ? board.at(x).at(y).getLetter() : '-';
 }
 
 std::size_t Board::getSize() const {

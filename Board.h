@@ -1,14 +1,14 @@
 #ifndef ASSIGN2_BOARD_H
 #define ASSIGN2_BOARD_H
 
-#include "Tile.h"
-#include "SaveState.h"
-
+#include <regex>
 #include <array>
 #include <vector>
 #include <memory>
 #include <string>
 #include <sstream>
+
+class Tile;
 
 class Board {
 
@@ -26,6 +26,7 @@ public:
     Board(const Board&);
     ~Board() = default;
 
+    char getLetter(std::size_t, std::size_t) const;
     std::size_t getSize() const;
     std::string toString() const;
 
