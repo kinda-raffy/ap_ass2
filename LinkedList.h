@@ -12,7 +12,7 @@ class LinkedList {
 
    std::shared_ptr<Node> head;
    std::shared_ptr<Node> tail;
-   int length;
+   std::size_t length;
 
 public:
 
@@ -27,7 +27,7 @@ public:
    void append(std::unique_ptr<Tile>);
    bool contains(char) const;
    bool replace(char, char);
-   int size() const;
+   std::size_t size() const;
 
    std::string toString() const;
 

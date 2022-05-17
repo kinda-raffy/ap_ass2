@@ -99,7 +99,9 @@ bool LinkedList::remove(char letter) {
     }
     if (current != nullptr) {
         // Superfluous storage auto deleted by smart pointers.
-        if (current == head) {
+        if (length == 1) {
+            head = tail = nullptr;
+        } else if (current == head) {
             head = head->getNext();
         } else if (current == tail) {
             tail = previous;
@@ -112,7 +114,7 @@ bool LinkedList::remove(char letter) {
     return success;
 }
 
-int LinkedList::size() const {
+std::size_t LinkedList::size() const {
     return length;
 }
 
