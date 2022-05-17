@@ -238,12 +238,11 @@ bool Core::verifyPlace(Player &player, const std::vector<std::string> &action) {
     bool valid {true};
     const std::string prev {player.prevTile()}, curr {action.at(3)};
     if (!prev.empty()) {
-        std::size_t const prevRow{static_cast<std::size_t>(prev.at(0) - 65)},
-                          currRow{static_cast<std::size_t>(curr.at(0) - 65)},
-                          prevCol {static_cast<std::size_t>(
-                                  std::stoi(prev.substr(1)))},
-                          currCol {static_cast<std::size_t>(
-                                  std::stoi(curr.substr(1)))};
+        const std::size_t 
+            prevRow {static_cast<std::size_t>(prev.at(0) - 65)},
+            currRow {static_cast<std::size_t>(curr.at(0) - 65)},
+            prevCol {static_cast<std::size_t>(std::stoi(prev.substr(1)))},
+            currCol {static_cast<std::size_t>(std::stoi(curr.substr(1)))};
         std::size_t hi, lo;
         Direction direction {player.getDirection()};
         bool xAxis {prevRow == currRow}, yAxis {prevCol == currCol};
