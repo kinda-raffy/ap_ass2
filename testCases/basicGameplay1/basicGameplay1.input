@@ -1,0 +1,16 @@
+2
+testCases/basicGameplay1/newGame.save
+place L at A0
+place D at A1
+place R at A2
+place X at A3
+place Done
+place C at A0
+place C at B0
+place V at B1
+place A at B2
+place A at B3
+place Done
+pass
+pass
+quit

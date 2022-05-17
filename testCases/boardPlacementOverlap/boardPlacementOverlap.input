@@ -1,5 +1,5 @@
 2
-testCases/newGame.save
+testCases/boardPlacementOverlap/newGame.save
 place T at H4
 place X at G4
 place D at F4

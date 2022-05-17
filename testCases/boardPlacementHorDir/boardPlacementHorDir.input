@@ -1,5 +1,5 @@
 2
-testCases/newGame.save
+testCases/boardPlacementHorDir/newGame.save
 place T at H3
 place X at H4
 place D at H2
