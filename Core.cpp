@@ -230,7 +230,6 @@ int Core::insertTile(const std::vector<std::string> &action) {
 }
 
 bool Core::verifyPlace(Player &player, const std::vector<std::string> &action) {
-    std::cout << "VERIFYING" << std::endl;
     bool valid {true};
     const std::string prev {player.prevTile()}, curr {action.at(3)};
     if (prev != "") {
@@ -259,7 +258,6 @@ bool Core::verifyPlace(Player &player, const std::vector<std::string> &action) {
             valid = false;
         }
     }
-    std::cout << "VERIFIED" << std::endl;
     return valid;
 }
 
