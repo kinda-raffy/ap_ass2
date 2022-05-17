@@ -57,7 +57,12 @@ void Core::getInput(std::vector<std::string> &action) {
     std::getline(std::cin >> std::ws, input);
     if (!std::cin.eof()) {
         std::stringstream stream {input};
+        bool save {false};
         while (stream >> word) {
+            if (!save) {
+                std::transform(word.begin(), word.end(), word.begin(), toupper);
+            }
+            if (word == "SAVE") {save = true;}
             action.emplace_back(word);
         }
     } else {
@@ -132,19 +137,19 @@ void Core::handleAction(Player &player,
     const std::vector<std::string> &action) {
     // Extract the base action.
     const std::string type {action.at(0)};
-    if (type == "place") {
+    if (type == "PLACE") {
         handlePlace(player, action);
-    } else if (type == "replace" && !player.isPlacing()) {
+    } else if (type == "REPLACE" && !player.isPlacing()) {
         replaceTile(player, action);
-    } else if (type == "pass" && !player.isPlacing()) {
+    } else if (type == "PASS" && !player.isPlacing()) {
         // Update player object pass count and signal core to next player.
         player.incrementPass();
         control = Control::NEXT;
-    } else if (type == "save" && action.size() == 2 && !player.isPlacing()) {
+    } else if (type == "SAVE" && action.size() == 2 && !player.isPlacing()) {
         // Save core state to file provided and signal core keep this turn.
         saveCore(action.at(1));
         control = Control::SAME;
-    } else if (type == "quit") {
+    } else if (type == "QUIT") {
         control = Control::QUIT;
     }
 }
@@ -157,10 +162,10 @@ void Core::handleAction(Player &player,
 void Core::handlePlace(Player &player, const std::vector<std::string> &action) {
     control = Control::INVALID;
     // If player has finished placing tiles and received args are correct.
-    if (action.size() == 2 && action.at(1) == "Done") {
+    if (action.size() == 2 && action.at(1) == "DONE") {
         placeDone(player);
     } else if (action.size() == 4
-        && action.at(2) == "at"
+        && action.at(2) == "AT"
         && player.getHand()->contains(action.at(1).at(0))) {
         // If the args are correct and the hand contains letter to place.
         placeTile(player, action);
