@@ -1,5 +1,7 @@
 #include "Tile.h"
 
+#include <stdexcept>
+
 // Values constant for each letter. Dash character represents null tiles.
 const static std::map<char, int> values = {
         {'-', 0},
