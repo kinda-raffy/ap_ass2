@@ -52,9 +52,18 @@ void loadSavedCore() {
     std::cout << "> ";
     std::cin >> file;
     // Read saved data, then create and run core object.
-    auto load {std::make_unique<SaveState>(file)};
-    auto core {std::make_unique<Core>(*load)};
-    core->runCore();
+    std::unique_ptr<Core> core;
+    bool loadError {false};
+    try {
+        auto load{std::make_unique<SaveState>(file)};
+        core = std::make_unique<Core>(*load);
+    }
+    // No need to tell what happened, we just know the save file is malformed
+    catch (...) {
+        loadError = true;
+        std::cout << "Error loading save - exiting." << std::endl;
+    }
+    if (!loadError) core->runCore();
 }
 
 int selectMode() {

@@ -1,0 +1,20 @@
+2
+testCases/bingo/newGame.save
+place T at A0
+place R at A1
+place D at A2
+place L at A3
+place X at A4
+place I at A5
+place L at A6
+place Done
+place C at B0
+place A at B1
+place S at B2
+place T at B3
+place A at B4
+place Y at B5
+place V at B6
+place Done
+place B at C0
+quit
