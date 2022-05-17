@@ -1,5 +1,5 @@
 2
-testCases/newGame.save
+testCases/saveGame/newGame.save
 place T at A0
 place R at A1
 place D at A2
