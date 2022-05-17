@@ -193,9 +193,7 @@ void Core::placeDone(Player &player) {
  */
 void Core::placeTile(Player &player, const std::vector<std::string> &action) {
     control = Control::INVALID;
-    int score;
-    if (verifyPlace(player, action)) score = insertTile(action);
-    else score = 0;
+    int score = verifyPlace(player, action) ? insertTile(action) : 0;
     // If the player's action was valid.
     if (score != 0) {
         // Delete placed tile from player's hand and reset player state.
