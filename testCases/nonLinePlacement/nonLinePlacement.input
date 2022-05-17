@@ -1,0 +1,9 @@
+2
+testCases/nonLinePlacement/nonLinePlacement
+place T at C0
+place L at C1
+place R at C2
+place D at D2
+place D at C3
+place Done
+quit
