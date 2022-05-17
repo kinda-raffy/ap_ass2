@@ -123,7 +123,7 @@ void Core::handleAction(Player &player,
 void Core::handlePlace(Player &player, const std::vector<std::string> &action) {
     control = Control::INVALID;
     // If player has finished placing tiles and received args are correct.
-    if (action.size() == 2 && action.at(1) == "DONE") {
+    if (action.size() == 2 && action.at(1) == "DONE" && player.isPlacing()) {
         placeDone(player);
     } else if (action.size() == 4
         && action.at(2) == "AT"
