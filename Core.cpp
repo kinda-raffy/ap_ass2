@@ -312,11 +312,9 @@ void Core::displayEnd() {
             << "Score for " << player.getName()
             << ": " << player.getScore() << std::endl;
     }
-    auto isTie = [](const Player &player1, const Player &player2) {
-        return player1.getScore() == player2.getScore();
-    };
+    bool tie = players.at(0).getScore() == players.at(1).getScore()
     // Find and declare winner by checking player scores if there is any.
-    if (isTie) {
+    if (tie) {
         std::cout << "It's a tie!\n" << std::endl;
     } else {
         auto victor { std::max_element(players.begin(), players.end(),
