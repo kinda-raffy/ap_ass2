@@ -59,14 +59,15 @@ void loadSavedCore() {
         core = std::make_unique<Core>(*load);
     }
     // No need to tell what happened, we just know the save file is malformed
-    catch (...) {
+    catch (std::exception &exception) {
         loadError = true;
+        std::cout << exception.what() << std::endl;
         std::cout << "Error loading save - exiting." << std::endl;
     }
     if (!loadError) core->runCore();
 }
 
-int selectMode() {
+std::string selectMode() {
     std::string choice;
     std::cout 
         << "1. New Game\n"
@@ -75,22 +76,22 @@ int selectMode() {
         << "4. Quit\n\n"
         << "> ";
     std::getline(std::cin >> std::ws, choice);
-    return std::stoi(choice);
+    return choice;
 }
 
 void handleSelection() {
     bool quit {false};
     while (!quit) {
-        int choice {selectMode()};
-        if (choice == 1) {
+        std::string choice {selectMode()};
+        if (choice == "1") {
             createNewCore();
             quit = true;
-        } else if (choice == 2) {
+        } else if (choice == "2") {
             loadSavedCore();
             quit = true;
-        } else if (choice == 3) {
+        } else if (choice == "3") {
             credits();
-        } else if (choice == 4 || std::cin.eof()) {
+        } else if (choice == "4" || std::cin.eof()) {
             quit = true;
         } else {
             std::cout << "Invalid choice\n";
